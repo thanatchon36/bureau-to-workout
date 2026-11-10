@@ -1,6 +1,6 @@
 PY ?= .venv/bin/python
 
-.PHONY: setup bureau workout experiments tables figures banner paper web hf hf-push test all clean
+.PHONY: setup bureau workout experiments tables figures banner poster paper web hf hf-push test all clean
 
 setup:          ## create venv and install the package (needs uv)
 	uv venv .venv --python 3.12
@@ -23,6 +23,9 @@ figures:        ## paper_results/ -> paper/figures/ (PDF for LaTeX, PNG previews
 
 banner:         ## README banner -> docs/assets/banner.png (bureau simulator output)
 	$(PY) scripts/make_banner.py
+
+poster:         ## LinkedIn poster -> docs/assets/linkedin_poster.png (numbers from results_macros.tex; needs Chrome)
+	$(PY) scripts/make_poster.py
 
 paper:          ## build paper/paper.pdf (tectonic) and the web reader docs/paper/
 	$(PY) -m bureau_to_workout.cli paper

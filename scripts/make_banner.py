@@ -22,23 +22,32 @@ BG, AMBER, INK, MUTED = "#04070f", "#f5a623", "#e8e9ec", "#8f9bb3"
 W, H, DPI = 1680, 624, 100
 
 
-def main() -> None:
+COLORS = ["#0b1222", "#6b420d", "#c27d14", AMBER, "#3b5b8c"]  # current, 30, 60, 90+ DPD, deferred
+
+
+def arrears_rows(n_rows: int = 260):
+    """Reported arrears of n_rows simulated borrowers (rows) by month; 4 marks deferred months."""
     p = bureau.simulate_bureau(bureau.SimConfig(n_borrowers=20_000, moratorium=True, seed=7))
     s, mor = p.s_obs, p.mor
     # borrowers who are current at the start and fall behind or are deferred later
     ever = np.flatnonzero((s[:, 0] == 0) & (((s > 0).sum(axis=1) >= 3) | mor.any(axis=1)))
-    pick = np.random.default_rng(0).choice(ever, size=260, replace=False)
+    pick = np.random.default_rng(0).choice(ever, size=n_rows, replace=False)
     rows, deferred = s[pick].astype(float), mor[pick]
     first = np.where((rows > 0) | deferred, 1, 0).argmax(axis=1)
     order = np.lexsort((-rows.sum(axis=1), first))
     rows, deferred = rows[order], deferred[order]
     rows[deferred] = 4  # deferred months: arrears reported as frozen
+    return rows, p.cfg
+
+
+def main() -> None:
+    rows, cfg = arrears_rows(260)
 
     fig = plt.figure(figsize=(W / DPI, H / DPI), dpi=DPI, facecolor=BG)
     ax = fig.add_axes([0.035, 0.09, 0.27, 0.80], facecolor=BG)
-    cmap = ListedColormap(["#0b1222", "#6b420d", "#c27d14", AMBER, "#3b5b8c"])
+    cmap = ListedColormap(COLORS)
     ax.imshow(rows, aspect="auto", cmap=cmap, vmin=-0.5, vmax=4.5, interpolation="nearest")
-    lo, hi = p.cfg.shock_start, p.cfg.shock_end
+    lo, hi = cfg.shock_start, cfg.shock_end
     ax.annotate("", xy=(lo - 0.5, -5), xytext=(hi + 0.5, -5), annotation_clip=False,
                 arrowprops=dict(arrowstyle="|-|", color=MUTED, lw=0.8, shrinkA=0, shrinkB=0, mutation_scale=3))
     ax.text((lo + hi) / 2, -9, "moratorium", color="#7fa3d6", ha="center", va="bottom", fontsize=10.5)

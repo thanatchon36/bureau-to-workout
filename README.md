@@ -55,6 +55,7 @@ Outputs: `paper_results/` (every experiment over five seeds), `paper/tables/` an
 | `tables` | `paper_results/` → `paper/tables/` and the number macros `paper/results_macros.tex` |
 | `figures` | `paper_results/` → `paper/figures/` |
 | `banner` | README banner → `docs/assets/banner.png`, drawn from bureau-simulator output |
+| `poster` | LinkedIn poster → `docs/assets/linkedin_poster.png`, numbers read from the paper's macros |
 | `paper` | `paper/main.tex` → `paper/paper.pdf` (tectonic) and the web reader `docs/paper/` (pandoc) |
 | `hf` / `hf-push` | Hugging Face dataset and model repos → `build/hf/`; `hf-push` uploads them (`uv pip install -e ".[hf]"`) |
 | `web` | Web reader only → `docs/paper/index.html`, served at <https://thanatchon36.github.io/bureau-to-workout/paper/> |
