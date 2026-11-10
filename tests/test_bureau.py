@@ -39,3 +39,17 @@ def test_metrics_on_known_cases():
     assert bureau.ks_stat(y, y) == 1.0
     p = rng.uniform(size=200_000)
     assert bureau.ece((rng.uniform(size=p.size) < p).astype(float), p) < 0.01
+
+
+def test_scorecard_json_round_trip(clean_panel):
+    """The scorecard ships as plain JSON on Hugging Face; reloading it must score identically."""
+    import json
+
+    cube = bureau.build_feature_cube(clean_panel)
+    dev = bureau.snapshot_dataset(clean_panel, cube, [12, 15, 18, 21, 24])
+    feats = [f for f in bureau.FEATURES if dev[f].std() > 0]
+    sc = bureau.WoEScorecard().fit(dev[feats], dev["y_obs"])
+    again = bureau.WoEScorecard.from_dict(json.loads(json.dumps(sc.to_dict())))
+    np.testing.assert_allclose(again.predict_proba(dev[feats]), sc.predict_proba(dev[feats]))
+    np.testing.assert_allclose(again.score(dev[feats]), sc.score(dev[feats]))
+    assert again.reason_codes(dev[feats].head(5)) == sc.reason_codes(dev[feats].head(5))

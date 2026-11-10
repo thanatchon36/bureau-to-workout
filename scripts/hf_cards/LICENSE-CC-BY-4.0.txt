@@ -1,0 +1,13 @@
+bureau-to-workout dataset — licence terms
+Copyright (c) 2026 Thanatchon Chongmankhong
+
+Every file in this dataset is synthetic: simulator output and results computed from it.
+
+   Creative Commons Attribution 4.0 International (CC BY 4.0)
+   https://creativecommons.org/licenses/by/4.0/
+
+   You may share and adapt this material for any purpose, provided you give appropriate credit
+   (cite the paper or the Zenodo archive given in README.md), link to the licence and indicate if
+   changes were made.
+
+The code that generates the data is MIT-licensed: https://github.com/thanatchon36/bureau-to-workout

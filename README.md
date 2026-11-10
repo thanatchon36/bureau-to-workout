@@ -7,12 +7,16 @@
 <a href="paper/paper.pdf"><img src="https://img.shields.io/badge/paper-PDF-f5a623?style=flat-square&labelColor=0b1020" alt="Paper PDF"></a>
 <a href="#all-data-are-synthetic"><img src="https://img.shields.io/badge/data-synthetic-b0560f?style=flat-square&labelColor=0b1020" alt="Data: synthetic"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-ffe8a3?style=flat-square&labelColor=0b1020" alt="License MIT"></a>
+<a href="https://huggingface.co/datasets/thanatchon36/bureau-to-workout"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20dataset-bureau--to--workout-f5a623?style=flat-square&labelColor=0b1020" alt="Hugging Face dataset"></a>
+<a href="https://huggingface.co/thanatchon36/bureau-to-workout"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20models-bureau--to--workout-f5a623?style=flat-square&labelColor=0b1020" alt="Hugging Face models"></a>
 </p>
 
 <p align="center">
 📖 <b><a href="https://thanatchon36.github.io/bureau-to-workout/paper/">Read the paper online</a></b> ·
 📄 <b><a href="paper/paper.pdf">Download the PDF</a></b> ·
 📊 <b><a href="paper_results/">Result files</a></b> ·
+🤗 <b><a href="https://huggingface.co/datasets/thanatchon36/bureau-to-workout">Dataset</a></b> ·
+🤗 <b><a href="https://huggingface.co/thanatchon36/bureau-to-workout">Models</a></b> ·
 🔁 <b><a href="#install-and-quickstart">Reproduce</a></b>
 </p>
 
@@ -36,7 +40,7 @@ proposes an estimator for each and tests them in two simulators that keep the gr
 ```bash
 make setup      # uv venv + dependencies (Python 3.12)
 make all        # experiments -> tables -> figures -> paper   (about 3 minutes)
-make test       # 11 tests: simulators, budgeted policy, off-policy evaluation, paper tables
+make test       # 12 tests: simulators, budgeted policy, off-policy evaluation, paper tables
 ```
 
 Outputs: `paper_results/` (every experiment over five seeds), `paper/tables/` and `paper/results_macros.tex`
@@ -51,6 +55,7 @@ Outputs: `paper_results/` (every experiment over five seeds), `paper/tables/` an
 | `figures` | `paper_results/` → `paper/figures/` |
 | `banner` | README banner → `docs/assets/banner.png`, drawn from bureau-simulator output |
 | `paper` | `paper/main.tex` → `paper/paper.pdf` (tectonic) and the web reader `docs/paper/` (pandoc) |
+| `hf` / `hf-push` | Hugging Face dataset and model repos → `build/hf/`; `hf-push` uploads them (`uv pip install -e ".[hf]"`) |
 | `web` | Web reader only → `docs/paper/index.html`, served at <https://thanatchon36.github.io/bureau-to-workout/paper/> |
 
 ## Key results
@@ -93,6 +98,11 @@ web version at <https://thanatchon36.github.io/bureau-to-workout/paper/>. Every 
 `paper/results_macros.tex`, which `make tables` generates from `paper_results/`.
 
 - Tables: [`paper/tables/`](paper/tables/) · Figures: [`paper/figures/`](paper/figures/) · Results: [`paper_results/`](paper_results/)
+- Dataset on Hugging Face: [`thanatchon36/bureau-to-workout`](https://huggingface.co/datasets/thanatchon36/bureau-to-workout), with the simulated bureau panels
+  (50,000 borrowers × 60 months, with and without a moratorium), the E1 and E3 modelling tables, the 50,000
+  workout cases with every potential outcome, and every result file
+- Models on Hugging Face: [`thanatchon36/bureau-to-workout`](https://huggingface.co/thanatchon36/bureau-to-workout): the WoE scorecard (JSON), monotone GBM,
+  SSL encoder, the E3 models, the workout outcome and propensity models and the DR-learner (skops, no pickle)
 - Section 7 sets out identification strategies for the linked NCB × SAM data and a privacy-preserving linkage design.
 
 | ID | Question | Code | Paper |
@@ -119,6 +129,7 @@ paper_results/              experiment outputs used by the tables and figures
 paper/                      main.tex, references.bib, main.bbl, reader.html, tables/, figures/, paper.pdf
 docs/                       GitHub Pages: the web reader (docs/paper/) and the banner
 scripts/make_banner.py      README banner
+scripts/export_hf.py        Hugging Face dataset and model repos (cards in scripts/hf_cards/)
 tests/                      simulators, policies, off-policy evaluation, paper tables and web reader
 ```
 
@@ -139,7 +150,7 @@ like. The functional forms and parameters are design choices; in the bureau simu
 a perfect proxy, so bureau augmentation is evaluated in its best case; the workout simulator satisfies
 unconfoundedness and overlap by construction. The committed `paper_results/` were produced with an earlier set of
 library versions; rerunning `make experiments` with current numpy, pandas and scikit-learn moves some numbers in the
-third decimal. See paper Section 8.
+third decimal; the Hugging Face models were fitted with current versions and their card reports their own metrics. See paper Section 8.
 
 ## Citation
 

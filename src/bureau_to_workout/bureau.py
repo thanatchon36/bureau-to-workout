@@ -451,6 +451,34 @@ class WoEScorecard:
         order = np.argsort(-shortfall, axis=1)[:, :k]
         return [[self.features[j] for j in row if shortfall[i, j] > 0.5] for i, row in enumerate(order)]
 
+    def to_dict(self) -> dict:
+        """Everything needed to score, as plain JSON types (no pickle): bins, WoE, points and the logistic fit."""
+        return {
+            "features": list(self.features),
+            "dropped_wrong_sign": list(self.dropped_wrong_sign),
+            "factor": float(self.factor), "offset": float(self.offset),
+            "coef": [float(c) for c in self.lr.coef_[0]], "intercept": float(self.lr.intercept_[0]),
+            "bins": {c: {"edges": [float(e) for e in self.bins[c]["edges"]],
+                         "woe": [float(v) for v in self.bins[c]["woe"]],
+                         "points": [float(v) for v in self.bins[c]["points"]],
+                         "n": [int(v) for v in self.bins[c]["n"]],
+                         "bad": [float(v) for v in self.bins[c]["bad"]],
+                         "iv": float(self.bins[c]["iv"])} for c in self.features},
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "WoEScorecard":
+        sc = cls()
+        sc.features, sc.dropped_wrong_sign = list(d["features"]), list(d["dropped_wrong_sign"])
+        sc.factor, sc.offset = d["factor"], d["offset"]
+        sc.bins = {c: {k: (np.asarray(v) if isinstance(v, list) else v) for k, v in b.items()}
+                   for c, b in d["bins"].items()}
+        sc.lr = LogisticRegression()
+        sc.lr.classes_ = np.array([0.0, 1.0])
+        sc.lr.coef_ = np.asarray([d["coef"]])
+        sc.lr.intercept_ = np.asarray([d["intercept"]])
+        return sc
+
     def points_table(self):
         rows = []
         for c in self.features:
@@ -606,7 +634,8 @@ def run_e1(p: BureauPanel, cube, seed):
     info = {"n_dev": len(dev), "n_oot": len(oot), "dev_bad_rate": float(y.mean()),
             "oot_bad_rate": float(yo.mean()), "scorecard_features": sc.features,
             "scorecard_dropped_wrong_sign": sc.dropped_wrong_sign}
-    art = {"sc": sc, "gbm": gbm, "oot": oot, "feats": feats, "preds": preds, "y_dev": y, "y_oot": yo}
+    art = {"sc": sc, "gbm": gbm, "oot": oot, "feats": feats, "preds": preds, "y_dev": y, "y_oot": yo,
+           "dev": dev, "enc": enc, "probe": (probe_scaler, probe), "gbm_ssl": gbm_ssl, "ecols": ecols}
     return res, info, art
 
 
@@ -683,13 +712,14 @@ def run_e3(p: BureauPanel, cube, seed):
         "Delayed labels (+6m after exit)": (np.ones(len(dev), bool), "y_delayed"),
         "Oracle: no-deferral counterfactual": (np.ones(len(dev), bool), "y_true"),
     }
-    rows, preds = [], {}
+    rows, preds, models = [], {}, {}
     for name, (keep, label) in strategies.items():
         d = dev[keep]
         s = StandardScaler().fit(d[feats])
         lr = LogisticRegression(max_iter=3000).fit(s.transform(d[feats]), d[label])
         pr = lr.predict_proba(s.transform(oot[feats]))[:, 1]
         preds[name] = pr
+        models[name] = (s, lr)
         coef = dict(zip(feats, lr.coef_[0]))
         flag_varies = d["moratorium_24m"].std() > 0
         cal_all = pr.mean() / yo.mean()
@@ -703,7 +733,7 @@ def run_e3(p: BureauPanel, cube, seed):
     info = {"oot_bad_rate_flagged": float(yo[flag].mean()), "oot_bad_rate_not_flagged": float(yo[~flag].mean()),
             "share_flagged_oot": float(flag.mean()),
             "dev_true_vs_reported_bad_rate": [float(dev["y_true"].mean()), float(dev["y_obs"].mean())]}
-    art = {"yo": yo, "flag": flag, "preds": preds}
+    art = {"yo": yo, "flag": flag, "preds": preds, "models": models, "feats": feats, "dev": dev, "oot": oot}
     return pd.DataFrame(rows).set_index("label strategy"), info, art
 
 

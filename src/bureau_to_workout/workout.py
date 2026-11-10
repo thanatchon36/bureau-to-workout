@@ -311,7 +311,8 @@ def run_all(w: Workouts, seed=0, budgets_pct=(0, 1, 2, 4, 6, 8, 10, 12, 15)):
     nuis = fit_nuisances(Xtr, Atr, Ytr, seed)
     m_te, e_te = predict_nuisances(nuis, Xte)
     tau_t = m_te - m_te[:, [0]]
-    tau_dr = predict_cate(dr_learner(Xtr, Atr, Ytr, seed), Xte)
+    dr_models = dr_learner(Xtr, Atr, Ytr, seed)
+    tau_dr = predict_cate(dr_models, Xte)
     r1 = pd.DataFrame([{"offer": ARMS[k],
                         "T-learner RMSE": float(np.sqrt(np.mean((tau_t[:, k] - tau_true[:, k]) ** 2))),
                         "DR-learner RMSE": float(np.sqrt(np.mean((tau_dr[:, k] - tau_true[:, k]) ** 2))),
@@ -377,7 +378,8 @@ def run_all(w: Workouts, seed=0, budgets_pct=(0, 1, 2, 4, 6, 8, 10, 12, 15)):
 
     info = {"n_test": int(len(te)), "logged offer shares": np.bincount(w.A, minlength=4).tolist(),
             "status-quo write-downs (% of balance)": 100 * sq_budget / total}
-    return {"r1": r1, "r2": r2, "r3": r3, "r4": r4, "curves": curves, "info": info}
+    models = {"nuisances": nuis, "dr_learner": dr_models, "predictive": clf, "train_idx": tr, "test_idx": te}
+    return {"r1": r1, "r2": r2, "r3": r3, "r4": r4, "curves": curves, "info": info, "models": models}
 
 
 def show(title, df, digits=3):

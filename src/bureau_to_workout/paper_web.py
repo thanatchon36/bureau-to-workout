@@ -18,6 +18,8 @@ from pathlib import Path
 
 REPO_URL = "https://github.com/thanatchon36/bureau-to-workout"
 PAPER_URL = "https://thanatchon36.github.io/bureau-to-workout/paper/"
+DATA_URL = "https://huggingface.co/datasets/thanatchon36/bureau-to-workout"
+MODEL_URL = "https://huggingface.co/thanatchon36/bureau-to-workout"
 
 # (label, style, finding, detail); \Macro names are resolved from results_macros.tex.
 # style: "ref" = simulation result, "null" = pending.
@@ -271,7 +273,8 @@ def build_web(paper_dir: Path, out_dir: Path) -> Path:
     actions = (
         '<li><a href="paper.pdf">Download PDF</a></li>'
         f'<li><a href="{REPO_URL}">Code and replication</a></li>'
-        f'<li><a href="{REPO_URL}/tree/main/paper_results">Result files</a></li>'
+        f'<li><a href="{DATA_URL}">Data (Hugging Face)</a></li>'
+        f'<li><a href="{MODEL_URL}">Models (Hugging Face)</a></li>'
     )
     bib = (
         "@misc{chongmankhong2026bureau,\n"

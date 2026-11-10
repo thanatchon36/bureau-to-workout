@@ -1,6 +1,6 @@
 PY ?= .venv/bin/python
 
-.PHONY: setup bureau workout experiments tables figures banner paper web test all clean
+.PHONY: setup bureau workout experiments tables figures banner paper web hf hf-push test all clean
 
 setup:          ## create venv and install the package (needs uv)
 	uv venv .venv --python 3.12
@@ -29,6 +29,12 @@ paper:          ## build paper/paper.pdf (tectonic) and the web reader docs/pape
 
 web:            ## web reader only -> docs/paper/index.html (pandoc; copies the current paper.pdf)
 	$(PY) -m bureau_to_workout.cli web
+
+hf:             ## Hugging Face dataset + model repos -> build/hf/ (needs the [hf] extra)
+	$(PY) scripts/export_hf.py
+
+hf-push:        ## build and upload to huggingface.co/thanatchon36/bureau-to-workout (needs hf auth login)
+	$(PY) scripts/export_hf.py --push
 
 test:
 	$(PY) -m pytest -q

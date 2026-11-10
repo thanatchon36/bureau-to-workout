@@ -29,3 +29,8 @@ All notable changes to this project are documented here. The format follows
 - Package layout with `pyproject.toml`, a Makefile, tests for the simulators, the budgeted policy, off-policy
   evaluation and the regeneration of the paper's tables, and CI.
 - README banner (`docs/assets/banner.png`) drawn from bureau-simulator output (`make banner`).
+- Dataset on Hugging Face, [`thanatchon36/bureau-to-workout`](https://huggingface.co/datasets/thanatchon36/bureau-to-workout): the simulated bureau panels, the E1 and
+  E3 modelling tables, the workout cases with every potential outcome, and every result file (CC BY 4.0).
+- Models on Hugging Face, [`thanatchon36/bureau-to-workout`](https://huggingface.co/thanatchon36/bureau-to-workout): the scorecard as JSON and the scikit-learn
+  models as skops files, with a card that reports their metrics (`make hf`, `make hf-push`).
+- `WoEScorecard.to_dict()` and `WoEScorecard.from_dict()`, so the scorecard travels without pickle.
