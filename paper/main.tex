@@ -1,0 +1,481 @@
+\documentclass[10pt]{article}
+
+% ---------------------------------------------------------------- packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\renewcommand{\ttdefault}{pcr}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[letterpaper,textwidth=6.5in,textheight=9in,top=1in,headheight=12pt,headsep=25pt,footskip=30pt]{geometry}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage[authoryear,round]{natbib}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage[colorlinks=true,linkcolor={blue!45!black},citecolor={blue!45!black},urlcolor={blue!45!black}]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\hypersetup{pdftitle={From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels},pdfauthor={Thanantchon Chongmankhong},pdfkeywords={credit scoring, reject inference, selective labels, forbearance, causal machine learning, debt restructuring}}
+
+\input{results_macros.tex}
+
+% ---------------------------------------------------------------- layout in the style of arXiv preprints
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\captionsetup[table]{position=top}
+\setlist{itemsep=2pt,topsep=4pt}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.8em}{}
+\titleformat{\paragraph}[runin]{\normalsize\bfseries}{}{}{}[.]
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\titlespacing*{\paragraph}{0pt}{6pt}{0.6em}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.12}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\scshape From Bureau to Workout}
+\fancyhead[R]{\small\scshape A Preprint \textendash{} November 2026}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+% first page: no running header or header rule; the title block carries the date
+\fancypagestyle{firstpage}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \thispagestyle{firstpage}
+  \vbox{\hsize\textwidth\linewidth\hsize
+    \vskip 0.05in
+    \hrule height 2pt
+    \vskip 0.22in
+    \centering
+    {\LARGE\bfseries \@title\par}
+    \vskip 0.22in
+    \hrule height 0.8pt
+    \vskip 0.25in
+    {\large \@author\par}
+    \vskip 0.08in
+    {\normalsize November 2026\par}
+    \vskip 0.25in}}
+\makeatother
+
+\renewenvironment{abstract}{%
+  \begin{center}\textbf{\large Abstract}\end{center}\vspace{-4pt}
+  \list{}{\leftmargin=0.45in\rightmargin=0.45in}\item\relax\small}{\endlist}
+
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Prob}{\Pr}
+\newcommand{\ind}{\mathbf{1}}
+
+\title{From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels}
+\author{Thanantchon Chongmankhong}
+
+\begin{document}
+\maketitle
+\thispagestyle{firstpage}
+
+\begin{abstract}
+Credit-risk models learn from labels that the credit system itself produces. Lenders observe repayment only for applicants they approve, debt-relief programmes suspend the reporting of arrears, and collectors decide which distressed borrowers receive concessions. We study these three mechanisms, selection, masking and treatment, along the full debt lifecycle that becomes observable when a national credit bureau is linked to a public asset-management company (AMC), a setting motivated by Thailand's National Credit Bureau and Sukhumvit Asset Management. For each mechanism we propose an estimator that exploits the linkage: bureau-augmented reject inference that uses repayment observed at other lenders, masking-aware labels that extend outcome windows past the end of a moratorium, and cross-fitted doubly robust learning of heterogeneous offer effects combined with budget-constrained policy learning and off-policy evaluation. Because ground truth is unobservable in real data, we evaluate the estimators in two calibrated simulators, of 50,000 borrowers and 50,000 workouts, that record counterfactual outcomes, over five seeds. Approved-only models under-predict default among rejected applicants by \EtwoAoUnder\%; classic fuzzy augmentation does not help, while bureau-augmented labels reach a predicted-to-observed ratio of \EtwoRejBa{} against \EtwoRejOracle{} for an oracle trained on every applicant's outcome. Training through a simulated moratorium makes a model read deferral as a safety signal and cuts out-of-time AUC from \EthreeAUCtwoDelay{} to \EthreeAUCtwoNaive{}; delayed labels restore it. Causal targeting of restructuring offers raises recovery by \RtwoGainDR{} percentage points of balance over the logged policy while writing down \RtwoWdCausDR\% of balance instead of \RtwoWdSq\%, capturing \RtwoShareDR\% of the attainable gain against \RtwoSharePred\% for predictive targeting. We close with an identification-driven agenda for the linked data and a privacy-preserving linkage design.
+\end{abstract}
+
+\vspace{2pt}
+{\small\textbf{\textit{Keywords}}\enspace credit scoring $\cdot$ reject inference $\cdot$ selective labels $\cdot$ forbearance $\cdot$ causal machine learning $\cdot$ debt restructuring $\cdot$ off-policy evaluation $\cdot$ credit bureau $\cdot$ Thailand}
+
+% =====================================================================================================
+\section{Introduction}\label{sec:intro}
+
+Credit scores are trained on outcomes produced by the system they help to run. A lender records repayment only for the applicants it approves. A moratorium suspends the reporting of arrears precisely when distress peaks. A collector chooses which distressed borrowers receive a longer term or a write-down, and that choice shapes whether they repay. Each mechanism turns a label into a policy-dependent quantity, and a model that ignores this learns the policy along with the risk.
+
+These mechanisms are first-order where household debt is high and policy intervenes often. Household debt in Thailand stood close to 90\% of GDP in the early 2020s according to Bank of Thailand statistics, and its growth and delinquency have been documented with credit-bureau records \citep{chantarat2020}. The country used broad payment deferrals during the COVID-19 pandemic, has operated a Debt Clinic for unsecured debt through a state-owned AMC since 2017, and has tightened responsible-lending rules that require earlier restructuring. Every one of these policies changes which outcomes are recorded and what they mean.
+
+Two institutions sit at opposite ends of the debt lifecycle (\cref{fig:lifecycle}). The National Credit Bureau (NCB) observes account-month repayment histories across its member lenders, from application to non-performance. Sukhumvit Asset Management (SAM) observes what happens after many of those loans are sold: the offers made, the repayments that follow and legal recovery. Linked, the two data sets would show the full lifecycle at national scale, including whether a resolved borrower returns to formal credit. They also make the three label mechanisms visible: selection at approval (S), masking during deferral (M) and treatment in the workout (T).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_lifecycle.pdf}
+\caption{The debt lifecycle observed by a credit bureau linked to an asset-management company. Red markers show where the system shapes labels: selection at approval (S), masking of arrears during deferral (M) and treatment by the workout offer (T). The dashed path marks re-entry into formal credit, which the bureau records after resolution.}
+\label{fig:lifecycle}
+\end{figure}
+
+This paper makes four contributions.
+\begin{enumerate}[leftmargin=1.4em]
+  \item \textbf{A lifecycle framework.} We formalise selection, masking and treatment on a common notation and show how linkage changes identification for each. For selection, repayment observed at other lenders shrinks the identification region for rejected applicants from the unit interval to the share of rejects with no other account, \EtwoUnobserved\% in our simulator.
+  \item \textbf{Estimators that use the linkage.} Bureau-augmented reject inference, masking-aware labels, and a cross-fitted DR-learner for the effects of restructuring offers, combined with write-down-budgeted policy learning and doubly robust off-policy evaluation.
+  \item \textbf{Simulators with ground truth.} Two calibrated simulators, a multi-lender bureau with soft information, a macro shock and a moratorium, and an NPL workout portfolio with four offers, record counterfactual outcomes so every method can be scored against the truth. All code accompanies the paper.
+  \item \textbf{Findings and an agenda.} The estimators correct most of the bias that standard practice leaves in place (\cref{sec:results}). We map each open question to a source of quasi-experimental variation in the linked data and to a privacy-preserving linkage design (\cref{sec:agenda}).
+\end{enumerate}
+
+\paragraph{Scope} No NCB or SAM data were used. Every number in this paper is a property of the simulators, whose parameters were chosen to make the mechanisms visible at plausible magnitudes. The numbers are not estimates for Thailand. The code separates the simulators from the estimators so that loaders for real data can replace the former once access and governance are in place.
+
+\Cref{sec:setting} describes the institutional setting and \cref{sec:related} related work. \Cref{sec:framework} formalises the mechanisms and the estimators, \cref{sec:sim} the simulators, and \cref{sec:results} reports results. \Cref{sec:agenda} sets out the research agenda, and \cref{sec:limits} discusses limitations.
+
+% =====================================================================================================
+\section{Institutional setting}\label{sec:setting}
+
+\paragraph{Credit bureau} NCB is Thailand's national credit bureau and operates under the Credit Information Business Act B.E.~2545 (2002). Member institutions report account-level data monthly, including product, limit, balance, days past due (DPD) and account status, and the bureau records inquiries made by members. Access requires the data subject's consent and is limited to purposes such as credit evaluation, and the Act limits how long negative information may be disclosed. Two features matter here. The bureau sees accounts at all member lenders, not only at the lender that made a decision. Its records are also shaped by member and policy decisions, for example through status codes for deferred accounts.
+
+\paragraph{Asset-management company} SAM is a state-owned AMC under the Financial Institutions Development Fund. It acquires non-performing loans (NPLs) and foreclosed assets from financial institutions and resolves them through restructuring, settlement or legal action. Since 2017 it has run a Debt Clinic with the Bank of Thailand that consolidates eligible borrowers' unsecured debts into a long-term, low-rate repayment plan. Programme terms and eligibility rules have changed over time, which matters for identification (\cref{sec:agenda}).
+
+\paragraph{Policy interventions} Relevant policies include payment deferrals during 2020--2021, responsible-lending rules that require lenders to offer restructuring before loans become non-performing, and targeted relief programmes with eligibility thresholds. The simulators encode only the mechanisms these policies share, not the terms of any programme, so nothing below depends on programme details.
+
+% =====================================================================================================
+\section{Related work}\label{sec:related}
+
+\paragraph{Credit scoring} Large benchmarks find that gradient-boosted trees and ensembles lead on tabular credit data \citep{lessmann2015} and that deep networks rarely beat them \citep{gunnarsson2021}, in line with general tabular evidence \citep{grinsztajn2022,gorishniy2021}. Event-sequence models trained on raw histories, often with self-supervision, are the main challenger \citep{babaev2019,babaev2022}, and tabular foundation models are a newer one \citep{hollmann2025}. Practice still relies on monotone, explainable scorecards \citep{siddiqi2017,thomas2017,rudin2019}; we evaluate both families, with profit-relevant metrics in the spirit of \citet{verbraken2014}.
+
+\paragraph{Selection and reject inference} Reject inference is not identified without assumptions \citep{hand1993,hand1997}, and empirical gains from classic methods are small \citep{banasik2003,crook2004}. The selective-labels literature evaluates predictions when decisions censor outcomes, using decision-maker leniency and contraction \citep{lakkaraju2017,kleinberg2018}; examiner leniency has also been used to measure bias in consumer lending \citep{dobbie2021bias}. Score cut-offs provide discontinuities in credit access \citep{keys2010,agarwal2018}. We add a data-driven route: a bureau observes rejected applicants' repayment elsewhere, which tightens bounds of the \citet{manski1990} type.
+
+\paragraph{Policy-shaped labels, deletion and fairness} Label noise \citep{natarajan2013}, invariance across environments \citep{arjovsky2019} and performative prediction \citep{perdomo2020} give general tools for labels that depend on the environment or on the model. Forbearance during COVID-19 changed reported delinquency at scale \citep{cherry2021}. The removal of negative information from credit reports changes access to credit \citep{musto2004,dobbie2020bad,herkenhoff2021}, with equilibrium effects on other borrowers \citep{liberman2018}. Machine-learning scores can widen disparities \citep{fuster2022}, partly through noisier scores for thin-file borrowers \citep{blattner2021}, and calibration cannot coexist with equal error rates when base rates differ \citep{kleinberg2017,chouldechova2017}; see \citet{kozodoi2022} for credit scoring and \citet{ustun2019} for recourse.
+
+\paragraph{Debt relief and resolution} Evidence on what helps distressed borrowers is mixed. Payment reductions dominated principal reductions for US mortgages \citep{ganong2020}, while delayed write-downs helped distressed credit-card borrowers and immediate payment reductions did not \citep{dobbie2020targeted}; see also \citet{dobbie2015,agarwal2017,piskorski2010}. Self-cure and redefault risk explain why lenders renegotiate less than one might expect \citep{adelino2013}. Collections have been optimised with dynamic models \citep{chehrazi2019} and constrained reinforcement learning \citep{abe2010}. We use the causal machine-learning toolkit \citep{chernozhukov2018,wager2018,athey2019grf,kunzel2019,nie2021,kennedy2023}, policy learning \citep{kitagawa2018,athey2021} and off-policy evaluation \citep{dudik2011}.
+
+% =====================================================================================================
+\section{Framework}\label{sec:framework}
+
+Borrowers are indexed by $i$ and months by $t$. $X_{it}$ denotes bureau attributes computed from reported data up to the end of month $t$. A loan is in default when it reaches 90+ DPD. For a horizon $h$, $Y_{it}$ indicates a reported default in $(t, t+h]$.
+
+\subsection{Selection at approval}\label{sec:selection}
+
+An applicant to lender $\ell$ is approved ($S=1$) or rejected ($S=0$). Let $Y(1)$ be the default indicator if a loan is granted. The lender observes $Y(1)$ only when $S=1$, but the target for an application score is $\pi(x) = \Pr(Y(1)=1 \mid X=x)$ for all applicants:
+\begin{equation}\label{eq:decomp}
+\pi(x) = \Pr(S=1 \mid x)\,\Pr(Y(1)=1 \mid x, S=1) + \Pr(S=0 \mid x)\,\Pr(Y(1)=1 \mid x, S=0).
+\end{equation}
+When lenders also use information $W$ that the bureau does not record (soft information) and $W$ predicts $Y(1)$, then $\Pr(Y(1)=1\mid x,S=1) \neq \pi(x)$. An approved-only model is then biased however flexible it is, and reweighting on $X$ cannot repair it.
+
+The bureau sees more than the lender. Let $O=1$ indicate that a rejected applicant holds any account, existing or newly opened elsewhere, during the outcome window, so that repayment is observed. For rejected applicants,
+\begin{equation}\label{eq:obs}
+\begin{split}
+\Pr(Y(1)=1 \mid x, S=0) ={}& \Pr(O=1 \mid x, S=0)\,\Pr(Y(1)=1 \mid x, S=0, O=1) \\
+&+ \Pr(O=0 \mid x, S=0)\,\Pr(Y(1)=1 \mid x, S=0, O=0).
+\end{split}
+\end{equation}
+Only the last factor is unobserved. Bounding it by $[0,1]$ yields an identification region of width $\Pr(O=0\mid x, S=0)$ for the rejects' default rate, instead of width one. In our simulator that width averages \EtwoUnobserved\%. Point identification requires one more assumption, that observable and unobservable rejects with the same $x$ default at the same rate, which motivates reweighting observable rejects by $1/\hat\Pr(O=1\mid x,S=0)$. Repayment on other accounts is a proxy for repayment on the new loan. The two coincide in our simulator by construction, and in real data the gap can be measured on approved applicants who hold other accounts.
+
+We compare five estimators: approved-only (AO); AO reweighted by $1/\hat\Pr(S=1\mid x)$; classic fuzzy augmentation, which adds each reject twice with labels 1 and 0 weighted by the AO prediction \citep{siddiqi2017}; bureau-augmented (BA), which adds rejects with $O=1$; and BA reweighted for unobservable rejects.
+
+\subsection{Masking by deferral}\label{sec:masking}
+
+During a moratorium, a deferred account ($M_{it}=1$) keeps its reported delinquency state frozen. Let $D^{*}_{it}$ be the default indicator in a counterfactual world without deferral. The reported label is roughly $Y_{it} = D^{*}_{it}(1-M_{it})$, and deferral is more likely for distressed borrowers:
+\begin{equation}\label{eq:mnar}
+\Pr(M_{it}=1 \mid D^{*}_{it}=1, X_{it}) \;>\; \Pr(M_{it}=1 \mid D^{*}_{it}=0, X_{it}).
+\end{equation}
+Masking is therefore not at random and has three consequences: default rates are understated, risk rankings flatten, and a deferral flag used as a feature can take the wrong sign. We compare three remedies with an oracle trained on $D^{*}$, which real data never provide:
+\begin{enumerate}[leftmargin=1.4em]
+  \item \emph{Exclude} windows that overlap a deferral. This is valid only if deferral is ignorable given $X$, and it removes every flagged training row.
+  \item \emph{Delayed labels}: extend the window of a deferred borrower to $(t, \max\{t+h,\, \tau_{\text{exit}}+\Delta\}]$, where $\tau_{\text{exit}}$ is the last month of deferral and $\Delta = 6$ months.
+  \item \emph{Naive}: use reported labels as they are.
+\end{enumerate}
+Deferral can also change outcomes, so $D^*$ differs from what happens after exit. Delayed labels target outcomes under the policy actually experienced, which is what a model used after the programme ends needs.
+
+\subsection{Treatment in the workout}\label{sec:treatment}
+
+Workout case $j$ has balance $b_j$ and covariates $X_j$ from the AMC file and the bureau. An offer $a\in\{0,1,2,3\}$ is standard collection, a term extension at a concessional rate, a 30\% write-down, or both. The recovery value $V_j(a)$ is the present value of collections at the AMC's cost of funds divided by $b_j$. The effect of offer $a$ is $\tau_a(x) = \Exp[V(a)-V(0)\mid X=x]$. Logged offers $A_j$ were chosen by officers with propensities $e_a(x)=\Pr(A=a\mid X=x)$. We assume unconfoundedness given $X$ and overlap ($e_a \ge 0.02$). With cross-fitted outcome models $\hat\mu_a$ and propensities $\hat e_a$, the DR-learner \citep{kennedy2023} regresses on $X$ the pseudo-outcome
+\begin{equation}\label{eq:dr}
+\hat\varphi_{a} = \hat\mu_a(X) - \hat\mu_0(X) + \frac{\ind\{A=a\}\,(V-\hat\mu_a(X))}{\hat e_a(X)} - \frac{\ind\{A=0\}\,(V-\hat\mu_0(X))}{\hat e_0(X)}.
+\end{equation}
+A policy $\pi$ maps covariates to offers. Write-downs are limited by a budget $B$ in baht:
+\begin{equation}\label{eq:policy}
+\max_{\pi}\ \sum_j b_j\,\hat\tau_{\pi(X_j)}(X_j) \quad\text{s.t.}\quad \sum_j h_{\pi(X_j)}\,b_j \le B,
+\end{equation}
+where $h_a = 0.3$ for offers with a write-down and $0$ otherwise. \Cref{alg:budget} solves the linear relaxation greedily, which is near-optimal when no single case is large relative to $B$. Policy values are estimated off-policy with the direct method (DM), inverse propensity scoring (IPS) and the doubly robust (DR) estimator \citep{dudik2011}, all weighted by balance:
+\begin{equation}\label{eq:ope}
+\hat V_{\text{DR}}(\pi) = \sum_j w_j\Big[\hat\mu_{\pi(X_j)}(X_j) + \frac{\ind\{A_j=\pi(X_j)\}}{\hat e_{A_j}(X_j)}\big(V_j - \hat\mu_{A_j}(X_j)\big)\Big],\qquad w_j = b_j \Big/ \textstyle\sum_k b_k .
+\end{equation}
+
+\begin{algorithm}[t]
+\caption{Write-down-budgeted offer allocation}\label{alg:budget}
+\small
+\begin{algorithmic}[1]
+\Require estimated effects $\hat\tau_a(X_j)$ for $a\in\{1,2,3\}$ ($\hat\tau_0\equiv 0$), balances $b_j$, budget $B$
+\For{each case $j$}
+  \State $\pi_j \gets \arg\max_{a\in\{0,1\}} \hat\tau_a(X_j)$ \Comment{best offer without a write-down}
+  \State $g_j \gets \max_{a\in\{2,3\}} \hat\tau_a(X_j) - \max\{0, \hat\tau_1(X_j)\}$ \Comment{extra gain from writing down}
+\EndFor
+\State spent $\gets 0$
+\For{$j$ in decreasing order of $g_j b_j / (0.3\,b_j)$}
+  \If{$g_j > 0$ \textbf{and} spent $+\,0.3\,b_j \le B$}
+    \State $\pi_j \gets \arg\max_{a\in\{2,3\}} \hat\tau_a(X_j)$;\quad spent $\gets$ spent $+\,0.3\,b_j$
+  \EndIf
+\EndFor
+\State \Return $\pi$
+\end{algorithmic}
+\end{algorithm}
+
+% =====================================================================================================
+\section{Simulators and protocol}\label{sec:sim}
+
+\subsection{Bureau simulator}
+
+The bureau simulator generates 50,000 borrowers over a 60-month panel after a 12-month burn-in. Borrower $i$ has latent ability $a_i$, whose mean differs by occupation and age, soft information $u_i\sim N(0,1)$ that lenders see but the bureau never records, and an idiosyncratic shock $z_{it} = 0.85\,z_{i,t-1} + 0.5\,\sigma_i\,\varepsilon_{it}$ whose volatility $\sigma_i$ is highest for informal workers. A macro shock $m_t=1$ hits in months 24--35, with $m_t = 0.3$ for six months afterwards. In each month the borrower misses a payment with probability
+\begin{equation}\label{eq:miss}
+p_{it} = \sigma\big(-3.0 - 0.7\,a_i - 0.5\,u_i + z_{it} + 0.9\,m_t\,v_i + 0.6\,(U_{it}-0.5)\,\ind\{\text{active}\}\big),
+\end{equation}
+where $\sigma$ is the logistic function, $v_i$ is occupation-specific sensitivity to the shock and $U_{it}$ is revolving utilisation. Delinquency moves along $0\to1\to2\to3$ (current, 30, 60 and 90+ DPD) with each missed payment. A borrower at 30 or 60 DPD who pays cures with probability $0.5$, and 90+ DPD is absorbing.
+
+Borrowers apply for credit with probability $0.015 + 0.25\,p_{it} + 0.03\,\ind\{\text{no account}\}$ at one of six lenders, chosen by market share (30\% for lender~0, 14\% for a lenient lender). Each lender approves its target share of the month's applicants (50\% at lender~0, 45--60\% at the others, 85\% at the lenient lender), ranking them by a risk index of reported attributes plus $\lambda_\ell u_i$ and noise. Lender~0 leans heavily on soft information ($\lambda_0 = 0.9$), the others less ($0.6$) and the lenient lender hardly at all ($0.1$). At month 24, active borrowers enter a moratorium with probability $\sigma(-1 + 1.6\,\tilde p_{it})$, where $\tilde p_{it}$ is their standardised distress. Deferral freezes the reported state until month 35, and catch-up payments raise the logit in \eqref{eq:miss} by 0.7 for six months after exit. An observed and a counterfactual no-deferral world share all random draws, so the masking effect is measured exactly. The bureau computes 16 attributes from reported data (\cref{app:features}). \Cref{tab:calibration} lists the resulting moments.
+
+\begin{table}[t]
+\centering\small
+\caption{Simulator moments, averaged over five seeds.}
+\label{tab:calibration}
+\input{tables/tab_calibration.tex}
+\end{table}
+
+\subsection{Workout simulator}
+
+The workout simulator generates 50,000 NPL cases, 30\% of them secured by property. Each case has a balance, monthly income, a repayment capacity $c_j$ equal to an unobserved share of income, and willingness to pay $w_j\sim N(0,1)$. Offers set an instalment $I_j(a)$ and a remaining debt $D_j(a)$ (\cref{app:params}). The plan is completed with probability
+\begin{equation}\label{eq:complete}
+q_j(a) = \sigma\Big(0.3 + 1.8\,\log\frac{c_j}{I_j(a)} + 5\,\min\Big\{0,\ \log\frac{48\,c_j}{D_j(a)}\Big\} + 0.8\,w_j\Big).
+\end{equation}
+The first term captures liquidity: can the borrower afford the instalment? The second captures debt overhang: willingness collapses once the debt exceeds four years of capacity, so only a write-down helps \citep{ganong2020,dobbie2020targeted}. A completed plan yields the present value of its instalments at an 8\% annual cost of funds. A failed plan yields the instalments paid before redefault within three years, fewer when they are unaffordable, followed by legal recovery: $0.9\min\{1, 0.7\times\text{collateral ratio}\}$ after 30 months for secured cases and 5\% after 24 months for unsecured ones. A secondary outcome is the probability of a new 90+ DPD at another lender within 24 months, $\sigma(-2.2 + 1.3\min\{I_j(a)/c_j, 4\} - 0.4\,w_j)$, for borrowers with other accounts. Sixty officers with generosity $g\sim N(0,0.7)$ chose logged offers through a multinomial logit on observables and their own generosity, with a 2\% floor per offer. Twelve covariates are observed, including noisy proxies of income and of the share of income free for repayment. Truth is computed in expectation by quadrature; realised outcomes are drawn once per case.
+
+\subsection{Protocol}
+
+All results are means over five seeds with standard deviations across seeds. \emph{E1 and E4}: models are developed on observation months $t_0\in\{12,15,18,21,24\}$ (about \EoneNdev{} thousand borrower-months) and tested out of time on $t_0\in\{36,39,42,45\}$ (about \EoneNoot{} thousand), with $h=12$; the development windows span the shock. \emph{E2}: lender~0's applications in months 6--47 (about \EtwoNapps{} thousand per seed), split 50/50 by borrower and scored against every applicant's $Y(1)$. \emph{E3}: development through the moratorium, $t_0\in\{15,18,21,24\}$, and test after it, $t_0\in\{39,42,45\}$. \emph{Workouts}: a 50/50 split, outcome models per offer, a multinomial logistic propensity model and 2-fold cross-fitting.
+
+The models are a gradient-boosted classifier with monotone constraints on 11 of the 16 attributes (scikit-learn \texttt{HistGradientBoosting}); a weight-of-evidence (WoE) scorecard with monotone binning and points scaled to 600 at odds of 50:1 with 20 points to double the odds; and, for E3, logistic regression, so that the coefficient on the deferral flag can be read. The self-supervised (SSL) encoder is a denoising autoencoder (96--16--96) trained on 60,000 unlabelled 24-month sequences of five channels with 25\% of months masked, a CPU-scale stand-in for a bureau foundation model. Metrics are AUC, the KS statistic, the Brier score, the ratio of mean predicted to observed default (PD/observed), and the population stability index (PSI) between development and out-of-time scores.
+
+% =====================================================================================================
+\section{Results}\label{sec:results}
+
+\subsection{E1: model benchmark out of time}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_e1_benchmark.pdf}
+\caption{Out-of-time benchmark (E1). (a) AUC for all borrowers and for thin-file borrowers. (b) Population stability index between development and out-of-time scores; the shaded bands mark the conventional thresholds of 0.10 (moderate shift) and 0.25 (significant shift). Bars are $\pm 1$ s.d.\ across five seeds.}
+\label{fig:e1}
+\end{figure}
+
+\begin{table}[t]
+\centering\footnotesize\setlength{\tabcolsep}{4.5pt}
+\caption{E1: out-of-time performance (mean $\pm$ s.d.\ over five seeds).}
+\label{tab:e1}
+\input{tables/tab_e1.tex}
+\end{table}
+
+The monotone GBM reaches an out-of-time AUC of \EoneAUCGbm{} against \EoneAUCSc{} for the scorecard (\cref{tab:e1}, \cref{fig:e1}). Adding SSL embeddings raises AUC to \EoneAUCGbmssl{} but not on thin files (\EoneThinGbmssl{} against \EoneThinGbm{}), and it more than triples score drift (PSI \EonePSIGbmssl{} against \EonePSIGbm{}). Embeddings alone reach \EoneAUCSsl{}. The pattern matches the tabular evidence that representation learning adds little over well-engineered attributes \citep{gunnarsson2021,grinsztajn2022}, and it adds a cost the usual benchmarks omit: a representation learned across a regime shift moves when the regime ends.
+
+Every model over-predicts default after the shock, by a factor of about \EoneCalGbm{} for the GBM, because development windows span the shock (\EoneDevBad\% default against \EoneOotBad\% out of time). Rankings transfer but calibration does not, so recalibration and macro-aware term structures are part of the method rather than an afterthought.
+
+\subsection{E2: selective labels}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_e2_selective_labels.pdf}
+\caption{Selective labels at lender~0 (E2). (a) Calibration on all applicants in ten bins of each model's prediction; points above the diagonal mean under-prediction (seed 7). (b) Ratio of predicted to observed default among applicants lender~0 rejected, mean $\pm$ s.d.\ over five seeds. The oracle sits below 1 because rejects were selected on soft information that no score observes.}
+\label{fig:e2}
+\end{figure}
+
+\begin{table}[t]
+\centering\small
+\caption{E2: reject inference at lender~0, scored against every applicant's true outcome $Y(1)$.}
+\label{tab:e2}
+\input{tables/tab_e2.tex}
+\end{table}
+
+Lender~0 approves \EtwoApprove\% of applicants; approved applicants default at \EtwoBadApproved\% and rejected ones would have defaulted at \EtwoBadRejected\%. The approved-only model under-predicts default among rejects by \EtwoAoUnder\% (ratio \EtwoRejAo{}, \cref{tab:e2}, \cref{fig:e2}). Reweighting on observables makes this worse (\EtwoRejAoipw{}), because it up-weights approved applicants with poor bureau records, whom the lender approved precisely because their soft information was good. Fuzzy augmentation (\EtwoRejFuzzy{}) inherits the AO model's bias. Bureau-augmented labels raise the ratio to \EtwoRejBa{} (\EtwoRejBaipw{} with reweighting), close to the oracle's \EtwoRejOracle{}. AUC on all applicants rises from \EtwoAUCAo{} to \EtwoAUCBa{}, equal to the oracle, and the default rate at a 70\% approval rate falls from \EtwoBadAo\% to \EtwoBadBa\%.
+
+Validation on approved applicants alone, the view a single lender has, cannot tell these methods apart: their AUCs on approved applicants span only \EtwoHouseMin--\EtwoHouseMax. Reject inference therefore cannot be validated in-house. It needs outcomes for rejected applicants, which only a cross-lender view can supply.
+
+\subsection{E3: masking by a moratorium}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_e3_masking.pdf}
+\caption{Label masking by a moratorium (E3). (a) Share of the scorable population with a 90+ DPD within 12 months of each observation month, as reported and in the counterfactual world without deferral (seed 7). (b) Out-of-time AUC by label strategy. (c) Calibration of deferred borrowers relative to the rest of the portfolio (1 is ideal). Bars are $\pm 1$ s.d.\ across five seeds.}
+\label{fig:e3}
+\end{figure}
+
+\begin{table}[t]
+\centering\footnotesize\setlength{\tabcolsep}{4.5pt}
+\caption{E3: training through a moratorium and testing after it. ``n/e'': not estimable, because excluding deferred windows removes every flagged row.}
+\label{tab:e3}
+\input{tables/tab_e3.tex}
+\end{table}
+
+During the moratorium the bureau reports far less default than occurs in the counterfactual world (\cref{fig:e3}a). Across development windows, the reported default rate is \EthreeDevRep\% against \EthreeDevTrue\% without deferral. A model trained on reported labels learns deferral as a safety signal (coefficient \EthreeCoefNaive{}, \cref{tab:e3}). After the programme ends, deferred borrowers default at \EthreeFlagBad\% against \EthreeNoFlagBad\% for the rest, and the naive model's AUC collapses to \EthreeAUCNaive{} from about 0.83. It also assigns deferred borrowers \EthreeRelNaive{} of their relative risk.
+
+Excluding deferred windows restores AUC (\EthreeAUCExcl{}) but cannot learn anything about the flag and leaves deferred borrowers under-predicted (\EthreeRelExcl{}). Delayed labels restore AUC (\EthreeAUCDelay{}), neutralise the flag (\EthreeCoefDelay{}) and raise relative calibration to \EthreeRelDelay{}. The oracle, which no real data provide, reaches \EthreeAUCOracle{} and \EthreeRelOracle{}. The remaining gap exists because deferral itself changes outcomes, through catch-up stress and through survival, so the deferral should be modelled as a treatment, not only as a source of missing labels (\cref{sec:agenda}).
+
+\subsection{E4: groups}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_e4_groups.pdf}
+\caption{Groups (E4), monotone GBM, out of time. (a) Group calibration relative to the portfolio, $(\overline{\text{PD}}_g/\bar y_g)/(\overline{\text{PD}}/\bar y)$. (b) Approval rate among borrowers who did not default, at a single cut-off that approves 70\% overall; the dashed line is the average across groups. Group effects in the simulator are design choices, not claims about Thai borrowers. Bars are $\pm 1$ s.d.\ across five seeds.}
+\label{fig:e4}
+\end{figure}
+
+Group calibration is stable across gender and regions (between \EfourRegMin{} and \EfourRegMax{} for regions) but not across occupations (\cref{fig:e4}a). Relative to the portfolio, the model under-predicts informal workers (\EfourRelInformal{}) and over-predicts salaried ones (\EfourRelSalaried{}), because the shock in the development period hit occupations unevenly and their relative risk changed after it. Yet non-defaulting informal workers are approved less often (\EfourAppInformal\% against \EfourAppSalaried\%, \cref{fig:e4}b), because their base default rate is higher (\EfourBadInformal\% against \EfourBadSalaried\%). The two panels illustrate the impossibility result: with unequal base rates, calibration and equal opportunity cannot both hold \citep{kleinberg2017,chouldechova2017}. Which criterion governs is a policy choice. Thin-file borrowers are close to calibrated (\EfourRelThin{}) but approved less often when they repay (\EfourAppThin\% against \EfourAppThick\%).
+
+\subsection{Causal debt resolution}
+
+\begin{table}[t]
+\centering\small
+\caption{Accuracy of estimated offer effects against the simulator's truth, in percentage points (pp) of balance.}
+\label{tab:r1}
+\input{tables/tab_r1.tex}
+\end{table}
+
+\paragraph{Effects} On average every concession lowers recovery value, by \RoneMeanExt, \RoneMeanWd{} and \RoneMeanBoth{} pp for extension, write-down and both, but the effects vary widely across cases (s.d.\ \RoneSdExt--\RoneSdBoth{} pp, \cref{tab:r1}). The DR-learner estimates them more accurately than the T-learner for extensions (RMSE \RoneDRExt{} against \RoneTExt{} pp) and write-downs (\RoneDRWd{} against \RoneTWd{}), but not for the combined offer (\RoneDRBoth{} against \RoneTBoth{}), which officers chose in only \RlogBoth\% of cases; small propensities make its pseudo-outcomes noisy.
+
+\begin{table}[t]
+\centering\small
+\caption{Policies at the logged policy's write-down budget, true values on the held-out half (mean $\pm$ s.d.\ of recovery over five seeds).}
+\label{tab:r2}
+\input{tables/tab_r2.tex}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_resolution.pdf}
+\caption{Targeting restructuring offers. (a) Recovery value against the write-down budget, mean $\pm$ s.d.\ over five seeds; the diamond is the logged policy. (b, c) Cumulative true gain in recovery from offering a term extension, or an extension with a write-down, to cases in the order each method ranks them (seed 7).}
+\label{fig:resolution}
+\end{figure}
+
+\paragraph{Policies} The logged policy recovers \RtwoRecSq\% of balance, less than offering everyone the standard track (\RtwoRecStd\%), because officers concede too often to borrowers who would self-cure and to borrowers beyond help (\cref{tab:r2}), the pattern \citet{adelino2013} describe. Predictive targeting, which ranks cases by a collections score and helps the lowest scorers, reaches \RtwoRecPred\%. Causal targeting with the DR-learner reaches \RtwoRecCausDR\% while writing down \RtwoWdCausDR\% of balance instead of \RtwoWdSq\%, and the oracle reaches \RtwoRecOracle\%. Causal targeting thus captures \RtwoShareDR\% of the attainable gain over the logged policy, against \RtwoSharePred\% for predictive targeting. Plan completion rises from \RtwoCompSq\% to \RtwoCompCausDR\%.
+
+The bureau outcome shows a trade-off. New 90+ DPD at other lenders falls from \RtwoSpillSq\% under the logged policy to \RtwoSpillCausDR\% under causal targeting, but to \RtwoSpillExt\% if every borrower gets an extension. Maximising recovery is not the same as minimising distress spilling over to other creditors, and a public AMC may want an objective that weights both.
+
+\paragraph{Budgets and rankings} The oracle frontier rises from \RthreeOracleZero\% at zero budget to \RthreeOracleMax\% and is flat beyond a budget of \RthreeOracleSat\% of balance (\cref{fig:resolution}a). Causal targeting gains much less from write-downs (\RthreeDRZero\% to \RthreeDRMax\%), and predictive targeting stays between \RthreePredMin\% and \RthreePredMax\% at every budget. Most of the attainable gain comes from choosing correctly between the standard track and an extension. Write-downs pay only in a narrow overhang segment, where effect estimates are noisiest. The gain curves (\cref{fig:resolution}b, c) show why predictive targeting fails: offering extensions to the lowest scorers first loses money at the start, because many of them cannot repay on any terms.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_ope.pdf}
+\caption{Off-policy evaluation of eight candidate policies on the held-out half, five seeds (\RfourNpoints{} points per panel). The dashed line is perfect agreement.}
+\label{fig:ope}
+\end{figure}
+
+\paragraph{Evaluation before deployment} Doubly robust off-policy evaluation tracks true policy values with a mean absolute error of \RfourDr{} pp, against \RfourDm{} for the direct method and \RfourIps{} for IPS (\cref{fig:ope}, \cref{app:ope}). The direct method overstates the value of the T-learner policy by \RfourDMselfbias{} pp, because it judges a policy with the outcome model that designed it, while the doubly robust estimate stays within \RfourDRselfbias{} pp. An AMC can therefore screen candidate policies on logged data before it commits to a field test.
+
+% =====================================================================================================
+\section{A research agenda for the linked data}\label{sec:agenda}
+
+The simulators show what each estimator can recover when its assumptions hold. With real data, the assumptions must be earned. \Cref{tab:agenda} maps each question to a source of variation that the linked data or the programmes themselves provide.
+
+\begin{table}[t]
+\centering\small
+\caption{Questions for the linked NCB--SAM data and sources of identifying variation.}
+\label{tab:agenda}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{3.2cm}}
+\toprule
+Question & Source of variation & Data needed & Estimator \\
+\midrule
+Default of rejected applicants & Leniency of lenders and branches; approval quotas; score cut-offs & Inquiries and new accounts across lenders & Leniency IV, contraction, bounds \eqref{eq:obs} \\
+Masking by deferral & Automatic versus opt-in phases; eligibility thresholds & Deferral status codes and post-exit histories & Delayed labels, censoring weights, RDD \\
+Effects of workout offers & Rotation-based assignment of cases to officers; programme cut-offs (debt size, NPL date); randomised pilots & SAM offers and payments; bureau outcomes & Judge IV, RDD, DR-learner, field experiments \\
+Return to formal credit & Expiry of negative information; timing of resolution & Bureau histories after resolution & RD in time, staggered DiD \citep{callaway2021} \\
+Prevention versus cure & Timing of restructuring relative to delinquency & Multi-state histories in both sources & Offline RL with conservative evaluation \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Selection} Lenders and branches differ in approval rates for comparable applicants. If applicants' choice of lender is as good as random given their attributes, leniency identifies the effect of credit access and the default rate of marginal rejects \citep{dobbie2021bias,kleinberg2018}, and bureau-observed repayment narrows the bounds in \eqref{eq:obs}.
+
+\paragraph{Masking and deferral} Deferral programmes that began automatically and later required applications, or that used eligibility thresholds, separate selection into deferral from its effect. That supports both corrected labels and an estimate of whether deferral prevented default or postponed it \citep{cherry2021}.
+
+\paragraph{Workout offers} If cases are allocated to officers by rotation or workload, officers' generosity is an instrument for concessions \citep{dobbie2015}. Debt Clinic eligibility rules, such as cut-off dates for NPL status and limits on debt size, create discontinuities. A small randomised pilot in which every arm is at least as generous as current practice would validate the off-policy estimates, and conservative bandits \citep{kazerouni2017} can then improve offers online.
+
+\paragraph{Return to formal credit} The statutory limit on how long negative information may be disclosed creates a discontinuity in time, comparable to bankruptcy-flag removal in the United States \citep{musto2004,dobbie2020bad}. Any policy that deletes records for small resolved debts would create an experiment similar to Chile's \citep{liberman2018}.
+
+\paragraph{Privacy-preserving linkage} Linking the two sources requires neither institution to release identities. National ID numbers, names and birth dates can be encoded with salted Bloom filters held by a trusted third party \citep{schnell2009}. Models can be trained across the two institutions with vertical federated learning, with features held at the bureau and outcomes at the AMC \citep{cheng2021secureboost}. Released statistics can carry differential-privacy guarantees \citep{dwork2014}. Each step needs a lawful purpose under the Credit Information Business Act and the Personal Data Protection Act B.E.~2562 (2019), a data-protection impact assessment and ethics review. Pilots that affect borrowers also need pre-registered analysis plans and stopping rules.
+
+% =====================================================================================================
+\section{Limitations}\label{sec:limits}
+
+Simulation results show what methods can recover under stated assumptions, not what the Thai credit market looks like. The simulators' functional forms and parameters were chosen by us. Different choices would change magnitudes and possibly rankings, for example if soft information mattered less or if overhang were rarer. In the bureau simulator, repayment on other accounts is a perfect proxy for repayment on the new loan, so bureau augmentation is evaluated in its best case. The workout simulator satisfies unconfoundedness and overlap by construction; with real data both are assumptions to defend (\cref{sec:agenda}). We ignore general-equilibrium responses, such as lenders changing cut-offs after a new score is adopted or borrowers anticipating relief, which performative-prediction and deletion studies show can matter \citep{perdomo2020,liberman2018}. The SSL encoder is a small stand-in for sequence models trained at bureau scale, so E1 tests the evaluation protocol rather than the potential of foundation models.
+
+% =====================================================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+The credit system writes its own labels. Approval hides the outcomes of the rejected, deferral hides distress, and workout offers change the outcomes they are meant to predict. Linking a credit bureau with a public AMC exposes all three mechanisms and supplies some of the means to correct them: repayment at other lenders for rejected applicants, post-exit histories for deferred borrowers, and bureau outcomes for workout policies. In our simulators, these corrections remove most of the bias that standard practice leaves in place. The next step is to estimate the same quantities on the linked data under the identification strategies above and the governance they require.
+
+\paragraph{Code availability} The code that produces every number, table and figure accompanies this preprint and uses only synthetic data.
+\begin{itemize}[leftmargin=1.4em,itemsep=0pt,topsep=2pt]
+  \item \texttt{ncb\_scoring\_lab.py}: the bureau simulator and experiments E1--E5.
+  \item \texttt{sam\_resolution\_lab.py}: the workout simulator and the causal-targeting experiments.
+  \item \texttt{paper\_experiments.py}, \texttt{paper\_tables.py}, \texttt{paper\_figures.py}: all seeds, tables and figures.
+\end{itemize}
+
+\bibliographystyle{plainnat}
+{\small\bibliography{references}}
+
+% =====================================================================================================
+
+\appendix
+\section{Simulator parameters}\label{app:params}
+
+\begin{table}[H]
+\centering\small
+\caption{Main parameters of the two simulators.}
+\label{tab:params}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}X}
+\toprule
+Component & Specification \\
+\midrule
+\multicolumn{2}{l}{\emph{Bureau simulator}} \\
+Population & 50,000 borrowers; 60 recorded months after a 12-month burn-in \\
+Ability & $a_i \sim N(\mu_{\text{occ}} + 0.01(\text{age}-40), 1)$, with $\mu = 0.3, 0, -0.3$ for salaried, self-employed and informal workers \\
+Shocks & $z_{it} = 0.85 z_{i,t-1} + 0.5\sigma_i\varepsilon_{it}$, $\sigma_i = 0.6, 0.9, 1.1$; shock sensitivity $v_i = 0.7, 1.2, 1.4$ \\
+Macro path & $m_t = 1$ in months 24--35, $0.3$ in months 36--41, $0$ otherwise \\
+New to credit & Probability $0.10 + 0.25\,\ind\{\text{age}<30\} + 0.15\,\ind\{\text{informal}\}$ of no account at the start \\
+Lenders & Six; market shares 30\%, $4\times 14\%$, 14\% (lenient); approval targets 50\%, 45--60\%, 85\%; soft-information weights $\lambda = 0.9, 0.6, 0.1$ \\
+Lender risk index & $1.0\,\text{worst DPD}_{6m} + 1.2\,U + 0.3\,\text{inquiries}_{3m} - 0.2\min(\text{accounts},4) + 0.4\,\ind\{\text{no account}\}$ \\
+Moratorium & Enrolment at month 24 with probability $\sigma(-1+1.6\tilde p)$; reported state frozen in months 24--35; logit $+0.7$ for six months after exit \\
+\midrule
+\multicolumn{2}{l}{\emph{Workout simulator}} \\
+Portfolio & 50,000 NPL cases; 30\% secured; balance log-normal with median THB 900,000 (secured) or 120,000 (unsecured) \\
+Capacity & Income log-normal, median THB 15,000 per month; repayment share of income $U(0.10, 0.35)$ \\
+Offers & Standard: 12\% over 36 months (unsecured), 7\% over 120 months (secured). Extension: 6\% over 96 months, 4\% over 240 months. Write-down: 30\% of principal \\
+Recovery & Cost of funds 8\% a year; legal recovery $0.9\min\{1, 0.7\times\text{collateral ratio}\}$ after 30 months (secured) or 5\% after 24 months (unsecured) \\
+Logging policy & 60 officers, generosity $N(0, 0.7)$; multinomial logit on DSR, DTI, prior payments and security; floor of 2\% per offer \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Covariates}\label{app:features}
+
+\paragraph{Bureau attributes (16)} Active accounts; distinct lenders; months on file; log total limit; utilisation; six-month average and six-month change of utilisation; worst DPD over 3, 6 and 12 months; months with any delinquency in the last 12; months since the last delinquency (capped at 36); inquiries over 3 and 6 months; accounts opened in the last 6 months; any deferral in the last 24 months. The GBM constrains risk to rise with utilisation, its average and change, worst DPD, delinquent months and inquiries, and to fall with months on file and months since the last delinquency. The deferral flag is left unconstrained so that E3 can show which sign a model learns.
+
+\paragraph{Workout covariates (12)} Security; log balance; collateral ratio; log income proxy; proxy for the share of income free for repayment; debt-service ratio at standard terms; debt-to-income ratio; share of payments made in the year before default; months in NPL; age; number of other bureau accounts; whether another account is delinquent; inquiries in the last six months.
+
+\section{Scorecard excerpt and reason codes}\label{app:scorecard}
+
+\Cref{tab:scorecard} shows the three attributes with the widest points range in the seed-7 scorecard, which keeps \EfiveNfeat{} attributes after removing those with low information value or wrong-signed coefficients. \Cref{tab:reasons} lists the reason codes for declined applicants at three score levels, at a cut-off of \EfiveCut{} points that approves 70\%. Reason codes rank attributes by their shortfall from the maximum points, as adverse-action notices typically do.
+
+\begin{table}[H]
+\centering\small
+\caption{Excerpt of the WoE scorecard (seed 7). Points are scaled to 600 at odds of 50:1 with 20 points to double the odds.}
+\label{tab:scorecard}
+\input{tables/tab_scorecard.tex}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Reason codes for declined applicants (seed 7).}
+\label{tab:reasons}
+\input{tables/tab_reasons.tex}
+\end{table}
+
+\section{Off-policy evaluation errors}\label{app:ope}
+
+\begin{table}[H]
+\centering\small
+\caption{Errors of off-policy estimates of recovery value over eight policies and five seeds (\RfourNpoints{} estimates per estimator), in percentage points of balance.}
+\label{tab:r4}
+\input{tables/tab_r4.tex}
+\end{table}
+
+\end{document}

@@ -1,0 +1,12 @@
+\begin{tabular}{lccccc}
+\toprule
+ & Training default & Coefficient on & Out-of-time & Relative calibration, & Out-of-time \\
+Label strategy & rate (\%) & deferral flag & AUC & deferred borrowers & Brier \\
+\midrule
+Naive: reported labels & 4.5 & $-0.59 \pm 0.04$ & $0.625 \pm 0.025$ & $0.16 \pm 0.02$ & $0.036 \pm 0.001$ \\
+Exclude deferred windows & 6.5 & n/e & $0.832 \pm 0.003$ & $0.72 \pm 0.02$ & $0.040 \pm 0.000$ \\
+Delayed labels (+6 months after exit) & 8.9 & $+0.01 \pm 0.01$ & $0.831 \pm 0.004$ & $0.69 \pm 0.02$ & $0.041 \pm 0.001$ \\
+\midrule
+Oracle: no-deferral counterfactual & 10.9 & $+0.24 \pm 0.01$ & $0.838 \pm 0.005$ & $0.90 \pm 0.02$ & $0.057 \pm 0.001$ \\
+\bottomrule
+\end{tabular}

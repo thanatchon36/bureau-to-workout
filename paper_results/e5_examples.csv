@@ -1,0 +1,4 @@
+score percentile,score,cut-off at 70% approval,reason codes
+5th,509.0,540,"util, log_limit, months_since_delinq"
+15th,524.0,540,"util, log_limit, worst_dpd_12m"
+25th,534.0,540,"util, log_limit, worst_dpd_12m"

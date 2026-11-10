@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this code or the accompanying paper, please cite it as below."
+title: "From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels"
+type: software
+authors:
+  - family-names: "Chongmankhong"
+    given-names: "Thanantchon"
+version: "1.0.0"
+date-released: "2026-11-09"
+keywords:
+  - credit scoring
+  - reject inference
+  - selective labels
+  - forbearance
+  - causal machine learning
+  - debt restructuring
+  - off-policy evaluation
+preferred-citation:
+  type: article
+  status: preprint
+  title: "From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels"
+  authors:
+    - family-names: "Chongmankhong"
+      given-names: "Thanantchon"
+  year: 2026
+  month: 11

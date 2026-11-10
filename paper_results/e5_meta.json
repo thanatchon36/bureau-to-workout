@@ -1,0 +1,19 @@
+{
+  "scorecard_features": [
+    "util",
+    "months_since_delinq",
+    "util_avg_6m",
+    "worst_dpd_12m",
+    "worst_dpd_6m",
+    "worst_dpd_3m",
+    "log_limit",
+    "util_trend_6m",
+    "inq_6m",
+    "inq_3m"
+  ],
+  "dropped": [
+    "n_delinq_12m"
+  ],
+  "factor": 28.85390081777927,
+  "offset": 487.1228762045055
+}

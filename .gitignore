@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Outputs of single-seed runs of the labs
+lab_outputs/
+resolution_outputs/
+
+# LaTeX build files (paper/main.bbl stays tracked: arXiv needs it)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.blg
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/main.pdf

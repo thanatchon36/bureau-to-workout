@@ -1,0 +1,408 @@
+\begin{thebibliography}{58}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abe et~al.(2010)Abe, Melville, Pendus, Reddy, Jensen, Thomas, Bennett,
+  Anderson, Cooley, Kowalczyk, Domick, and Gardinier]{abe2010}
+Naoki Abe, Prem Melville, Cezar Pendus, Chandan~K. Reddy, David~L. Jensen,
+  Vince~P. Thomas, James~J. Bennett, Gary~F. Anderson, Brent~R. Cooley, Melissa
+  Kowalczyk, Mark Domick, and Timothy Gardinier.
+\newblock Optimizing debt collections using constrained reinforcement learning.
+\newblock In \emph{Proceedings of the 16th ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 75--84, 2010.
+
+\bibitem[Adelino et~al.(2013)Adelino, Gerardi, and Willen]{adelino2013}
+Manuel Adelino, Kristopher Gerardi, and Paul~S. Willen.
+\newblock Why don't lenders renegotiate more home mortgages? {R}edefaults,
+  self-cures and securitization.
+\newblock \emph{Journal of Monetary Economics}, 60\penalty0 (7):\penalty0
+  835--853, 2013.
+
+\bibitem[Agarwal et~al.(2017)Agarwal, Amromin, Ben-David, Chomsisengphet,
+  Piskorski, and Seru]{agarwal2017}
+Sumit Agarwal, Gene Amromin, Itzhak Ben-David, Souphala Chomsisengphet, Tomasz
+  Piskorski, and Amit Seru.
+\newblock Policy intervention in debt renegotiation: Evidence from the {H}ome
+  {A}ffordable {M}odification {P}rogram.
+\newblock \emph{Journal of Political Economy}, 125\penalty0 (3):\penalty0
+  654--712, 2017.
+
+\bibitem[Agarwal et~al.(2018)Agarwal, Chomsisengphet, Mahoney, and
+  Stroebel]{agarwal2018}
+Sumit Agarwal, Souphala Chomsisengphet, Neale Mahoney, and Johannes Stroebel.
+\newblock Do banks pass through credit expansions to consumers who want to
+  borrow?
+\newblock \emph{Quarterly Journal of Economics}, 133\penalty0 (1):\penalty0
+  129--190, 2018.
+
+\bibitem[Arjovsky et~al.(2019)Arjovsky, Bottou, Gulrajani, and
+  Lopez-Paz]{arjovsky2019}
+Martin Arjovsky, L{\'e}on Bottou, Ishaan Gulrajani, and David Lopez-Paz.
+\newblock Invariant risk minimization.
+\newblock \emph{arXiv preprint arXiv:1907.02893}, 2019.
+
+\bibitem[Athey and Wager(2021)]{athey2021}
+Susan Athey and Stefan Wager.
+\newblock Policy learning with observational data.
+\newblock \emph{Econometrica}, 89\penalty0 (1):\penalty0 133--161, 2021.
+
+\bibitem[Athey et~al.(2019)Athey, Tibshirani, and Wager]{athey2019grf}
+Susan Athey, Julie Tibshirani, and Stefan Wager.
+\newblock Generalized random forests.
+\newblock \emph{Annals of Statistics}, 47\penalty0 (2):\penalty0 1148--1178,
+  2019.
+
+\bibitem[Babaev et~al.(2019)Babaev, Savchenko, Tuzhilin, and
+  Umerenkov]{babaev2019}
+Dmitrii Babaev, Maxim Savchenko, Alexander Tuzhilin, and Dmitrii Umerenkov.
+\newblock {E.T.-RNN}: Applying deep learning to credit loan applications.
+\newblock In \emph{Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 2183--2190, 2019.
+
+\bibitem[Babaev et~al.(2022)Babaev, Ovsov, Kireev, Ivanova, Gusev, Nazarov, and
+  Tuzhilin]{babaev2022}
+Dmitrii Babaev, Nikita Ovsov, Ivan Kireev, Maria Ivanova, Gleb Gusev, Ivan
+  Nazarov, and Alexander Tuzhilin.
+\newblock {CoLES}: Contrastive learning for event sequences with
+  self-supervision.
+\newblock In \emph{Proceedings of the 2022 International Conference on
+  Management of Data (SIGMOD)}, 2022.
+
+\bibitem[Banasik et~al.(2003)Banasik, Crook, and Thomas]{banasik2003}
+John Banasik, Jonathan Crook, and Lyn Thomas.
+\newblock Sample selection bias in credit scoring models.
+\newblock \emph{Journal of the Operational Research Society}, 54\penalty0
+  (8):\penalty0 822--832, 2003.
+
+\bibitem[Blattner and Nelson(2021)]{blattner2021}
+Laura Blattner and Scott Nelson.
+\newblock How costly is noise? {D}ata and disparities in consumer credit.
+\newblock Working paper, arXiv, 2021.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021}
+Brantly Callaway and Pedro H.~C. Sant'Anna.
+\newblock Difference-in-differences with multiple time periods.
+\newblock \emph{Journal of Econometrics}, 225\penalty0 (2):\penalty0 200--230,
+  2021.
+
+\bibitem[Chantarat et~al.(2020)Chantarat, Lamsam, Samphantharak, and
+  Tangsawasdirat]{chantarat2020}
+Sommarat Chantarat, Atchana Lamsam, Krislert Samphantharak, and Bhumjai
+  Tangsawasdirat.
+\newblock Household debt and delinquency over the life cycle.
+\newblock \emph{Asian Development Review}, 37\penalty0 (1), 2020.
+
+\bibitem[Chehrazi et~al.(2019)Chehrazi, Glynn, and Weber]{chehrazi2019}
+Naveed Chehrazi, Peter~W. Glynn, and Thomas~A. Weber.
+\newblock Dynamic credit-collections optimization.
+\newblock \emph{Management Science}, 65\penalty0 (6):\penalty0 2737--2769,
+  2019.
+
+\bibitem[Cheng et~al.(2021)Cheng, Fan, Jin, Liu, Chen, Papadopoulos, and
+  Yang]{cheng2021secureboost}
+Kewei Cheng, Tao Fan, Yilun Jin, Yang Liu, Tianjian Chen, Dimitrios
+  Papadopoulos, and Qiang Yang.
+\newblock {SecureBoost}: A lossless federated learning framework.
+\newblock \emph{IEEE Intelligent Systems}, 36\penalty0 (6):\penalty0 87--98,
+  2021.
+
+\bibitem[Chernozhukov et~al.(2018)Chernozhukov, Chetverikov, Demirer, Duflo,
+  Hansen, Newey, and Robins]{chernozhukov2018}
+Victor Chernozhukov, Denis Chetverikov, Mert Demirer, Esther Duflo, Christian
+  Hansen, Whitney Newey, and James Robins.
+\newblock Double/debiased machine learning for treatment and structural
+  parameters.
+\newblock \emph{The Econometrics Journal}, 21\penalty0 (1):\penalty0 C1--C68,
+  2018.
+
+\bibitem[Cherry et~al.(2021)Cherry, Jiang, Matvos, Piskorski, and
+  Seru]{cherry2021}
+Susan Cherry, Erica~Xuewei Jiang, Gregor Matvos, Tomasz Piskorski, and Amit
+  Seru.
+\newblock Government and private household debt relief during {COVID-19}.
+\newblock \emph{Brookings Papers on Economic Activity}, 2021.
+\newblock Fall 2021 issue.
+
+\bibitem[Chouldechova(2017)]{chouldechova2017}
+Alexandra Chouldechova.
+\newblock Fair prediction with disparate impact: A study of bias in recidivism
+  prediction instruments.
+\newblock \emph{Big Data}, 5\penalty0 (2):\penalty0 153--163, 2017.
+
+\bibitem[Crook and Banasik(2004)]{crook2004}
+Jonathan Crook and John Banasik.
+\newblock Does reject inference really improve the performance of application
+  scoring models?
+\newblock \emph{Journal of Banking \& Finance}, 28\penalty0 (4):\penalty0
+  857--874, 2004.
+
+\bibitem[Dobbie and Song(2015)]{dobbie2015}
+Will Dobbie and Jae Song.
+\newblock Debt relief and debtor outcomes: Measuring the effects of consumer
+  bankruptcy protection.
+\newblock \emph{American Economic Review}, 105\penalty0 (3):\penalty0
+  1272--1311, 2015.
+
+\bibitem[Dobbie and Song(2020)]{dobbie2020targeted}
+Will Dobbie and Jae Song.
+\newblock Targeted debt relief and the origins of financial distress:
+  Experimental evidence from distressed credit card borrowers.
+\newblock \emph{American Economic Review}, 110\penalty0 (4):\penalty0
+  984--1018, 2020.
+
+\bibitem[Dobbie et~al.(2020)Dobbie, Goldsmith-Pinkham, Mahoney, and
+  Song]{dobbie2020bad}
+Will Dobbie, Paul Goldsmith-Pinkham, Neale Mahoney, and Jae Song.
+\newblock Bad credit, no problem? {C}redit and labor market consequences of bad
+  credit reports.
+\newblock \emph{Journal of Finance}, 75\penalty0 (5):\penalty0 2377--2419,
+  2020.
+
+\bibitem[Dobbie et~al.(2021)Dobbie, Liberman, Paravisini, and
+  Pathania]{dobbie2021bias}
+Will Dobbie, Andres Liberman, Daniel Paravisini, and Vikram Pathania.
+\newblock Measuring bias in consumer lending.
+\newblock \emph{Review of Economic Studies}, 88\penalty0 (6):\penalty0
+  2799--2832, 2021.
+
+\bibitem[Dud{\'i}k et~al.(2011)Dud{\'i}k, Langford, and Li]{dudik2011}
+Miroslav Dud{\'i}k, John Langford, and Lihong Li.
+\newblock Doubly robust policy evaluation and learning.
+\newblock In \emph{Proceedings of the 28th International Conference on Machine
+  Learning}, pages 1097--1104, 2011.
+
+\bibitem[Dwork and Roth(2014)]{dwork2014}
+Cynthia Dwork and Aaron Roth.
+\newblock The algorithmic foundations of differential privacy.
+\newblock \emph{Foundations and Trends in Theoretical Computer Science},
+  9\penalty0 (3--4):\penalty0 211--407, 2014.
+
+\bibitem[Fuster et~al.(2022)Fuster, Goldsmith-Pinkham, Ramadorai, and
+  Walther]{fuster2022}
+Andreas Fuster, Paul Goldsmith-Pinkham, Tarun Ramadorai, and Ansgar Walther.
+\newblock Predictably unequal? {T}he effects of machine learning on credit
+  markets.
+\newblock \emph{Journal of Finance}, 77\penalty0 (1):\penalty0 5--47, 2022.
+
+\bibitem[Ganong and Noel(2020)]{ganong2020}
+Peter Ganong and Pascal Noel.
+\newblock Liquidity versus wealth in household debt obligations: Evidence from
+  housing policy in the {G}reat {R}ecession.
+\newblock \emph{American Economic Review}, 110\penalty0 (10):\penalty0
+  3100--3138, 2020.
+
+\bibitem[Gorishniy et~al.(2021)Gorishniy, Rubachev, Khrulkov, and
+  Babenko]{gorishniy2021}
+Yury Gorishniy, Ivan Rubachev, Valentin Khrulkov, and Artem Babenko.
+\newblock Revisiting deep learning models for tabular data.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2021.
+
+\bibitem[Grinsztajn et~al.(2022)Grinsztajn, Oyallon, and
+  Varoquaux]{grinsztajn2022}
+L{\'e}o Grinsztajn, Edouard Oyallon, and Ga{\"e}l Varoquaux.
+\newblock Why do tree-based models still outperform deep learning on typical
+  tabular data?
+\newblock In \emph{Advances in Neural Information Processing Systems, Datasets
+  and Benchmarks Track}, 2022.
+
+\bibitem[Gunnarsson et~al.(2021)Gunnarsson, vanden Broucke, Baesens,
+  {\'O}skarsd{\'o}ttir, and Lemahieu]{gunnarsson2021}
+Bj{\"o}rn~Rafn Gunnarsson, Seppe vanden Broucke, Bart Baesens, Mar{\'i}a
+  {\'O}skarsd{\'o}ttir, and Wilfried Lemahieu.
+\newblock Deep learning for credit scoring: Do or don't?
+\newblock \emph{European Journal of Operational Research}, 295\penalty0
+  (1):\penalty0 292--305, 2021.
+
+\bibitem[Hand and Henley(1993)]{hand1993}
+David~J. Hand and William~E. Henley.
+\newblock Can reject inference ever work?
+\newblock \emph{IMA Journal of Mathematics Applied in Business and Industry},
+  5\penalty0 (1):\penalty0 45--55, 1993.
+
+\bibitem[Hand and Henley(1997)]{hand1997}
+David~J. Hand and William~E. Henley.
+\newblock Statistical classification methods in consumer credit scoring: A
+  review.
+\newblock \emph{Journal of the Royal Statistical Society: Series A},
+  160\penalty0 (3):\penalty0 523--541, 1997.
+
+\bibitem[Herkenhoff et~al.(2021)Herkenhoff, Phillips, and
+  Cohen-Cole]{herkenhoff2021}
+Kyle Herkenhoff, Gordon~M. Phillips, and Ethan Cohen-Cole.
+\newblock The impact of consumer credit access on self-employment and
+  entrepreneurship.
+\newblock \emph{Journal of Financial Economics}, 141\penalty0 (1):\penalty0
+  345--371, 2021.
+
+\bibitem[Hollmann et~al.(2025)Hollmann, M{\"u}ller, Purucker, Krishnakumar,
+  K{\"o}rfer, Hoo, Schirrmeister, and Hutter]{hollmann2025}
+Noah Hollmann, Samuel M{\"u}ller, Lennart Purucker, Arjun Krishnakumar, Max
+  K{\"o}rfer, Shi~Bin Hoo, Robin~Tibor Schirrmeister, and Frank Hutter.
+\newblock Accurate predictions on small data with a tabular foundation model.
+\newblock \emph{Nature}, 637:\penalty0 319--326, 2025.
+
+\bibitem[Kazerouni et~al.(2017)Kazerouni, Ghavamzadeh, Abbasi-Yadkori, and
+  Van~Roy]{kazerouni2017}
+Abbas Kazerouni, Mohammad Ghavamzadeh, Yasin Abbasi-Yadkori, and Benjamin
+  Van~Roy.
+\newblock Conservative contextual linear bandits.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Kennedy(2023)]{kennedy2023}
+Edward~H. Kennedy.
+\newblock Towards optimal doubly robust estimation of heterogeneous causal
+  effects.
+\newblock \emph{Electronic Journal of Statistics}, 17\penalty0 (2):\penalty0
+  3008--3049, 2023.
+
+\bibitem[Keys et~al.(2010)Keys, Mukherjee, Seru, and Vig]{keys2010}
+Benjamin~J. Keys, Tanmoy Mukherjee, Amit Seru, and Vikrant Vig.
+\newblock Did securitization lead to lax screening? {E}vidence from subprime
+  loans.
+\newblock \emph{Quarterly Journal of Economics}, 125\penalty0 (1):\penalty0
+  307--362, 2010.
+
+\bibitem[Kitagawa and Tetenov(2018)]{kitagawa2018}
+Toru Kitagawa and Aleksey Tetenov.
+\newblock Who should be treated? {E}mpirical welfare maximization methods for
+  treatment choice.
+\newblock \emph{Econometrica}, 86\penalty0 (2):\penalty0 591--616, 2018.
+
+\bibitem[Kleinberg et~al.(2017)Kleinberg, Mullainathan, and
+  Raghavan]{kleinberg2017}
+Jon Kleinberg, Sendhil Mullainathan, and Manish Raghavan.
+\newblock Inherent trade-offs in the fair determination of risk scores.
+\newblock In \emph{8th Innovations in Theoretical Computer Science Conference
+  (ITCS)}, 2017.
+
+\bibitem[Kleinberg et~al.(2018)Kleinberg, Lakkaraju, Leskovec, Ludwig, and
+  Mullainathan]{kleinberg2018}
+Jon Kleinberg, Himabindu Lakkaraju, Jure Leskovec, Jens Ludwig, and Sendhil
+  Mullainathan.
+\newblock Human decisions and machine predictions.
+\newblock \emph{Quarterly Journal of Economics}, 133\penalty0 (1):\penalty0
+  237--293, 2018.
+
+\bibitem[Kozodoi et~al.(2022)Kozodoi, Jacob, and Lessmann]{kozodoi2022}
+Nikita Kozodoi, Johannes Jacob, and Stefan Lessmann.
+\newblock Fairness in credit scoring: Assessment, implementation and profit
+  implications.
+\newblock \emph{European Journal of Operational Research}, 297\penalty0
+  (3):\penalty0 1083--1094, 2022.
+
+\bibitem[K{\"u}nzel et~al.(2019)K{\"u}nzel, Sekhon, Bickel, and Yu]{kunzel2019}
+S{\"o}ren~R. K{\"u}nzel, Jasjeet~S. Sekhon, Peter~J. Bickel, and Bin Yu.
+\newblock Metalearners for estimating heterogeneous treatment effects using
+  machine learning.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 116\penalty0
+  (10):\penalty0 4156--4165, 2019.
+
+\bibitem[Lakkaraju et~al.(2017)Lakkaraju, Kleinberg, Leskovec, Ludwig, and
+  Mullainathan]{lakkaraju2017}
+Himabindu Lakkaraju, Jon Kleinberg, Jure Leskovec, Jens Ludwig, and Sendhil
+  Mullainathan.
+\newblock The selective labels problem: Evaluating algorithmic predictions in
+  the presence of unobservables.
+\newblock In \emph{Proceedings of the 23rd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 275--284, 2017.
+
+\bibitem[Lessmann et~al.(2015)Lessmann, Baesens, Seow, and
+  Thomas]{lessmann2015}
+Stefan Lessmann, Bart Baesens, Hsin-Vonn Seow, and Lyn~C. Thomas.
+\newblock Benchmarking state-of-the-art classification algorithms for credit
+  scoring: An update of research.
+\newblock \emph{European Journal of Operational Research}, 247\penalty0
+  (1):\penalty0 124--136, 2015.
+
+\bibitem[Liberman et~al.(2018)Liberman, Neilson, Opazo, and
+  Zimmerman]{liberman2018}
+Andres Liberman, Christopher Neilson, Luis Opazo, and Seth Zimmerman.
+\newblock The equilibrium effects of information deletion: Evidence from
+  consumer credit markets.
+\newblock Working Paper 25097, National Bureau of Economic Research, 2018.
+
+\bibitem[Manski(1990)]{manski1990}
+Charles~F. Manski.
+\newblock Nonparametric bounds on treatment effects.
+\newblock \emph{American Economic Review: Papers and Proceedings}, 80\penalty0
+  (2):\penalty0 319--323, 1990.
+
+\bibitem[Musto(2004)]{musto2004}
+David~K. Musto.
+\newblock What happens when information leaves a market? {E}vidence from
+  postbankruptcy consumers.
+\newblock \emph{Journal of Business}, 77\penalty0 (4):\penalty0 725--748, 2004.
+
+\bibitem[Natarajan et~al.(2013)Natarajan, Dhillon, Ravikumar, and
+  Tewari]{natarajan2013}
+Nagarajan Natarajan, Inderjit~S. Dhillon, Pradeep Ravikumar, and Ambuj Tewari.
+\newblock Learning with noisy labels.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2013.
+
+\bibitem[Nie and Wager(2021)]{nie2021}
+Xinkun Nie and Stefan Wager.
+\newblock Quasi-oracle estimation of heterogeneous treatment effects.
+\newblock \emph{Biometrika}, 108\penalty0 (2):\penalty0 299--319, 2021.
+
+\bibitem[Perdomo et~al.(2020)Perdomo, Zrnic, Mendler-D{\"u}nner, and
+  Hardt]{perdomo2020}
+Juan~C. Perdomo, Tijana Zrnic, Celestine Mendler-D{\"u}nner, and Moritz Hardt.
+\newblock Performative prediction.
+\newblock In \emph{Proceedings of the 37th International Conference on Machine
+  Learning}, 2020.
+
+\bibitem[Piskorski et~al.(2010)Piskorski, Seru, and Vig]{piskorski2010}
+Tomasz Piskorski, Amit Seru, and Vikrant Vig.
+\newblock Securitization and distressed loan renegotiation: Evidence from the
+  subprime mortgage crisis.
+\newblock \emph{Journal of Financial Economics}, 97\penalty0 (3):\penalty0
+  369--397, 2010.
+
+\bibitem[Rudin(2019)]{rudin2019}
+Cynthia Rudin.
+\newblock Stop explaining black box machine learning models for high stakes
+  decisions and use interpretable models instead.
+\newblock \emph{Nature Machine Intelligence}, 1:\penalty0 206--215, 2019.
+
+\bibitem[Schnell et~al.(2009)Schnell, Bachteler, and Reiher]{schnell2009}
+Rainer Schnell, Tobias Bachteler, and J{\"o}rg Reiher.
+\newblock Privacy-preserving record linkage using {B}loom filters.
+\newblock \emph{BMC Medical Informatics and Decision Making}, 9:\penalty0 41,
+  2009.
+
+\bibitem[Siddiqi(2017)]{siddiqi2017}
+Naeem Siddiqi.
+\newblock \emph{Intelligent Credit Scoring: Building and Implementing Better
+  Credit Risk Scorecards}.
+\newblock Wiley, 2nd edition, 2017.
+
+\bibitem[Thomas et~al.(2017)Thomas, Crook, and Edelman]{thomas2017}
+Lyn Thomas, Jonathan Crook, and David Edelman.
+\newblock \emph{Credit Scoring and Its Applications}.
+\newblock SIAM, 2nd edition, 2017.
+
+\bibitem[Ustun et~al.(2019)Ustun, Spangher, and Liu]{ustun2019}
+Berk Ustun, Alexander Spangher, and Yang Liu.
+\newblock Actionable recourse in linear classification.
+\newblock In \emph{Proceedings of the Conference on Fairness, Accountability,
+  and Transparency}, pages 10--19, 2019.
+
+\bibitem[Verbraken et~al.(2014)Verbraken, Bravo, Weber, and
+  Baesens]{verbraken2014}
+Thomas Verbraken, Cristi{\'a}n Bravo, Richard Weber, and Bart Baesens.
+\newblock Development and application of consumer credit scoring models using
+  profit-based classification measures.
+\newblock \emph{European Journal of Operational Research}, 238\penalty0
+  (2):\penalty0 505--513, 2014.
+
+\bibitem[Wager and Athey(2018)]{wager2018}
+Stefan Wager and Susan Athey.
+\newblock Estimation and inference of heterogeneous treatment effects using
+  random forests.
+\newblock \emph{Journal of the American Statistical Association}, 113\penalty0
+  (523):\penalty0 1228--1242, 2018.
+
+\end{thebibliography}

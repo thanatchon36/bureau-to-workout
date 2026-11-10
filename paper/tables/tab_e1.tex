@@ -1,0 +1,10 @@
+\begin{tabular}{lcccccc}
+\toprule
+Model & AUC & AUC, thin file & KS & Brier & PSI & PD/observed \\
+\midrule
+WoE scorecard & $0.809 \pm 0.004$ & $0.806 \pm 0.016$ & $0.469 \pm 0.007$ & $0.039 \pm 0.001$ & $0.11 \pm 0.01$ & $3.87 \pm 0.11$ \\
+Monotone GBM & $0.816 \pm 0.004$ & $0.812 \pm 0.012$ & $0.470 \pm 0.006$ & $0.039 \pm 0.001$ & $0.11 \pm 0.02$ & $3.85 \pm 0.13$ \\
+SSL embedding, linear probe & $0.769 \pm 0.007$ & $0.709 \pm 0.023$ & $0.405 \pm 0.010$ & $0.057 \pm 0.002$ & $0.56 \pm 0.11$ & $5.44 \pm 0.35$ \\
+GBM + SSL embedding & $0.822 \pm 0.003$ & $0.805 \pm 0.007$ & $0.485 \pm 0.004$ & $0.047 \pm 0.001$ & $0.36 \pm 0.02$ & $4.77 \pm 0.18$ \\
+\bottomrule
+\end{tabular}

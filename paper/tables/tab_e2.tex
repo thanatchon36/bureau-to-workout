@@ -1,0 +1,15 @@
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{AUC} & \multicolumn{2}{c}{Predicted / observed} & Default rate at \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & all applicants & approved only & all & rejected & 70\% approval (\%) \\
+\midrule
+Approved-only (AO) & $0.693 \pm 0.004$ & $0.679 \pm 0.012$ & $0.66 \pm 0.07$ & $0.55 \pm 0.06$ & $7.1 \pm 0.6$ \\
+AO + IPW on observables & $0.682 \pm 0.007$ & $0.663 \pm 0.011$ & $0.62 \pm 0.07$ & $0.50 \pm 0.08$ & $7.3 \pm 0.5$ \\
+Fuzzy augmentation & $0.698 \pm 0.006$ & $0.677 \pm 0.008$ & $0.67 \pm 0.07$ & $0.56 \pm 0.06$ & $7.0 \pm 0.7$ \\
+Bureau-augmented (BA) & $0.713 \pm 0.007$ & $0.675 \pm 0.015$ & $0.97 \pm 0.08$ & $0.86 \pm 0.06$ & $6.6 \pm 0.4$ \\
+BA + IPW for unobserved rejects & $0.713 \pm 0.008$ & $0.675 \pm 0.015$ & $0.98 \pm 0.07$ & $0.87 \pm 0.05$ & $6.6 \pm 0.3$ \\
+\midrule
+Oracle (all applicants, true $Y$) & $0.713 \pm 0.005$ & $0.679 \pm 0.014$ & $1.00 \pm 0.09$ & $0.89 \pm 0.06$ & $6.6 \pm 0.6$ \\
+\bottomrule
+\end{tabular}
