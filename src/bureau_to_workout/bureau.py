@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-ncb_scoring_lab.py
-==================
+bureau_to_workout.bureau
+========================
 Reference research code for Track A of the NCB x SAM research agenda:
 credit scoring on bureau data whose labels are shaped by lender decisions and by policy.
 
@@ -23,7 +21,7 @@ simulate_bureau() with a loader that fills the same BureauPanel arrays from the 
 account-month table.
 
 Requires numpy, pandas, scikit-learn >= 1.4.
-Run:  python ncb_scoring_lab.py --exp all --n 50000 --seed 7 --out lab_outputs
+Run:  make bureau   (python -m bureau_to_workout.cli bureau --exp all --n 50000 --seed 7 --out lab_outputs)
 """
 from __future__ import annotations
 
@@ -756,13 +754,13 @@ def run_e5(sc: WoEScorecard, oot: pd.DataFrame, feats, approve_rate=0.7):
 # 6. Main
 # =============================================================================================
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--exp", default="all", help="all or comma list of e1,e2,e3,e4,e5")
     ap.add_argument("--n", type=int, default=50_000, help="number of synthetic borrowers")
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--out", default="lab_outputs")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
     exps = {"e1", "e2", "e3", "e4", "e5"} if args.exp == "all" else set(args.exp.split(","))
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)

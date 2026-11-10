@@ -1,0 +1,29 @@
+{
+  "title": "bureau-to-workout",
+  "upload_type": "software",
+  "description": "Reference code for the preprint \"From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels\". Credit-risk models learn from labels that the credit system itself produces: selection at approval, masking of arrears by a moratorium, and treatment by workout offers. The repository contains a credit-bureau simulator and an asset-management workout simulator that keep counterfactual outcomes, and an estimator for each mechanism: bureau-augmented reject inference, masking-aware delayed labels, and a cross-fitted DR-learner with budget-constrained offer policies and off-policy evaluation. All data are synthetic.",
+  "creators": [
+    {
+      "name": "Chongmankhong, Thanatchon"
+    }
+  ],
+  "license": "mit",
+  "keywords": [
+    "credit scoring",
+    "reject inference",
+    "selective labels",
+    "forbearance",
+    "causal machine learning",
+    "debt restructuring",
+    "off-policy evaluation",
+    "Thailand"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://thanatchon36.github.io/bureau-to-workout/paper/",
+      "relation": "isDocumentedBy",
+      "resource_type": "publication-preprint",
+      "scheme": "url"
+    }
+  ]
+}

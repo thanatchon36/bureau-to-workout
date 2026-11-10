@@ -1,15 +1,12 @@
-#!/usr/bin/env python3
 """
-paper_figures.py
+bureau_to_workout.figures
 Builds every figure in the paper from paper_results/ into paper/figures/ (vector PDF + PNG preview).
 One style for all figures: STIX (Times-compatible) type, Okabe-Ito colour-blind-safe palette,
 the same colour for the same method everywhere, and layouts sized to the 6.5-inch text width.
 
-Run: python paper_figures.py
+Run: make figures
 """
 from __future__ import annotations
-
-from pathlib import Path
 
 import matplotlib as mpl
 mpl.use("Agg")
@@ -18,9 +15,9 @@ import numpy as np                                    # noqa: E402
 import pandas as pd                                   # noqa: E402
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch   # noqa: E402
 
-ROOT = Path(__file__).resolve().parent
-RES = ROOT / "paper_results"
-FIG = ROOT / "paper" / "figures"
+from .paths import PAPER, RESULTS as RES   # noqa: E402
+
+FIG = PAPER / "figures"
 FIG.mkdir(parents=True, exist_ok=True)
 
 mpl.rcParams.update({
@@ -391,9 +388,12 @@ FIGS = {"fig1": fig_lifecycle, "fig2": fig_e1, "fig3": fig_e2, "fig4": fig_e3, "
         "fig6": fig_resolution, "fig7": fig_ope}
 
 
-if __name__ == "__main__":
-    import sys
-    which = sys.argv[1:] or list(FIGS)
-    for k in which:
+def main(which=None):
+    for k in which or list(FIGS):
         FIGS[k]()
         print("built", k)
+
+
+if __name__ == "__main__":
+    import sys
+    main(sys.argv[1:])

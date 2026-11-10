@@ -1,26 +1,30 @@
 cff-version: 1.2.0
-message: "If you use this code or the accompanying paper, please cite it as below."
-title: "From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels"
+message: "Please cite the paper (preferred-citation); if you use the bureau_to_workout code, also cite the software."
+title: "bureau-to-workout: credit scoring and causal debt resolution under policy-shaped labels"
+abstract: >-
+  Reference code for a preprint on credit-risk labels that the credit system
+  itself produces: a credit-bureau simulator and an asset-management workout
+  simulator that keep counterfactual outcomes, and an estimator for each label
+  mechanism: bureau-augmented reject inference (selection), masking-aware
+  delayed labels after a moratorium (masking), and a cross-fitted DR-learner
+  with budget-constrained offer policies and off-policy evaluation
+  (treatment). All data are synthetic.
 type: software
 authors:
-  - family-names: "Chongmankhong"
-    given-names: "Thanantchon"
-version: "1.0.0"
-date-released: "2026-11-09"
-keywords:
-  - credit scoring
-  - reject inference
-  - selective labels
-  - forbearance
-  - causal machine learning
-  - debt restructuring
-  - off-policy evaluation
+  - family-names: Chongmankhong
+    given-names: Thanatchon
+version: 0.1.0
+date-released: 2026-11-10
+license: MIT
+repository-code: "https://github.com/thanatchon36/bureau-to-workout"
+url: "https://thanatchon36.github.io/bureau-to-workout/paper/"
+keywords: [credit-scoring, reject-inference, selective-labels, forbearance, causal-machine-learning, debt-restructuring, off-policy-evaluation, thailand]
 preferred-citation:
-  type: article
-  status: preprint
+  type: generic
   title: "From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels"
   authors:
-    - family-names: "Chongmankhong"
-      given-names: "Thanantchon"
+    - family-names: Chongmankhong
+      given-names: Thanatchon
   year: 2026
-  month: 11
+  url: "https://thanatchon36.github.io/bureau-to-workout/paper/"
+  notes: "Preprint; all results are from simulators with synthetic data."

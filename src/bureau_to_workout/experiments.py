@@ -1,28 +1,23 @@
-#!/usr/bin/env python3
 """
-paper_experiments.py
+bureau_to_workout.experiments
 Runs every experiment in the paper over five seeds and writes the numbers and figure data to
 paper_results/. Tables report mean and standard deviation across seeds; figures use seed 7
 (bureau) and seed 107 (workouts) unless they show seed-to-seed spread.
 
-Run: python paper_experiments.py
+Run: make experiments
 """
 from __future__ import annotations
 
 import json
-import sys
 import time
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_curve
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import ncb_scoring_lab as A      # noqa: E402
-import sam_resolution_lab as B   # noqa: E402
-
-OUT = Path(__file__).resolve().parent / "paper_results"
+from . import bureau as A
+from . import workout as B
+from .paths import RESULTS as OUT
 SEEDS = [7, 8, 9, 10, 11]
 N_BORROWERS, N_CASES = 50_000, 50_000
 

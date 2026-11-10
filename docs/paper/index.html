@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>From Bureau to Workout</title>
+<meta name="description" content="Preprint: credit scoring and causal debt resolution under policy-shaped labels, with two simulators that keep the ground truth.">
+<meta name="author" content="Thanatchon Chongmankhong">
+<style>
+/* Web reader for paper/main.tex, in the format of the thainowcast reader: one reading column
+   (~46rem) with a results strip up top. System font stacks only: the page is a single self-contained
+   file with no third-party requests. Colour tokens on :root, redefined for dark. */
+:root {
+  --paper: #fbfbf9; --ink: #17191c; --ink-2: #4c5058; --rule: #dcdcd6;
+  --accent: #1f5fae; --accent-soft: #e6eef8;
+  --pos: #1d6b52; --pos-soft: #e3f1ea; --null: #6b6f78; --null-soft: #eeeeea;
+  --find: #8a5a12; --find-soft: #f6eedd; --plate: #ffffff; --quote: #f3f3ef;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #15171a; --ink: #e8e9ec; --ink-2: #a6abb4; --rule: #30343a;
+    --accent: #7fb0ec; --accent-soft: #1b2a3d; --pos: #7dcfac; --pos-soft: #16302a;
+    --null: #a6abb4; --null-soft: #23262b; --find: #e7bd73; --find-soft: #33291a;
+    --plate: #f4f4f2; --quote: #1d2024; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #15171a; --ink: #e8e9ec; --ink-2: #a6abb4; --rule: #30343a;
+  --accent: #7fb0ec; --accent-soft: #1b2a3d; --pos: #7dcfac; --pos-soft: #16302a;
+  --null: #a6abb4; --null-soft: #23262b; --find: #e7bd73; --find-soft: #33291a;
+  --plate: #f4f4f2; --quote: #1d2024; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.62 var(--font-body); }
+.page { max-width: 46rem; margin: 0 auto; padding-inline: 16px; padding-block: 48px 72px;
+  display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 650; text-wrap: balance; line-height: 1.2; }
+h1 { font-size: clamp(1.7rem, 4.2vw, 2.35rem); margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.4rem; margin: 2.2em 0 0.5em; }
+h3 { font-size: 1.12rem; margin: 1.8em 0 0.4em; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+code { font: 500 0.84em var(--font-mono); overflow-wrap: anywhere; }
+pre { background: var(--quote); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px;
+  overflow-x: auto; font-size: 0.84rem; line-height: 1.5; }
+pre code { font-weight: 400; font-size: inherit; overflow-wrap: normal; }
+.masthead { display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid var(--rule); padding-bottom: 28px; }
+.kicker { margin: 0; font: 500 0.78rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent); }
+.subtitle { margin: 0; font-style: italic; color: var(--ink-2); font-size: 1.05rem; }
+.byline { margin: 0; color: var(--ink-2); }
+.meta { margin: 0; font: 400 0.8rem/1.6 var(--font-mono); color: var(--ink-2); }
+.meta b { font-weight: 500; color: var(--ink); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.actions a { display: inline-block; padding: 6px 12px; border: 1px solid var(--rule); border-radius: 999px;
+  font: 500 0.78rem var(--font-mono); text-decoration: none; color: var(--ink); }
+.actions a:hover { border-color: var(--accent); color: var(--accent); }
+.abstract h2, .results h2, .toc h2, .cite h2 { margin: 0 0 10px; font-size: 0.82rem; font-family: var(--font-mono);
+  font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-2); }
+.abstract-body p { margin: 0 0 0.8em; font-size: 1.04rem; }
+.abstract-body p:last-child { margin-bottom: 0; }
+.results .note { margin: 0 0 14px; color: var(--ink-2); font-size: 0.95rem; }
+.result-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 8px; }
+.r { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "id tag" "text text"; gap: 2px 10px;
+  align-content: start; padding: 10px 12px; border-radius: 6px; border-left: 3px solid; font-size: 0.9rem; line-height: 1.4; }
+.r-pos { background: var(--pos-soft); border-color: var(--pos); }
+.r-ref { background: var(--find-soft); border-color: var(--find); }
+.r-null, .r-nf { background: var(--null-soft); border-color: var(--null); }
+.r-id { grid-area: id; font: 500 0.85rem var(--font-mono); }
+.r-text { grid-area: text; }
+.r-text small { display: block; color: var(--ink-2); font-size: 0.8rem; margin-top: 2px; }
+.toc ul { margin: 0; padding-left: 1.2em; columns: 2 14rem; column-gap: 32px; }
+.toc li { break-inside: avoid; }
+.toc ul ul { columns: 1; padding-left: 1em; font-size: 0.92em; color: var(--ink-2); }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.paper h1 { font-size: 1.55rem; margin: 2em 0 0.5em; padding-top: 0.6em; border-top: 1px solid var(--rule); }
+.paper p, .paper li { hyphens: auto; }
+.paper p { margin: 0 0 1em; }
+.paper math[display="block"] { overflow-x: auto; max-width: 100%; }
+/* MathML does not line-break: a long inline formula scrolls on its own instead of widening the page */
+.paper p > math { display: inline-block; max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.paper .header-section-number { color: var(--accent); margin-right: 0.5em; font-family: var(--font-mono); font-size: 0.85em; font-weight: 500; }
+.paper blockquote { margin: 1.2em 0; padding: 10px 16px; border-left: 3px solid var(--rule); background: var(--quote);
+  border-radius: 0 6px 6px 0; font-size: 0.93rem; color: var(--ink-2); }
+.paper blockquote p:last-child { margin-bottom: 0; }
+figure { margin: 1.6em 0; display: flex; flex-direction: column; gap: 10px; }
+figure img { background: var(--plate); padding: 12px; border-radius: 6px; border: 1px solid var(--rule); max-width: 100%; height: auto; }
+figcaption, caption, .tcap { font-size: 0.88rem; color: var(--ink-2); line-height: 1.45; text-align: left; }
+caption { caption-side: top; padding-bottom: 8px; }
+.tbl { margin: 1.6em 0; }
+.paper .tcap { margin: 0 0 8px; hyphens: auto; }
+.tscroll { overflow-x: auto; }
+/* Tables keep their natural width (scrolling sideways when wider than the column); only long text cells wrap. */
+.paper table { border-collapse: collapse; width: max-content; min-width: 100%;
+  font: 400 0.78rem/1.45 var(--font-mono); font-variant-numeric: tabular-nums; }
+.paper td { max-width: 17em; }
+/* Code in table cells must not break per letter on phones; the table scrolls sideways instead. */
+.paper table code { overflow-wrap: normal; word-break: normal; white-space: nowrap; }
+th, td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+th { font-weight: 500; color: var(--ink-2); border-bottom-color: var(--ink-2); }
+.paper strong { font-weight: 650; }
+.cite { min-width: 0; }
+/* BibTeX keeps its lines intact (no mid-URL breaks); the block scrolls sideways on narrow screens. */
+.cite pre { overflow-x: auto; }
+.cite pre, .cite pre code { white-space: pre; overflow-wrap: normal; word-break: normal; }
+.colophon { border-top: 1px solid var(--rule); padding-top: 20px; color: var(--ink-2); font-size: 0.85rem; }
+.colophon p { margin: 0 0 0.7em; }
+/* display equations carry their LaTeX number on the right; the anchor is the target of (n) links */
+.paper .eq { display: flex; align-items: center; gap: 12px; scroll-margin-top: 16px; }
+.paper .eq > math { flex: 1; min-width: 0; overflow-x: auto; }
+.paper .eqno { font: 400 0.85rem var(--font-mono); color: var(--ink-2); }
+.paper h1.unnumbered { counter-reset: none; }
+/* references, as natbib author-year in the PDF */
+#refs { font-size: 0.9rem; }
+#refs .csl-entry { margin: 0 0 0.6em; padding-left: 1.6em; text-indent: -1.6em; }
+@media (max-width: 480px) { body { font-size: 16px; } .page { padding-block: 28px 48px; gap: 28px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="page">
+<header class="masthead">
+  <p class="kicker">Preprint · bureau-to-workout</p>
+  <h1>From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels</h1>
+  <p class="byline">Thanatchon Chongmankhong · <a href="https://github.com/thanatchon36/bureau-to-workout">github.com/thanatchon36/bureau-to-workout</a></p>
+  <p class="meta"><b>November 2026</b> · credit scoring, reject inference, selective labels, forbearance, causal machine learning, debt restructuring, off-policy evaluation, credit bureau, Thailand</p>
+  <ul class="actions"><li><a href="paper.pdf">Download PDF</a></li><li><a href="https://github.com/thanatchon36/bureau-to-workout">Code and replication</a></li><li><a href="https://github.com/thanatchon36/bureau-to-workout/tree/main/paper_results">Result files</a></li></ul>
+</header>
+<section class="abstract" aria-label="Abstract">
+  <h2>Abstract</h2>
+  <div class="abstract-body"><p>Credit-risk models learn from labels that the credit system itself produces. Lenders observe repayment only for applicants they approve, debt-relief programmes suspend the reporting of arrears, and collectors decide which distressed borrowers receive concessions. We study these three mechanisms, selection, masking and treatment, along the full debt lifecycle that becomes observable when a national credit bureau is linked to a public asset-management company (AMC), a setting motivated by Thailand’s National Credit Bureau and Sukhumvit Asset Management. For each mechanism we propose an estimator that exploits the linkage: bureau-augmented reject inference that uses repayment observed at other lenders, masking-aware labels that extend outcome windows past the end of a moratorium, and cross-fitted doubly robust learning of heterogeneous offer effects combined with budget-constrained policy learning and off-policy evaluation. Because ground truth is unobservable in real data, we evaluate the estimators in two calibrated simulators, of 50,000 borrowers and 50,000 workouts, that record counterfactual outcomes, over five seeds. Approved-only models under-predict default among rejected applicants by 45%; classic fuzzy augmentation does not help, while bureau-augmented labels reach a predicted-to-observed ratio of 0.86 against 0.89 for an oracle trained on every applicant’s outcome. Training through a simulated moratorium makes a model read deferral as a safety signal and cuts out-of-time AUC from 0.83 to 0.62; delayed labels restore it. Causal targeting of restructuring offers raises recovery by 1.7 percentage points of balance over the logged policy while writing down 4.4% of balance instead of 10.4%, capturing 69% of the attainable gain against 35% for predictive targeting. We close with an identification-driven agenda for the linked data and a privacy-preserving linkage design.</p>
+</div>
+</section>
+<section class="results" aria-label="Results at a glance">
+  <h2>Results at a glance</h2>
+  <p class="note">Headline numbers, read from the macros the paper uses. Simulation results, mean of five seeds; they show what each estimator recovers, not estimates for Thailand. Amber: simulation; grey: pending.</p>
+  <ul class="result-list"><li class="r r-ref"><span class="r-id">Selection · E2</span><span class="r-text">Bureau-augmented labels: predicted ÷ observed default 0.86 on rejected applicants<small>approved-only 0.55 (under-prediction by 45%); oracle 0.89; fuzzy augmentation 0.56</small></span></li>
+<li class="r r-ref"><span class="r-id">Masking · E3</span><span class="r-text">Delayed labels restore out-of-time AUC to 0.831 after a moratorium<small>reported labels 0.625; oracle 0.838; the naive model reads deferral as safety</small></span></li>
+<li class="r r-ref"><span class="r-id">Treatment · R2</span><span class="r-text">Causal targeting: recovery 57.22% of balance, write-downs 4.4%<small>logged policy 55.55% and 10.4%; 69% of the attainable gain against 35% for predictive targeting</small></span></li>
+<li class="r r-ref"><span class="r-id">Benchmark · E1</span><span class="r-text">Monotone GBM out-of-time AUC 0.816 against 0.809 for the WoE scorecard<small>GBM + SSL embedding 0.822 but PSI 0.36 against 0.11</small></span></li>
+<li class="r r-ref"><span class="r-id">Off-policy · R4</span><span class="r-text">Doubly robust OPE error 0.13 pp against 0.41 (DM) and 1.20 (IPS)<small>mean absolute error over 40 policy-budget points</small></span></li>
+<li class="r r-null"><span class="r-id">NCB × SAM data</span><span class="r-text">Real-data results pending<small>every number here comes from the simulators; the estimators run unchanged on the linked data</small></span></li></ul>
+</section>
+<nav class="toc" aria-label="Contents"><h2>Contents</h2>
+<ul>
+<li><a href="#sec:intro" id="toc-sec:intro"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#sec:setting" id="toc-sec:setting"><span class="toc-section-number">2</span> Institutional setting</a></li>
+<li><a href="#sec:related" id="toc-sec:related"><span class="toc-section-number">3</span> Related work</a></li>
+<li><a href="#sec:framework" id="toc-sec:framework"><span class="toc-section-number">4</span> Framework</a></li>
+<li><a href="#sec:sim" id="toc-sec:sim"><span class="toc-section-number">5</span> Simulators and protocol</a></li>
+<li><a href="#sec:results" id="toc-sec:results"><span class="toc-section-number">6</span> Results</a></li>
+<li><a href="#sec:agenda" id="toc-sec:agenda"><span class="toc-section-number">7</span> A research agenda for the linked data</a></li>
+<li><a href="#sec:limits" id="toc-sec:limits"><span class="toc-section-number">8</span> Limitations</a></li>
+<li><a href="#sec:conclusion" id="toc-sec:conclusion"><span class="toc-section-number">9</span> Conclusion</a></li>
+<li><a href="#app:params" id="toc-app:params"><span class="toc-section-number">A</span> Simulator parameters</a></li>
+<li><a href="#app:features" id="toc-app:features"><span class="toc-section-number">B</span> Covariates</a></li>
+<li><a href="#app:scorecard" id="toc-app:scorecard"><span class="toc-section-number">C</span> Scorecard excerpt and reason codes</a></li>
+<li><a href="#app:ope" id="toc-app:ope"><span class="toc-section-number">D</span> Off-policy evaluation errors</a></li>
+</ul>
+</nav>
+<article class="paper">
+<h1 data-number="1" id="sec:intro"><span class="header-section-number">1</span> Introduction</h1>
+<p>Credit scores are trained on outcomes produced by the system they help to run. A lender records repayment only for the applicants it approves. A moratorium suspends the reporting of arrears precisely when distress peaks. A collector chooses which distressed borrowers receive a longer term or a write-down, and that choice shapes whether they repay. Each mechanism turns a label into a policy-dependent quantity, and a model that ignores this learns the policy along with the risk.</p>
+<p>These mechanisms are first-order where household debt is high and policy intervenes often. Household debt in Thailand stood close to 90% of GDP in the early 2020s according to Bank of Thailand statistics, and its growth and delinquency have been documented with credit-bureau records <span class="citation" data-cites="chantarat2020">(<a href="#ref-chantarat2020" role="doc-biblioref">Chantarat et al. 2020</a>)</span>. The country used broad payment deferrals during the COVID-19 pandemic, has operated a Debt Clinic for unsecured debt through a state-owned AMC since 2017, and has tightened responsible-lending rules that require earlier restructuring. Every one of these policies changes which outcomes are recorded and what they mean.</p>
+<p>Two institutions sit at opposite ends of the debt lifecycle (<a href="#fig:lifecycle">Figure 1</a>). The National Credit Bureau (NCB) observes account-month repayment histories across its member lenders, from application to non-performance. Sukhumvit Asset Management (SAM) observes what happens after many of those loans are sold: the offers made, the repayments that follow and legal recovery. Linked, the two data sets would show the full lifecycle at national scale, including whether a resolved borrower returns to formal credit. They also make the three label mechanisms visible: selection at approval (S), masking during deferral (M) and treatment in the workout (T).</p>
+<figure id="fig:lifecycle" data-latex-placement="t">
+<img loading="lazy" src="figures/fig1_lifecycle.png" />
+<figcaption><b>Figure 1.</b> The debt lifecycle observed by a credit bureau linked to an asset-management company. Red markers show where the system shapes labels: selection at approval (S), masking of arrears during deferral (M) and treatment by the workout offer (T). The dashed path marks re-entry into formal credit, which the bureau records after resolution.</figcaption>
+</figure>
+<p>This paper makes four contributions.</p>
+<ol>
+<li><p><strong>A lifecycle framework.</strong> We formalise selection, masking and treatment on a common notation and show how linkage changes identification for each. For selection, repayment observed at other lenders shrinks the identification region for rejected applicants from the unit interval to the share of rejects with no other account, 10% in our simulator.</p></li>
+<li><p><strong>Estimators that use the linkage.</strong> Bureau-augmented reject inference, masking-aware labels, and a cross-fitted DR-learner for the effects of restructuring offers, combined with write-down-budgeted policy learning and doubly robust off-policy evaluation.</p></li>
+<li><p><strong>Simulators with ground truth.</strong> Two calibrated simulators, a multi-lender bureau with soft information, a macro shock and a moratorium, and an NPL workout portfolio with four offers, record counterfactual outcomes so every method can be scored against the truth. All code accompanies the paper.</p></li>
+<li><p><strong>Findings and an agenda.</strong> The estimators correct most of the bias that standard practice leaves in place (<a href="#sec:results">Section 6</a>). We map each open question to a source of quasi-experimental variation in the linked data and to a privacy-preserving linkage design (<a href="#sec:agenda">Section 7</a>).</p></li>
+</ol>
+<h4 data-number="1.0.0.1" id="scope"><span class="header-section-number">1.0.0.1</span> Scope</h4>
+<p>No NCB or SAM data were used. Every number in this paper is a property of the simulators, whose parameters were chosen to make the mechanisms visible at plausible magnitudes. The numbers are not estimates for Thailand. The code separates the simulators from the estimators so that loaders for real data can replace the former once access and governance are in place.</p>
+<p><a href="#sec:setting">Section 2</a> describes the institutional setting and <a href="#sec:related">Section 3</a> related work. <a href="#sec:framework">Section 4</a> formalises the mechanisms and the estimators, <a href="#sec:sim">Section 5</a> the simulators, and <a href="#sec:results">Section 6</a> reports results. <a href="#sec:agenda">Section 7</a> sets out the research agenda, and <a href="#sec:limits">Section 8</a> discusses limitations.</p>
+<h1 data-number="2" id="sec:setting"><span class="header-section-number">2</span> Institutional setting</h1>
+<h4 data-number="2.0.0.1" id="credit-bureau"><span class="header-section-number">2.0.0.1</span> Credit bureau</h4>
+<p>NCB is Thailand’s national credit bureau and operates under the Credit Information Business Act B.E. 2545 (2002). Member institutions report account-level data monthly, including product, limit, balance, days past due (DPD) and account status, and the bureau records inquiries made by members. Access requires the data subject’s consent and is limited to purposes such as credit evaluation, and the Act limits how long negative information may be disclosed. Two features matter here. The bureau sees accounts at all member lenders, not only at the lender that made a decision. Its records are also shaped by member and policy decisions, for example through status codes for deferred accounts.</p>
+<h4 data-number="2.0.0.2" id="asset-management-company"><span class="header-section-number">2.0.0.2</span> Asset-management company</h4>
+<p>SAM is a state-owned AMC under the Financial Institutions Development Fund. It acquires non-performing loans (NPLs) and foreclosed assets from financial institutions and resolves them through restructuring, settlement or legal action. Since 2017 it has run a Debt Clinic with the Bank of Thailand that consolidates eligible borrowers’ unsecured debts into a long-term, low-rate repayment plan. Programme terms and eligibility rules have changed over time, which matters for identification (<a href="#sec:agenda">Section 7</a>).</p>
+<h4 data-number="2.0.0.3" id="policy-interventions"><span class="header-section-number">2.0.0.3</span> Policy interventions</h4>
+<p>Relevant policies include payment deferrals during 2020–2021, responsible-lending rules that require lenders to offer restructuring before loans become non-performing, and targeted relief programmes with eligibility thresholds. The simulators encode only the mechanisms these policies share, not the terms of any programme, so nothing below depends on programme details.</p>
+<h1 data-number="3" id="sec:related"><span class="header-section-number">3</span> Related work</h1>
+<h4 data-number="3.0.0.1" id="credit-scoring"><span class="header-section-number">3.0.0.1</span> Credit scoring</h4>
+<p>Large benchmarks find that gradient-boosted trees and ensembles lead on tabular credit data <span class="citation" data-cites="lessmann2015">(<a href="#ref-lessmann2015" role="doc-biblioref">Lessmann et al. 2015</a>)</span> and that deep networks rarely beat them <span class="citation" data-cites="gunnarsson2021">(<a href="#ref-gunnarsson2021" role="doc-biblioref">Gunnarsson et al. 2021</a>)</span>, in line with general tabular evidence <span class="citation" data-cites="grinsztajn2022 gorishniy2021">(<a href="#ref-grinsztajn2022" role="doc-biblioref">Grinsztajn et al. 2022</a>; <a href="#ref-gorishniy2021" role="doc-biblioref">Gorishniy et al. 2021</a>)</span>. Event-sequence models trained on raw histories, often with self-supervision, are the main challenger <span class="citation" data-cites="babaev2019 babaev2022">(<a href="#ref-babaev2019" role="doc-biblioref">Babaev et al. 2019</a>, <a href="#ref-babaev2022" role="doc-biblioref">2022</a>)</span>, and tabular foundation models are a newer one <span class="citation" data-cites="hollmann2025">(<a href="#ref-hollmann2025" role="doc-biblioref">Hollmann et al. 2025</a>)</span>. Practice still relies on monotone, explainable scorecards <span class="citation" data-cites="siddiqi2017 thomas2017 rudin2019">(<a href="#ref-siddiqi2017" role="doc-biblioref">Siddiqi 2017</a>; <a href="#ref-thomas2017" role="doc-biblioref">Thomas et al. 2017</a>; <a href="#ref-rudin2019" role="doc-biblioref">Rudin 2019</a>)</span>; we evaluate both families, with profit-relevant metrics in the spirit of <span class="citation" data-cites="verbraken2014">Verbraken et al. (<a href="#ref-verbraken2014" role="doc-biblioref">2014</a>)</span>.</p>
+<h4 data-number="3.0.0.2" id="selection-and-reject-inference"><span class="header-section-number">3.0.0.2</span> Selection and reject inference</h4>
+<p>Reject inference is not identified without assumptions <span class="citation" data-cites="hand1993 hand1997">(<a href="#ref-hand1993" role="doc-biblioref">Hand and Henley 1993</a>, <a href="#ref-hand1997" role="doc-biblioref">1997</a>)</span>, and empirical gains from classic methods are small <span class="citation" data-cites="banasik2003 crook2004">(<a href="#ref-banasik2003" role="doc-biblioref">Banasik et al. 2003</a>; <a href="#ref-crook2004" role="doc-biblioref">Crook and Banasik 2004</a>)</span>. The selective-labels literature evaluates predictions when decisions censor outcomes, using decision-maker leniency and contraction <span class="citation" data-cites="lakkaraju2017 kleinberg2018">(<a href="#ref-lakkaraju2017" role="doc-biblioref">Lakkaraju et al. 2017</a>; <a href="#ref-kleinberg2018" role="doc-biblioref">Kleinberg et al. 2018</a>)</span>; examiner leniency has also been used to measure bias in consumer lending <span class="citation" data-cites="dobbie2021bias">(<a href="#ref-dobbie2021bias" role="doc-biblioref">Dobbie et al. 2021</a>)</span>. Score cut-offs provide discontinuities in credit access <span class="citation" data-cites="keys2010 agarwal2018">(<a href="#ref-keys2010" role="doc-biblioref">Keys et al. 2010</a>; <a href="#ref-agarwal2018" role="doc-biblioref">Agarwal et al. 2018</a>)</span>. We add a data-driven route: a bureau observes rejected applicants’ repayment elsewhere, which tightens bounds of the <span class="citation" data-cites="manski1990">Manski (<a href="#ref-manski1990" role="doc-biblioref">1990</a>)</span> type.</p>
+<h4 data-number="3.0.0.3" id="policy-shaped-labels-deletion-and-fairness"><span class="header-section-number">3.0.0.3</span> Policy-shaped labels, deletion and fairness</h4>
+<p>Label noise <span class="citation" data-cites="natarajan2013">(<a href="#ref-natarajan2013" role="doc-biblioref">Natarajan et al. 2013</a>)</span>, invariance across environments <span class="citation" data-cites="arjovsky2019">(<a href="#ref-arjovsky2019" role="doc-biblioref">Arjovsky et al. 2019</a>)</span> and performative prediction <span class="citation" data-cites="perdomo2020">(<a href="#ref-perdomo2020" role="doc-biblioref">Perdomo et al. 2020</a>)</span> give general tools for labels that depend on the environment or on the model. Forbearance during COVID-19 changed reported delinquency at scale <span class="citation" data-cites="cherry2021">(<a href="#ref-cherry2021" role="doc-biblioref">Cherry et al. 2021</a>)</span>. The removal of negative information from credit reports changes access to credit <span class="citation" data-cites="musto2004 dobbie2020bad herkenhoff2021">(<a href="#ref-musto2004" role="doc-biblioref">Musto 2004</a>; <a href="#ref-dobbie2020bad" role="doc-biblioref">Dobbie et al. 2020</a>; <a href="#ref-herkenhoff2021" role="doc-biblioref">Herkenhoff et al. 2021</a>)</span>, with equilibrium effects on other borrowers <span class="citation" data-cites="liberman2018">(<a href="#ref-liberman2018" role="doc-biblioref">Liberman et al. 2018</a>)</span>. Machine-learning scores can widen disparities <span class="citation" data-cites="fuster2022">(<a href="#ref-fuster2022" role="doc-biblioref">Fuster et al. 2022</a>)</span>, partly through noisier scores for thin-file borrowers <span class="citation" data-cites="blattner2021">(<a href="#ref-blattner2021" role="doc-biblioref">Blattner and Nelson 2021</a>)</span>, and calibration cannot coexist with equal error rates when base rates differ <span class="citation" data-cites="kleinberg2017 chouldechova2017">(<a href="#ref-kleinberg2017" role="doc-biblioref">Kleinberg et al. 2017</a>; <a href="#ref-chouldechova2017" role="doc-biblioref">Chouldechova 2017</a>)</span>; see <span class="citation" data-cites="kozodoi2022">Kozodoi et al. (<a href="#ref-kozodoi2022" role="doc-biblioref">2022</a>)</span> for credit scoring and <span class="citation" data-cites="ustun2019">Ustun et al. (<a href="#ref-ustun2019" role="doc-biblioref">2019</a>)</span> for recourse.</p>
+<h4 data-number="3.0.0.4" id="debt-relief-and-resolution"><span class="header-section-number">3.0.0.4</span> Debt relief and resolution</h4>
+<p>Evidence on what helps distressed borrowers is mixed. Payment reductions dominated principal reductions for US mortgages <span class="citation" data-cites="ganong2020">(<a href="#ref-ganong2020" role="doc-biblioref">Ganong and Noel 2020</a>)</span>, while delayed write-downs helped distressed credit-card borrowers and immediate payment reductions did not <span class="citation" data-cites="dobbie2020targeted">(<a href="#ref-dobbie2020targeted" role="doc-biblioref">Dobbie and Song 2020</a>)</span>; see also <span class="citation" data-cites="dobbie2015 agarwal2017 piskorski2010">Dobbie and Song (<a href="#ref-dobbie2015" role="doc-biblioref">2015</a>; <a href="#ref-agarwal2017" role="doc-biblioref">Agarwal et al. 2017</a>; <a href="#ref-piskorski2010" role="doc-biblioref">Piskorski et al. 2010</a>)</span>. Self-cure and redefault risk explain why lenders renegotiate less than one might expect <span class="citation" data-cites="adelino2013">(<a href="#ref-adelino2013" role="doc-biblioref">Adelino et al. 2013</a>)</span>. Collections have been optimised with dynamic models <span class="citation" data-cites="chehrazi2019">(<a href="#ref-chehrazi2019" role="doc-biblioref">Chehrazi et al. 2019</a>)</span> and constrained reinforcement learning <span class="citation" data-cites="abe2010">(<a href="#ref-abe2010" role="doc-biblioref">Abe et al. 2010</a>)</span>. We use the causal machine-learning toolkit <span class="citation" data-cites="chernozhukov2018 wager2018 athey2019grf kunzel2019 nie2021 kennedy2023">(<a href="#ref-chernozhukov2018" role="doc-biblioref">Chernozhukov et al. 2018</a>; <a href="#ref-wager2018" role="doc-biblioref">Wager and Athey 2018</a>; <a href="#ref-athey2019grf" role="doc-biblioref">Athey et al. 2019</a>; <a href="#ref-kunzel2019" role="doc-biblioref">Künzel et al. 2019</a>; <a href="#ref-nie2021" role="doc-biblioref">Nie and Wager 2021</a>; <a href="#ref-kennedy2023" role="doc-biblioref">Kennedy 2023</a>)</span>, policy learning <span class="citation" data-cites="kitagawa2018 athey2021">(<a href="#ref-kitagawa2018" role="doc-biblioref">Kitagawa and Tetenov 2018</a>; <a href="#ref-athey2021" role="doc-biblioref">Athey and Wager 2021</a>)</span> and off-policy evaluation <span class="citation" data-cites="dudik2011">(<a href="#ref-dudik2011" role="doc-biblioref">Dudík et al. 2011</a>)</span>.</p>
+<h1 data-number="4" id="sec:framework"><span class="header-section-number">4</span> Framework</h1>
+<p>Borrowers are indexed by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> and months by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">X_{it}</annotation></semantics></math> denotes bureau attributes computed from reported data up to the end of month <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>. A loan is in default when it reaches 90+ DPD. For a horizon <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Y</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">Y_{it}</annotation></semantics></math> indicates a reported default in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo>,</mo><mi>t</mi><mo>+</mo><mi>h</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">(t, t+h]</annotation></semantics></math>.</p>
+<h2 data-number="4.1" id="sec:selection"><span class="header-section-number">4.1</span> Selection at approval</h2>
+<p>An applicant to lender <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℓ</mi><annotation encoding="application/x-tex">\ell</annotation></semantics></math> is approved (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math>) or rejected (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">S=0</annotation></semantics></math>). Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math> be the default indicator if a loan is granted. The lender observes <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math> only when <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">S=1</annotation></semantics></math>, but the target for an application score is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi(x) = \Pr(Y(1)=1 \mid X=x)</annotation></semantics></math> for all applicants: <span class="eq" id="eq:decomp"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo>∣</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:decomp}
+\pi(x) = \Pr(S=1 \mid x)\,\Pr(Y(1)=1 \mid x, S=1) + \Pr(S=0 \mid x)\,\Pr(Y(1)=1 \mid x, S=0).
+\end{equation}</annotation></semantics></math><span class="eqno">(1)</span></span> When lenders also use information <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math> that the bureau does not record (soft information) and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math> predicts <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math>, then <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>≠</mo><mi>π</mi><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Pr(Y(1)=1\mid x,S=1) \neq \pi(x)</annotation></semantics></math>. An approved-only model is then biased however flexible it is, and reweighting on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> cannot repair it.</p>
+<p>The bureau sees more than the lender. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">O=1</annotation></semantics></math> indicate that a rejected applicant holds any account, existing or newly opened elsewhere, during the outcome window, so that repayment is observed. For rejected applicants, <span class="eq" id="eq:obs"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow></mrow></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>O</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo>,</mo><mi>O</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mi>+</mi><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>O</mi><mo>=</mo><mn>0</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo>,</mo><mi>O</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:obs}
+\begin{split}
+\Pr(Y(1)=1 \mid x, S=0) ={}&amp; \Pr(O=1 \mid x, S=0)\,\Pr(Y(1)=1 \mid x, S=0, O=1) \\
+&amp;+ \Pr(O=0 \mid x, S=0)\,\Pr(Y(1)=1 \mid x, S=0, O=0).
+\end{split}
+\end{equation}</annotation></semantics></math><span class="eqno">(2)</span></span> Only the last factor is unobserved. Bounding it by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math> yields an identification region of width <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>O</mi><mo>=</mo><mn>0</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Pr(O=0\mid x, S=0)</annotation></semantics></math> for the rejects’ default rate, instead of width one. In our simulator that width averages 10%. Point identification requires one more assumption, that observable and unobservable rejects with the same <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> default at the same rate, which motivates reweighting observable rejects by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mover><mi mathvariant="normal">Pr</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><mi>O</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo>,</mo><mi>S</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/\hat\Pr(O=1\mid x,S=0)</annotation></semantics></math>. Repayment on other accounts is a proxy for repayment on the new loan. The two coincide in our simulator by construction, and in real data the gap can be measured on approved applicants who hold other accounts.</p>
+<p>We compare five estimators: approved-only (AO); AO reweighted by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mover><mi mathvariant="normal">Pr</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>=</mo><mn>1</mn><mo>∣</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/\hat\Pr(S=1\mid x)</annotation></semantics></math>; classic fuzzy augmentation, which adds each reject twice with labels 1 and 0 weighted by the AO prediction <span class="citation" data-cites="siddiqi2017">(<a href="#ref-siddiqi2017" role="doc-biblioref">Siddiqi 2017</a>)</span>; bureau-augmented (BA), which adds rejects with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">O=1</annotation></semantics></math>; and BA reweighted for unobservable rejects.</p>
+<h2 data-number="4.2" id="sec:masking"><span class="header-section-number">4.2</span> Masking by deferral</h2>
+<p>During a moratorium, a deferred account (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M_{it}=1</annotation></semantics></math>) keeps its reported delinquency state frozen. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>D</mi><mrow><mi>i</mi><mi>t</mi></mrow><mo>*</mo></msubsup><annotation encoding="application/x-tex">D^{*}_{it}</annotation></semantics></math> be the default indicator in a counterfactual world without deferral. The reported label is roughly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><msubsup><mi>D</mi><mrow><mi>i</mi><mi>t</mi></mrow><mo>*</mo></msubsup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>M</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y_{it} = D^{*}_{it}(1-M_{it})</annotation></semantics></math>, and deferral is more likely for distressed borrowers: <span class="eq" id="eq:mnar"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mn>1</mn><mo>∣</mo><msubsup><mi>D</mi><mrow><mi>i</mi><mi>t</mi></mrow><mo>*</mo></msubsup><mo>=</mo><mn>1</mn><mo>,</mo><msub><mi>X</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.278em"></mspace><mo>&gt;</mo><mspace width="0.278em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mn>1</mn><mo>∣</mo><msubsup><mi>D</mi><mrow><mi>i</mi><mi>t</mi></mrow><mo>*</mo></msubsup><mo>=</mo><mn>0</mn><mo>,</mo><msub><mi>X</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:mnar}
+\Pr(M_{it}=1 \mid D^{*}_{it}=1, X_{it}) \;&gt;\; \Pr(M_{it}=1 \mid D^{*}_{it}=0, X_{it}).
+\end{equation}</annotation></semantics></math><span class="eqno">(3)</span></span> Masking is therefore not at random and has three consequences: default rates are understated, risk rankings flatten, and a deferral flag used as a feature can take the wrong sign. We compare three remedies with an oracle trained on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>D</mi><mo>*</mo></msup><annotation encoding="application/x-tex">D^{*}</annotation></semantics></math>, which real data never provide:</p>
+<ol>
+<li><p><em>Exclude</em> windows that overlap a deferral. This is valid only if deferral is ignorable given <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>, and it removes every flagged training row.</p></li>
+<li><p><em>Delayed labels</em>: extend the window of a deferred borrower to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo>,</mo><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>t</mi><mo>+</mo><mi>h</mi><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>τ</mi><mtext mathvariant="normal">exit</mtext></msub><mo>+</mo><mi mathvariant="normal">Δ</mi><mo stretchy="false" form="postfix">}</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">(t, \max\{t+h,\, \tau_{\text{exit}}+\Delta\}]</annotation></semantics></math>, where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mtext mathvariant="normal">exit</mtext></msub><annotation encoding="application/x-tex">\tau_{\text{exit}}</annotation></semantics></math> is the last month of deferral and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">\Delta = 6</annotation></semantics></math> months.</p></li>
+<li><p><em>Naive</em>: use reported labels as they are.</p></li>
+</ol>
+<p>Deferral can also change outcomes, so <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>D</mi><mo>*</mo></msup><annotation encoding="application/x-tex">D^*</annotation></semantics></math> differs from what happens after exit. Delayed labels target outcomes under the policy actually experienced, which is what a model used after the programme ends needs.</p>
+<h2 data-number="4.3" id="sec:treatment"><span class="header-section-number">4.3</span> Treatment in the workout</h2>
+<p>Workout case <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> has balance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>b</mi><mi>j</mi></msub><annotation encoding="application/x-tex">b_j</annotation></semantics></math> and covariates <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math> from the AMC file and the bureau. An offer <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">a\in\{0,1,2,3\}</annotation></semantics></math> is standard collection, a term extension at a concessional rate, a 30% write-down, or both. The recovery value <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">V_j(a)</annotation></semantics></math> is the present value of collections at the AMC’s cost of funds divided by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>b</mi><mi>j</mi></msub><annotation encoding="application/x-tex">b_j</annotation></semantics></math>. The effect of offer <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math> is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>𝔼</mi><mo stretchy="false" form="prefix">[</mo><mi>V</mi><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>V</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>∣</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\tau_a(x) = \mathbb{E}[V(a)-V(0)\mid X=x]</annotation></semantics></math>. Logged offers <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>j</mi></msub><annotation encoding="application/x-tex">A_j</annotation></semantics></math> were chosen by officers with propensities <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>A</mi><mo>=</mo><mi>a</mi><mo>∣</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">e_a(x)=\Pr(A=a\mid X=x)</annotation></semantics></math>. We assume unconfoundedness given <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and overlap (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>a</mi></msub><mo>≥</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">e_a \ge 0.02</annotation></semantics></math>). With cross-fitted outcome models <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><annotation encoding="application/x-tex">\hat\mu_a</annotation></semantics></math> and propensities <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>e</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><annotation encoding="application/x-tex">\hat e_a</annotation></semantics></math>, the DR-learner <span class="citation" data-cites="kennedy2023">(<a href="#ref-kennedy2023" role="doc-biblioref">Kennedy 2023</a>)</span> regresses on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> the pseudo-outcome <span class="eq" id="eq:dr"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>φ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo>=</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mrow><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>A</mi><mo>=</mo><mi>a</mi><mo stretchy="false" form="postfix">}</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>V</mi><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msub><mover><mi>e</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>−</mo><mfrac><mrow><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>A</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>V</mi><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msub><mover><mi>e</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:dr}
+\hat\varphi_{a} = \hat\mu_a(X) - \hat\mu_0(X) + \frac{\mathbf{1}\{A=a\}\,(V-\hat\mu_a(X))}{\hat e_a(X)} - \frac{\mathbf{1}\{A=0\}\,(V-\hat\mu_0(X))}{\hat e_0(X)}.
+\end{equation}</annotation></semantics></math><span class="eqno">(4)</span></span> A policy <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> maps covariates to offers. Write-downs are limited by a budget <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math> in baht: <span class="eq" id="eq:policy"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">max</mi><mi>π</mi></munder><mspace width="0.222em"></mspace><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>b</mi><mi>j</mi></msub><mspace width="0.167em"></mspace><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mspace width="1.0em"></mspace><mtext mathvariant="normal">s.t.</mtext><mspace width="1.0em"></mspace><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>h</mi><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></msub><mspace width="0.167em"></mspace><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><mi>B</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:policy}
+\max_{\pi}\ \sum_j b_j\,\hat\tau_{\pi(X_j)}(X_j) \quad\text{s.t.}\quad \sum_j h_{\pi(X_j)}\,b_j \le B,
+\end{equation}</annotation></semantics></math><span class="eqno">(5)</span></span> where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>a</mi></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">h_a = 0.3</annotation></semantics></math> for offers with a write-down and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math> otherwise. <a href="#alg:budget">Algorithm 1</a> solves the linear relaxation greedily, which is near-optimal when no single case is large relative to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>. Policy values are estimated off-policy with the direct method (DM), inverse propensity scoring (IPS) and the doubly robust (DR) estimator <span class="citation" data-cites="dudik2011">(<a href="#ref-dudik2011" role="doc-biblioref">Dudík et al. 2011</a>)</span>, all weighted by balance: <span class="eq" id="eq:ope"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>V</mi><mo accent="true">̂</mo></mover><mtext mathvariant="normal">DR</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>π</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>w</mi><mi>j</mi></msub><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">[</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><mrow><mi>π</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mrow><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>A</mi><mi>j</mi></msub><mo>=</mo><mi>π</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">}</mo></mrow><mrow><msub><mover><mi>e</mi><mo accent="true">̂</mo></mover><msub><mi>A</mi><mi>j</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><msub><mi>V</mi><mi>j</mi></msub><mo>−</mo><msub><mover><mi>μ</mi><mo accent="true">̂</mo></mover><msub><mi>A</mi><mi>j</mi></msub></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><msub><mi>b</mi><mi>j</mi></msub><mi minsize="180%" maxsize="180%" stretchy="true">/</mi><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>b</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:ope}
+\hat V_{\text{DR}}(\pi) = \sum_j w_j\Big[\hat\mu_{\pi(X_j)}(X_j) + \frac{\mathbf{1}\{A_j=\pi(X_j)\}}{\hat e_{A_j}(X_j)}\big(V_j - \hat\mu_{A_j}(X_j)\big)\Big],\qquad w_j = b_j \Big/ \textstyle\sum_k b_k .
+\end{equation}</annotation></semantics></math><span class="eqno">(6)</span></span></p>
+<blockquote class="algorithm" id="alg:budget">
+<p><strong>Algorithm 1.</strong> Write-down-budgeted offer allocation</p>
+<p><strong>Require</strong> estimated effects <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat\tau_a(X_j)</annotation></semantics></math> for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">a\in\{1,2,3\}</annotation></semantics></math> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mo>≡</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\hat\tau_0\equiv 0</annotation></semantics></math>), balances <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>b</mi><mi>j</mi></msub><annotation encoding="application/x-tex">b_j</annotation></semantics></math>, budget <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math></p>
+<p><strong>for</strong> each case <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> <strong>do</strong></p>
+<p>    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>j</mi></msub><mo>←</mo><mrow><mi mathvariant="normal">arg</mi><mo>&#8289;</mo></mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mrow><mi>a</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow></msub><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi_j \gets \arg\max_{a\in\{0,1\}} \hat\tau_a(X_j)</annotation></semantics></math> <em>// best offer without a write-down</em></p>
+<p>    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo>←</mo><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mrow><mi>a</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mrow></msub><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">g_j \gets \max_{a\in\{2,3\}} \hat\tau_a(X_j) - \max\{0, \hat\tau_1(X_j)\}</annotation></semantics></math> <em>// extra gain from writing down</em></p>
+<p>spent <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>←</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\gets 0</annotation></semantics></math></p>
+<p><strong>for</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> in decreasing order of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><msub><mi>b</mi><mi>j</mi></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>0.3</mn><mspace width="0.167em"></mspace><msub><mi>b</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">g_j b_j / (0.3\,b_j)</annotation></semantics></math> <strong>do</strong></p>
+<p>    <strong>if</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j &gt; 0</annotation></semantics></math> <strong>and</strong> spent <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mspace width="0.167em"></mspace><mn>0.3</mn><mspace width="0.167em"></mspace><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">+\,0.3\,b_j \le B</annotation></semantics></math> <strong>then</strong></p>
+<p>        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>j</mi></msub><mo>←</mo><mrow><mi mathvariant="normal">arg</mi><mo>&#8289;</mo></mrow><msub><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mrow><mi>a</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mrow></msub><msub><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mi>a</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi_j \gets \arg\max_{a\in\{2,3\}} \hat\tau_a(X_j)</annotation></semantics></math>;spent <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\gets</annotation></semantics></math> spent <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mspace width="0.167em"></mspace><mn>0.3</mn><mspace width="0.167em"></mspace><msub><mi>b</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">+\,0.3\,b_j</annotation></semantics></math></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math></p>
+</blockquote>
+<h1 data-number="5" id="sec:sim"><span class="header-section-number">5</span> Simulators and protocol</h1>
+<h2 data-number="5.1" id="bureau-simulator"><span class="header-section-number">5.1</span> Bureau simulator</h2>
+<p>The bureau simulator generates 50,000 borrowers over a 60-month panel after a 12-month burn-in. Borrower <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> has latent ability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math>, whose mean differs by occupation and age, soft information <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>i</mi></msub><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">u_i\sim N(0,1)</annotation></semantics></math> that lenders see but the bureau never records, and an idiosyncratic shock <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mn>0.85</mn><mspace width="0.167em"></mspace><msub><mi>z</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mn>0.5</mn><mspace width="0.167em"></mspace><msub><mi>σ</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>ε</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">z_{it} = 0.85\,z_{i,t-1} + 0.5\,\sigma_i\,\varepsilon_{it}</annotation></semantics></math> whose volatility <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\sigma_i</annotation></semantics></math> is highest for informal workers. A macro shock <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m_t=1</annotation></semantics></math> hits in months 24–35, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">m_t = 0.3</annotation></semantics></math> for six months afterwards. In each month the borrower misses a payment with probability <span class="eq" id="eq:miss"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mi>σ</mi><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mo>−</mo><mn>3.0</mn><mo>−</mo><mn>0.7</mn><mspace width="0.167em"></mspace><msub><mi>a</mi><mi>i</mi></msub><mo>−</mo><mn>0.5</mn><mspace width="0.167em"></mspace><msub><mi>u</mi><mi>i</mi></msub><mo>+</mo><msub><mi>z</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>+</mo><mn>0.9</mn><mspace width="0.167em"></mspace><msub><mi>m</mi><mi>t</mi></msub><mspace width="0.167em"></mspace><msub><mi>v</mi><mi>i</mi></msub><mo>+</mo><mn>0.6</mn><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>U</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>−</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mtext mathvariant="normal">active</mtext><mo stretchy="false" form="postfix">}</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:miss}
+p_{it} = \sigma\big(-3.0 - 0.7\,a_i - 0.5\,u_i + z_{it} + 0.9\,m_t\,v_i + 0.6\,(U_{it}-0.5)\,\mathbf{1}\{\text{active}\}\big),
+\end{equation}</annotation></semantics></math><span class="eqno">(7)</span></span> where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math> is the logistic function, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>i</mi></msub><annotation encoding="application/x-tex">v_i</annotation></semantics></math> is occupation-specific sensitivity to the shock and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">U_{it}</annotation></semantics></math> is revolving utilisation. Delinquency moves along <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>→</mo><mn>1</mn><mo>→</mo><mn>2</mn><mo>→</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">0\to1\to2\to3</annotation></semantics></math> (current, 30, 60 and 90+ DPD) with each missed payment. A borrower at 30 or 60 DPD who pays cures with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>, and 90+ DPD is absorbing.</p>
+<p>Borrowers apply for credit with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.015</mn><mo>+</mo><mn>0.25</mn><mspace width="0.167em"></mspace><msub><mi>p</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>+</mo><mn>0.03</mn><mspace width="0.167em"></mspace><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mtext mathvariant="normal">no account</mtext><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">0.015 + 0.25\,p_{it} + 0.03\,\mathbf{1}\{\text{no account}\}</annotation></semantics></math> at one of six lenders, chosen by market share (30% for lender 0, 14% for a lenient lender). Each lender approves its target share of the month’s applicants (50% at lender 0, 45–60% at the others, 85% at the lenient lender), ranking them by a risk index of reported attributes plus <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mi>ℓ</mi></msub><msub><mi>u</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\lambda_\ell u_i</annotation></semantics></math> and noise. Lender 0 leans heavily on soft information (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>0</mn></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\lambda_0 = 0.9</annotation></semantics></math>), the others less (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.6</mn><annotation encoding="application/x-tex">0.6</annotation></semantics></math>) and the lenient lender hardly at all (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.1</mn><annotation encoding="application/x-tex">0.1</annotation></semantics></math>). At month 24, active borrowers enter a moratorium with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>+</mo><mn>1.6</mn><mspace width="0.167em"></mspace><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma(-1 + 1.6\,\tilde p_{it})</annotation></semantics></math>, where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">\tilde p_{it}</annotation></semantics></math> is their standardised distress. Deferral freezes the reported state until month 35, and catch-up payments raise the logit in <a href="#eq:miss">(7)</a> by 0.7 for six months after exit. An observed and a counterfactual no-deferral world share all random draws, so the masking effect is measured exactly. The bureau computes 16 attributes from reported data (<a href="#app:features">Appendix B</a>). <a href="#tab:calibration">Table 1</a> lists the resulting moments.</p>
+<div id="tab:calibration">
+<div class="tbl"><p class="tcap"><b>Table 1.</b> Simulator moments, averaged over five seeds.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Simulator</th>
+<th style="text-align: left;">Moment</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Bureau, no moratorium</td>
+<td style="text-align: left;">12-month default rate, scorable population, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mn>18</mn></mrow><annotation encoding="application/x-tex">t_0=18</annotation></semantics></math> (window spans the shock)</td>
+<td style="text-align: right;">9.8%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">12-month default rate, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mn>39</mn></mrow><annotation encoding="application/x-tex">t_0=39</annotation></semantics></math> (after the shock)</td>
+<td style="text-align: right;">3.1%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Thin-file share of the scorable population</td>
+<td style="text-align: right;">10.7%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Approval rate, lender 0 / lenient lender</td>
+<td style="text-align: right;">50% / 85%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Default rate of approved / rejected applicants at lender 0, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math></td>
+<td style="text-align: right;">5.5% / 16.1%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Rejected applicants with repayment observable at other lenders</td>
+<td style="text-align: right;">90%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Bureau, with moratorium</td>
+<td style="text-align: left;">12-month default rate before the shock, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">t_0=6</annotation></semantics></math></td>
+<td style="text-align: right;">4.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Borrowers ever deferred</td>
+<td style="text-align: right;">26.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Training default rate, reported vs. no-deferral counterfactual</td>
+<td style="text-align: right;">4.5% vs. 10.9%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Workouts</td>
+<td style="text-align: left;">Logged offers: standard / extension / write-down / both</td>
+<td style="text-align: right;">48 / 28 / 15 / 9%</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Write-downs under the logged policy, share of balance</td>
+<td style="text-align: right;">10.4%</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<h2 data-number="5.2" id="workout-simulator"><span class="header-section-number">5.2</span> Workout simulator</h2>
+<p>The workout simulator generates 50,000 NPL cases, 30% of them secured by property. Each case has a balance, monthly income, a repayment capacity <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>j</mi></msub><annotation encoding="application/x-tex">c_j</annotation></semantics></math> equal to an unobserved share of income, and willingness to pay <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w_j\sim N(0,1)</annotation></semantics></math>. Offers set an instalment <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">I_j(a)</annotation></semantics></math> and a remaining debt <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D_j(a)</annotation></semantics></math> (<a href="#app:params">Appendix A</a>). The plan is completed with probability <span class="eq" id="eq:complete"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>σ</mi><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">(</mo><mn>0.3</mn><mo>+</mo><mn>1.8</mn><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><msub><mi>c</mi><mi>j</mi></msub><mrow><msub><mi>I</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo>+</mo><mn>5</mn><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo minsize="180%" maxsize="180%" stretchy="true" form="prefix">{</mo><mn>0</mn><mo>,</mo><mspace width="0.222em"></mspace><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mfrac><mrow><mn>48</mn><mspace width="0.167em"></mspace><msub><mi>c</mi><mi>j</mi></msub></mrow><mrow><msub><mi>D</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">}</mo><mo>+</mo><mn>0.8</mn><mspace width="0.167em"></mspace><msub><mi>w</mi><mi>j</mi></msub><mo minsize="180%" maxsize="180%" stretchy="true" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\label{eq:complete}
+q_j(a) = \sigma\Big(0.3 + 1.8\,\log\frac{c_j}{I_j(a)} + 5\,\min\Big\{0,\ \log\frac{48\,c_j}{D_j(a)}\Big\} + 0.8\,w_j\Big).
+\end{equation}</annotation></semantics></math><span class="eqno">(8)</span></span> The first term captures liquidity: can the borrower afford the instalment? The second captures debt overhang: willingness collapses once the debt exceeds four years of capacity, so only a write-down helps <span class="citation" data-cites="ganong2020 dobbie2020targeted">(<a href="#ref-ganong2020" role="doc-biblioref">Ganong and Noel 2020</a>; <a href="#ref-dobbie2020targeted" role="doc-biblioref">Dobbie and Song 2020</a>)</span>. A completed plan yields the present value of its instalments at an 8% annual cost of funds. A failed plan yields the instalments paid before redefault within three years, fewer when they are unaffordable, followed by legal recovery: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.9</mn><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>0.7</mn><mo>×</mo><mtext mathvariant="normal">collateral ratio</mtext><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">0.9\min\{1, 0.7\times\text{collateral ratio}\}</annotation></semantics></math> after 30 months for secured cases and 5% after 24 months for unsecured ones. A secondary outcome is the probability of a new 90+ DPD at another lender within 24 months, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>2.2</mn><mo>+</mo><mn>1.3</mn><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><msub><mi>I</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo stretchy="false" form="postfix">)</mo><mi>/</mi><msub><mi>c</mi><mi>j</mi></msub><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo><mo>−</mo><mn>0.4</mn><mspace width="0.167em"></mspace><msub><mi>w</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma(-2.2 + 1.3\min\{I_j(a)/c_j, 4\} - 0.4\,w_j)</annotation></semantics></math>, for borrowers with other accounts. Sixty officers with generosity <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0.7</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">g\sim N(0,0.7)</annotation></semantics></math> chose logged offers through a multinomial logit on observables and their own generosity, with a 2% floor per offer. Twelve covariates are observed, including noisy proxies of income and of the share of income free for repayment. Truth is computed in expectation by quadrature; realised outcomes are drawn once per case.</p>
+<h2 data-number="5.3" id="protocol"><span class="header-section-number">5.3</span> Protocol</h2>
+<p>All results are means over five seeds with standard deviations across seeds. <em>E1 and E4</em>: models are developed on observation months <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>12</mn><mo>,</mo><mn>15</mn><mo>,</mo><mn>18</mn><mo>,</mo><mn>21</mn><mo>,</mo><mn>24</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">t_0\in\{12,15,18,21,24\}</annotation></semantics></math> (about 200 thousand borrower-months) and tested out of time on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>36</mn><mo>,</mo><mn>39</mn><mo>,</mo><mn>42</mn><mo>,</mo><mn>45</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">t_0\in\{36,39,42,45\}</annotation></semantics></math> (about 136 thousand), with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">h=12</annotation></semantics></math>; the development windows span the shock. <em>E2</em>: lender 0’s applications in months 6–47 (about 18.9 thousand per seed), split 50/50 by borrower and scored against every applicant’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math>. <em>E3</em>: development through the moratorium, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>15</mn><mo>,</mo><mn>18</mn><mo>,</mo><mn>21</mn><mo>,</mo><mn>24</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">t_0\in\{15,18,21,24\}</annotation></semantics></math>, and test after it, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>39</mn><mo>,</mo><mn>42</mn><mo>,</mo><mn>45</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">t_0\in\{39,42,45\}</annotation></semantics></math>. <em>Workouts</em>: a 50/50 split, outcome models per offer, a multinomial logistic propensity model and 2-fold cross-fitting.</p>
+<p>The models are a gradient-boosted classifier with monotone constraints on 11 of the 16 attributes (scikit-learn <code>Hist­Gradient­Boosting</code>); a weight-of-evidence (WoE) scorecard with monotone binning and points scaled to 600 at odds of 50:1 with 20 points to double the odds; and, for E3, logistic regression, so that the coefficient on the deferral flag can be read. The self-supervised (SSL) encoder is a denoising autoencoder (96–16–96) trained on 60,000 unlabelled 24-month sequences of five channels with 25% of months masked, a CPU-scale stand-in for a bureau foundation model. Metrics are AUC, the KS statistic, the Brier score, the ratio of mean predicted to observed default (PD/observed), and the population stability index (PSI) between development and out-of-time scores.</p>
+<h1 data-number="6" id="sec:results"><span class="header-section-number">6</span> Results</h1>
+<h2 data-number="6.1" id="e1-model-benchmark-out-of-time"><span class="header-section-number">6.1</span> E1: model benchmark out of time</h2>
+<figure id="fig:e1" data-latex-placement="t">
+<img loading="lazy" src="figures/fig2_e1_benchmark.png" />
+<figcaption><b>Figure 2.</b> Out-of-time benchmark (E1). (a) AUC for all borrowers and for thin-file borrowers. (b) Population stability index between development and out-of-time scores; the shaded bands mark the conventional thresholds of 0.10 (moderate shift) and 0.25 (significant shift). Bars are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\pm 1</annotation></semantics></math> s.d. across five seeds.</figcaption>
+</figure>
+<div id="tab:e1">
+<div class="tbl"><p class="tcap"><b>Table 2.</b> E1: out-of-time performance (mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>±</mi><annotation encoding="application/x-tex">\pm</annotation></semantics></math> s.d. over five seeds).</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">AUC</th>
+<th style="text-align: center;">AUC, thin file</th>
+<th style="text-align: center;">KS</th>
+<th style="text-align: center;">Brier</th>
+<th style="text-align: center;">PSI</th>
+<th style="text-align: center;">PD/observed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">WoE scorecard</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.809</mn><mo>±</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">0.809 \pm 0.004</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.806</mn><mo>±</mo><mn>0.016</mn></mrow><annotation encoding="application/x-tex">0.806 \pm 0.016</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.469</mn><mo>±</mo><mn>0.007</mn></mrow><annotation encoding="application/x-tex">0.469 \pm 0.007</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.039</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.039 \pm 0.001</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.11</mn><mo>±</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">0.11 \pm 0.01</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3.87</mn><mo>±</mo><mn>0.11</mn></mrow><annotation encoding="application/x-tex">3.87 \pm 0.11</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Monotone GBM</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.816</mn><mo>±</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">0.816 \pm 0.004</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.812</mn><mo>±</mo><mn>0.012</mn></mrow><annotation encoding="application/x-tex">0.812 \pm 0.012</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.470</mn><mo>±</mo><mn>0.006</mn></mrow><annotation encoding="application/x-tex">0.470 \pm 0.006</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.039</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.039 \pm 0.001</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.11</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.11 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3.85</mn><mo>±</mo><mn>0.13</mn></mrow><annotation encoding="application/x-tex">3.85 \pm 0.13</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">SSL embedding, linear probe</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.769</mn><mo>±</mo><mn>0.007</mn></mrow><annotation encoding="application/x-tex">0.769 \pm 0.007</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.709</mn><mo>±</mo><mn>0.023</mn></mrow><annotation encoding="application/x-tex">0.709 \pm 0.023</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.405</mn><mo>±</mo><mn>0.010</mn></mrow><annotation encoding="application/x-tex">0.405 \pm 0.010</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.057</mn><mo>±</mo><mn>0.002</mn></mrow><annotation encoding="application/x-tex">0.057 \pm 0.002</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.56</mn><mo>±</mo><mn>0.11</mn></mrow><annotation encoding="application/x-tex">0.56 \pm 0.11</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5.44</mn><mo>±</mo><mn>0.35</mn></mrow><annotation encoding="application/x-tex">5.44 \pm 0.35</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">GBM + SSL embedding</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.822</mn><mo>±</mo><mn>0.003</mn></mrow><annotation encoding="application/x-tex">0.822 \pm 0.003</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.805</mn><mo>±</mo><mn>0.007</mn></mrow><annotation encoding="application/x-tex">0.805 \pm 0.007</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.485</mn><mo>±</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">0.485 \pm 0.004</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.047</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.047 \pm 0.001</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.36</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.36 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4.77</mn><mo>±</mo><mn>0.18</mn></mrow><annotation encoding="application/x-tex">4.77 \pm 0.18</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<p>The monotone GBM reaches an out-of-time AUC of 0.816 against 0.809 for the scorecard (<a href="#tab:e1">Table 2</a>, <a href="#fig:e1">Figure 2</a>). Adding SSL embeddings raises AUC to 0.822 but not on thin files (0.805 against 0.812), and it more than triples score drift (PSI 0.36 against 0.11). Embeddings alone reach 0.769. The pattern matches the tabular evidence that representation learning adds little over well-engineered attributes <span class="citation" data-cites="gunnarsson2021 grinsztajn2022">(<a href="#ref-gunnarsson2021" role="doc-biblioref">Gunnarsson et al. 2021</a>; <a href="#ref-grinsztajn2022" role="doc-biblioref">Grinsztajn et al. 2022</a>)</span>, and it adds a cost the usual benchmarks omit: a representation learned across a regime shift moves when the regime ends.</p>
+<p>Every model over-predicts default after the shock, by a factor of about 3.85 for the GBM, because development windows span the shock (9.5% default against 3.0% out of time). Rankings transfer but calibration does not, so recalibration and macro-aware term structures are part of the method rather than an afterthought.</p>
+<h2 data-number="6.2" id="e2-selective-labels"><span class="header-section-number">6.2</span> E2: selective labels</h2>
+<figure id="fig:e2" data-latex-placement="t">
+<img loading="lazy" src="figures/fig3_e2_selective_labels.png" />
+<figcaption><b>Figure 3.</b> Selective labels at lender 0 (E2). (a) Calibration on all applicants in ten bins of each model’s prediction; points above the diagonal mean under-prediction (seed 7). (b) Ratio of predicted to observed default among applicants lender 0 rejected, mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>±</mi><annotation encoding="application/x-tex">\pm</annotation></semantics></math> s.d. over five seeds. The oracle sits below 1 because rejects were selected on soft information that no score observes.</figcaption>
+</figure>
+<div id="tab:e2">
+<div class="tbl"><p class="tcap"><b>Table 3.</b> E2: reject inference at lender 0, scored against every applicant’s true outcome <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y(1)</annotation></semantics></math>.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th colspan="2" style="text-align: center;">AUC</th>
+<th colspan="2" style="text-align: center;">Predicted / observed</th>
+<th style="text-align: center;">Default rate at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span>2-3</span>(lr)<span>4-5</span> Method</td>
+<td style="text-align: center;">all applicants</td>
+<td style="text-align: center;">approved only</td>
+<td style="text-align: center;">all</td>
+<td style="text-align: center;">rejected</td>
+<td style="text-align: center;">70% approval (%)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Approved-only (AO)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.693</mn><mo>±</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">0.693 \pm 0.004</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.679</mn><mo>±</mo><mn>0.012</mn></mrow><annotation encoding="application/x-tex">0.679 \pm 0.012</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.66</mn><mo>±</mo><mn>0.07</mn></mrow><annotation encoding="application/x-tex">0.66 \pm 0.07</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.55</mn><mo>±</mo><mn>0.06</mn></mrow><annotation encoding="application/x-tex">0.55 \pm 0.06</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.1</mn><mo>±</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">7.1 \pm 0.6</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">AO + IPW on observables</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.682</mn><mo>±</mo><mn>0.007</mn></mrow><annotation encoding="application/x-tex">0.682 \pm 0.007</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.663</mn><mo>±</mo><mn>0.011</mn></mrow><annotation encoding="application/x-tex">0.663 \pm 0.011</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.62</mn><mo>±</mo><mn>0.07</mn></mrow><annotation encoding="application/x-tex">0.62 \pm 0.07</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.50</mn><mo>±</mo><mn>0.08</mn></mrow><annotation encoding="application/x-tex">0.50 \pm 0.08</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.3</mn><mo>±</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">7.3 \pm 0.5</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Fuzzy augmentation</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.698</mn><mo>±</mo><mn>0.006</mn></mrow><annotation encoding="application/x-tex">0.698 \pm 0.006</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.677</mn><mo>±</mo><mn>0.008</mn></mrow><annotation encoding="application/x-tex">0.677 \pm 0.008</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.67</mn><mo>±</mo><mn>0.07</mn></mrow><annotation encoding="application/x-tex">0.67 \pm 0.07</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.56</mn><mo>±</mo><mn>0.06</mn></mrow><annotation encoding="application/x-tex">0.56 \pm 0.06</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.0</mn><mo>±</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">7.0 \pm 0.7</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Bureau-augmented (BA)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.713</mn><mo>±</mo><mn>0.007</mn></mrow><annotation encoding="application/x-tex">0.713 \pm 0.007</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.675</mn><mo>±</mo><mn>0.015</mn></mrow><annotation encoding="application/x-tex">0.675 \pm 0.015</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.97</mn><mo>±</mo><mn>0.08</mn></mrow><annotation encoding="application/x-tex">0.97 \pm 0.08</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.86</mn><mo>±</mo><mn>0.06</mn></mrow><annotation encoding="application/x-tex">0.86 \pm 0.06</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.6</mn><mo>±</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">6.6 \pm 0.4</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">BA + IPW for unobserved rejects</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.713</mn><mo>±</mo><mn>0.008</mn></mrow><annotation encoding="application/x-tex">0.713 \pm 0.008</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.675</mn><mo>±</mo><mn>0.015</mn></mrow><annotation encoding="application/x-tex">0.675 \pm 0.015</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.98</mn><mo>±</mo><mn>0.07</mn></mrow><annotation encoding="application/x-tex">0.98 \pm 0.07</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.87</mn><mo>±</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">0.87 \pm 0.05</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.6</mn><mo>±</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">6.6 \pm 0.3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Oracle (all applicants, true <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.713</mn><mo>±</mo><mn>0.005</mn></mrow><annotation encoding="application/x-tex">0.713 \pm 0.005</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.679</mn><mo>±</mo><mn>0.014</mn></mrow><annotation encoding="application/x-tex">0.679 \pm 0.014</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.00</mn><mo>±</mo><mn>0.09</mn></mrow><annotation encoding="application/x-tex">1.00 \pm 0.09</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.89</mn><mo>±</mo><mn>0.06</mn></mrow><annotation encoding="application/x-tex">0.89 \pm 0.06</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.6</mn><mo>±</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">6.6 \pm 0.6</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Lender 0 approves 50% of applicants; approved applicants default at 5.5% and rejected ones would have defaulted at 16.1%. The approved-only model under-predicts default among rejects by 45% (ratio 0.55, <a href="#tab:e2">Table 3</a>, <a href="#fig:e2">Figure 3</a>). Reweighting on observables makes this worse (0.50), because it up-weights approved applicants with poor bureau records, whom the lender approved precisely because their soft information was good. Fuzzy augmentation (0.56) inherits the AO model’s bias. Bureau-augmented labels raise the ratio to 0.86 (0.87 with reweighting), close to the oracle’s 0.89. AUC on all applicants rises from 0.693 to 0.713, equal to the oracle, and the default rate at a 70% approval rate falls from 7.1% to 6.6%.</p>
+<p>Validation on approved applicants alone, the view a single lender has, cannot tell these methods apart: their AUCs on approved applicants span only 0.663–0.679. Reject inference therefore cannot be validated in-house. It needs outcomes for rejected applicants, which only a cross-lender view can supply.</p>
+<h2 data-number="6.3" id="e3-masking-by-a-moratorium"><span class="header-section-number">6.3</span> E3: masking by a moratorium</h2>
+<figure id="fig:e3" data-latex-placement="t">
+<img loading="lazy" src="figures/fig4_e3_masking.png" />
+<figcaption><b>Figure 4.</b> Label masking by a moratorium (E3). (a) Share of the scorable population with a 90+ DPD within 12 months of each observation month, as reported and in the counterfactual world without deferral (seed 7). (b) Out-of-time AUC by label strategy. (c) Calibration of deferred borrowers relative to the rest of the portfolio (1 is ideal). Bars are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\pm 1</annotation></semantics></math> s.d. across five seeds.</figcaption>
+</figure>
+<div id="tab:e3">
+<div class="tbl"><p class="tcap"><b>Table 4.</b> E3: training through a moratorium and testing after it. “n/e”: not estimable, because excluding deferred windows removes every flagged row.</p><div class="tscroll"><table>
+<tbody>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;">Training default</td>
+<td style="text-align: center;">Coefficient on</td>
+<td style="text-align: center;">Out-of-time</td>
+<td style="text-align: center;">Relative calibration,</td>
+<td style="text-align: center;">Out-of-time</td>
+</tr>
+<tr>
+<td style="text-align: left;">Label strategy</td>
+<td style="text-align: center;">rate (%)</td>
+<td style="text-align: center;">deferral flag</td>
+<td style="text-align: center;">AUC</td>
+<td style="text-align: center;">deferred borrowers</td>
+<td style="text-align: center;">Brier</td>
+</tr>
+<tr>
+<td style="text-align: left;">Naive: reported labels</td>
+<td style="text-align: center;">4.5</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.59</mn><mo>±</mo><mn>0.04</mn></mrow><annotation encoding="application/x-tex">-0.59 \pm 0.04</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.625</mn><mo>±</mo><mn>0.025</mn></mrow><annotation encoding="application/x-tex">0.625 \pm 0.025</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.16</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.16 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.036</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.036 \pm 0.001</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Exclude deferred windows</td>
+<td style="text-align: center;">6.5</td>
+<td style="text-align: center;">n/e</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.832</mn><mo>±</mo><mn>0.003</mn></mrow><annotation encoding="application/x-tex">0.832 \pm 0.003</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.72</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.72 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.040</mn><mo>±</mo><mn>0.000</mn></mrow><annotation encoding="application/x-tex">0.040 \pm 0.000</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Delayed labels (+6 months after exit)</td>
+<td style="text-align: center;">8.9</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>0.01</mn><mo>±</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">+0.01 \pm 0.01</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.831</mn><mo>±</mo><mn>0.004</mn></mrow><annotation encoding="application/x-tex">0.831 \pm 0.004</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.69</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.69 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.041</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.041 \pm 0.001</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Oracle: no-deferral counterfactual</td>
+<td style="text-align: center;">10.9</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>0.24</mn><mo>±</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">+0.24 \pm 0.01</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.838</mn><mo>±</mo><mn>0.005</mn></mrow><annotation encoding="application/x-tex">0.838 \pm 0.005</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.90</mn><mo>±</mo><mn>0.02</mn></mrow><annotation encoding="application/x-tex">0.90 \pm 0.02</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.057</mn><mo>±</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">0.057 \pm 0.001</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<p>During the moratorium the bureau reports far less default than occurs in the counterfactual world (<a href="#fig:e3">Figure 4</a>a). Across development windows, the reported default rate is 4.5% against 10.9% without deferral. A model trained on reported labels learns deferral as a safety signal (coefficient <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.59, <a href="#tab:e3">Table 4</a>). After the programme ends, deferred borrowers default at 7.5% against 2.1% for the rest, and the naive model’s AUC collapses to 0.625 from about 0.83. It also assigns deferred borrowers 0.16 of their relative risk.</p>
+<p>Excluding deferred windows restores AUC (0.832) but cannot learn anything about the flag and leaves deferred borrowers under-predicted (0.72). Delayed labels restore AUC (0.831), neutralise the flag (+0.01) and raise relative calibration to 0.69. The oracle, which no real data provide, reaches 0.838 and 0.90. The remaining gap exists because deferral itself changes outcomes, through catch-up stress and through survival, so the deferral should be modelled as a treatment, not only as a source of missing labels (<a href="#sec:agenda">Section 7</a>).</p>
+<h2 data-number="6.4" id="e4-groups"><span class="header-section-number">6.4</span> E4: groups</h2>
+<figure id="fig:e4" data-latex-placement="t">
+<img loading="lazy" src="figures/fig5_e4_groups.png" />
+<figcaption><b>Figure 5.</b> Groups (E4), monotone GBM, out of time. (a) Group calibration relative to the portfolio, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mover><mtext mathvariant="normal">PD</mtext><mo accent="true">¯</mo></mover><mi>g</mi></msub><mi>/</mi><msub><mover><mi>y</mi><mo accent="true">‾</mo></mover><mi>g</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mover><mtext mathvariant="normal">PD</mtext><mo accent="true">¯</mo></mover><mi>/</mi><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\overline{\text{PD}}_g/\bar y_g)/(\overline{\text{PD}}/\bar y)</annotation></semantics></math>. (b) Approval rate among borrowers who did not default, at a single cut-off that approves 70% overall; the dashed line is the average across groups. Group effects in the simulator are design choices, not claims about Thai borrowers. Bars are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">\pm 1</annotation></semantics></math> s.d. across five seeds.</figcaption>
+</figure>
+<p>Group calibration is stable across gender and regions (between 0.96 and 1.09 for regions) but not across occupations (<a href="#fig:e4">Figure 5</a>a). Relative to the portfolio, the model under-predicts informal workers (0.68) and over-predicts salaried ones (1.37), because the shock in the development period hit occupations unevenly and their relative risk changed after it. Yet non-defaulting informal workers are approved less often (61.9% against 75.6%, <a href="#fig:e4">Figure 5</a>b), because their base default rate is higher (5.6% against 2.0%). The two panels illustrate the impossibility result: with unequal base rates, calibration and equal opportunity cannot both hold <span class="citation" data-cites="kleinberg2017 chouldechova2017">(<a href="#ref-kleinberg2017" role="doc-biblioref">Kleinberg et al. 2017</a>; <a href="#ref-chouldechova2017" role="doc-biblioref">Chouldechova 2017</a>)</span>. Which criterion governs is a policy choice. Thin-file borrowers are close to calibrated (0.94) but approved less often when they repay (68.8% against 71.7%).</p>
+<h2 data-number="6.5" id="causal-debt-resolution"><span class="header-section-number">6.5</span> Causal debt resolution</h2>
+<div id="tab:r1">
+<div class="tbl"><p class="tcap"><b>Table 5.</b> Accuracy of estimated offer effects against the simulator’s truth, in percentage points (pp) of balance.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th colspan="2" style="text-align: center;">True effect vs. standard (pp)</th>
+<th colspan="2" style="text-align: center;">RMSE of estimated effect (pp)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span>2-3</span>(lr)<span>4-5</span> Offer</td>
+<td style="text-align: center;">mean</td>
+<td style="text-align: center;">s.d. across cases</td>
+<td style="text-align: center;">T-learner</td>
+<td style="text-align: center;">DR-learner</td>
+</tr>
+<tr>
+<td style="text-align: left;">Term extension</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.9</td>
+<td style="text-align: center;">6.5</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6.7</mn><mo>±</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">6.7 \pm 0.1</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5.2</mn><mo>±</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">5.2 \pm 0.1</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Write-down</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>8.8</td>
+<td style="text-align: center;">12.7</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.7</mn><mo>±</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">7.7 \pm 0.2</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.3</mn><mo>±</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">7.3 \pm 0.3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Extension + write-down</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>11.1</td>
+<td style="text-align: center;">16.6</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.0</mn><mo>±</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">9.0 \pm 0.1</annotation></semantics></math></td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.5</mn><mo>±</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">9.5 \pm 0.3</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<h4 data-number="6.5.0.1" id="effects"><span class="header-section-number">6.5.0.1</span> Effects</h4>
+<p>On average every concession lowers recovery value, by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.9, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>8.8 and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>11.1 pp for extension, write-down and both, but the effects vary widely across cases (s.d. 6.5–16.6 pp, <a href="#tab:r1">Table 5</a>). The DR-learner estimates them more accurately than the T-learner for extensions (RMSE 5.2 against 6.7 pp) and write-downs (7.3 against 7.7), but not for the combined offer (9.5 against 9.0), which officers chose in only 9% of cases; small propensities make its pseudo-outcomes noisy.</p>
+<div id="tab:r2">
+<div class="tbl"><p class="tcap"><b>Table 6.</b> Policies at the logged policy’s write-down budget, true values on the held-out half (mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>±</mi><annotation encoding="application/x-tex">\pm</annotation></semantics></math> s.d. of recovery over five seeds).</p><div class="tscroll"><table>
+<tbody>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;">Recovery value</td>
+<td style="text-align: center;">Plan</td>
+<td style="text-align: center;">New 90+ DPD at</td>
+<td style="text-align: center;">Write-downs</td>
+</tr>
+<tr>
+<td style="text-align: left;">Policy</td>
+<td style="text-align: center;">(% of balance)</td>
+<td style="text-align: center;">completion (%)</td>
+<td style="text-align: center;">other lenders (%)</td>
+<td style="text-align: center;">(% of balance)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Status quo (logged offers)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>55.55</mn><mo>±</mo><mn>0.07</mn></mrow><annotation encoding="application/x-tex">55.55 \pm 0.07</annotation></semantics></math></td>
+<td style="text-align: center;">37.6</td>
+<td style="text-align: center;">31.2</td>
+<td style="text-align: center;">10.4</td>
+</tr>
+<tr>
+<td style="text-align: left;">All standard</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>56.58</mn><mo>±</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">56.58 \pm 0.10</annotation></semantics></math></td>
+<td style="text-align: center;">31.3</td>
+<td style="text-align: center;">38.2</td>
+<td style="text-align: center;">0.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">All term extension</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>55.37</mn><mo>±</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">55.37 \pm 0.10</annotation></semantics></math></td>
+<td style="text-align: center;">44.7</td>
+<td style="text-align: center;">23.7</td>
+<td style="text-align: center;">0.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">Predictive targeting</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>56.40</mn><mo>±</mo><mn>0.11</mn></mrow><annotation encoding="application/x-tex">56.40 \pm 0.11</annotation></semantics></math></td>
+<td style="text-align: center;">43.6</td>
+<td style="text-align: center;">24.2</td>
+<td style="text-align: center;">10.4</td>
+</tr>
+<tr>
+<td style="text-align: left;">Causal targeting (T-learner)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>57.11</mn><mo>±</mo><mn>0.12</mn></mrow><annotation encoding="application/x-tex">57.11 \pm 0.12</annotation></semantics></math></td>
+<td style="text-align: center;">41.3</td>
+<td style="text-align: center;">29.3</td>
+<td style="text-align: center;">8.5</td>
+</tr>
+<tr>
+<td style="text-align: left;">Causal targeting (DR-learner)</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>57.22</mn><mo>±</mo><mn>0.20</mn></mrow><annotation encoding="application/x-tex">57.22 \pm 0.20</annotation></semantics></math></td>
+<td style="text-align: center;">42.2</td>
+<td style="text-align: center;">29.3</td>
+<td style="text-align: center;">4.4</td>
+</tr>
+<tr>
+<td style="text-align: left;">Oracle</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>57.97</mn><mo>±</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">57.97 \pm 0.10</annotation></semantics></math></td>
+<td style="text-align: center;">44.3</td>
+<td style="text-align: center;">29.0</td>
+<td style="text-align: center;">2.9</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<figure id="fig:resolution" data-latex-placement="t">
+<img loading="lazy" src="figures/fig6_resolution.png" />
+<figcaption><b>Figure 6.</b> Targeting restructuring offers. (a) Recovery value against the write-down budget, mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>±</mi><annotation encoding="application/x-tex">\pm</annotation></semantics></math> s.d. over five seeds; the diamond is the logged policy. (b, c) Cumulative true gain in recovery from offering a term extension, or an extension with a write-down, to cases in the order each method ranks them (seed 7).</figcaption>
+</figure>
+<h4 data-number="6.5.0.2" id="policies"><span class="header-section-number">6.5.0.2</span> Policies</h4>
+<p>The logged policy recovers 55.55% of balance, less than offering everyone the standard track (56.58%), because officers concede too often to borrowers who would self-cure and to borrowers beyond help (<a href="#tab:r2">Table 6</a>), the pattern <span class="citation" data-cites="adelino2013">Adelino et al. (<a href="#ref-adelino2013" role="doc-biblioref">2013</a>)</span> describe. Predictive targeting, which ranks cases by a collections score and helps the lowest scorers, reaches 56.40%. Causal targeting with the DR-learner reaches 57.22% while writing down 4.4% of balance instead of 10.4%, and the oracle reaches 57.97%. Causal targeting thus captures 69% of the attainable gain over the logged policy, against 35% for predictive targeting. Plan completion rises from 37.6% to 42.2%.</p>
+<p>The bureau outcome shows a trade-off. New 90+ DPD at other lenders falls from 31.2% under the logged policy to 29.3% under causal targeting, but to 23.7% if every borrower gets an extension. Maximising recovery is not the same as minimising distress spilling over to other creditors, and a public AMC may want an objective that weights both.</p>
+<h4 data-number="6.5.0.3" id="budgets-and-rankings"><span class="header-section-number">6.5.0.3</span> Budgets and rankings</h4>
+<p>The oracle frontier rises from 57.36% at zero budget to 57.97% and is flat beyond a budget of 4% of balance (<a href="#fig:resolution">Figure 6</a>a). Causal targeting gains much less from write-downs (57.12% to 57.25%), and predictive targeting stays between 56.37% and 56.45% at every budget. Most of the attainable gain comes from choosing correctly between the standard track and an extension. Write-downs pay only in a narrow overhang segment, where effect estimates are noisiest. The gain curves (<a href="#fig:resolution">Figure 6</a>b, c) show why predictive targeting fails: offering extensions to the lowest scorers first loses money at the start, because many of them cannot repay on any terms.</p>
+<figure id="fig:ope" data-latex-placement="t">
+<img loading="lazy" src="figures/fig7_ope.png" />
+<figcaption><b>Figure 7.</b> Off-policy evaluation of eight candidate policies on the held-out half, five seeds (40 points per panel). The dashed line is perfect agreement.</figcaption>
+</figure>
+<h4 data-number="6.5.0.4" id="evaluation-before-deployment"><span class="header-section-number">6.5.0.4</span> Evaluation before deployment</h4>
+<p>Doubly robust off-policy evaluation tracks true policy values with a mean absolute error of 0.13 pp, against 0.41 for the direct method and 1.20 for IPS (<a href="#fig:ope">Figure 7</a>, <a href="#app:ope">Appendix D</a>). The direct method overstates the value of the T-learner policy by +1.64 pp, because it judges a policy with the outcome model that designed it, while the doubly robust estimate stays within <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.01 pp. An AMC can therefore screen candidate policies on logged data before it commits to a field test.</p>
+<h1 data-number="7" id="sec:agenda"><span class="header-section-number">7</span> A research agenda for the linked data</h1>
+<p>The simulators show what each estimator can recover when its assumptions hold. With real data, the assumptions must be earned. <a href="#tab:agenda">Table 7</a> maps each question to a source of variation that the linked data or the programmes themselves provide.</p>
+<div id="tab:agenda">
+<div class="tbl"><p class="tcap"><b>Table 7.</b> Questions for the linked NCB–SAM data and sources of identifying variation.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Question</th>
+<th style="text-align: left;">Source of variation</th>
+<th style="text-align: left;">Data needed</th>
+<th style="text-align: left;">Estimator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Default of rejected applicants</td>
+<td style="text-align: left;">Leniency of lenders and branches; approval quotas; score cut-offs</td>
+<td style="text-align: left;">Inquiries and new accounts across lenders</td>
+<td style="text-align: left;">Leniency IV, contraction, bounds <a href="#eq:obs">(2)</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Masking by deferral</td>
+<td style="text-align: left;">Automatic versus opt-in phases; eligibility thresholds</td>
+<td style="text-align: left;">Deferral status codes and post-exit histories</td>
+<td style="text-align: left;">Delayed labels, censoring weights, RDD</td>
+</tr>
+<tr>
+<td style="text-align: left;">Effects of workout offers</td>
+<td style="text-align: left;">Rotation-based assignment of cases to officers; programme cut-offs (debt size, NPL date); randomised pilots</td>
+<td style="text-align: left;">SAM offers and payments; bureau outcomes</td>
+<td style="text-align: left;">Judge IV, RDD, DR-learner, field experiments</td>
+</tr>
+<tr>
+<td style="text-align: left;">Return to formal credit</td>
+<td style="text-align: left;">Expiry of negative information; timing of resolution</td>
+<td style="text-align: left;">Bureau histories after resolution</td>
+<td style="text-align: left;">RD in time, staggered DiD <span class="citation" data-cites="callaway2021">(<a href="#ref-callaway2021" role="doc-biblioref">Callaway and Sant’Anna 2021</a>)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">Prevention versus cure</td>
+<td style="text-align: left;">Timing of restructuring relative to delinquency</td>
+<td style="text-align: left;">Multi-state histories in both sources</td>
+<td style="text-align: left;">Offline RL with conservative evaluation</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<h4 data-number="7.0.0.1" id="selection"><span class="header-section-number">7.0.0.1</span> Selection</h4>
+<p>Lenders and branches differ in approval rates for comparable applicants. If applicants’ choice of lender is as good as random given their attributes, leniency identifies the effect of credit access and the default rate of marginal rejects <span class="citation" data-cites="dobbie2021bias kleinberg2018">(<a href="#ref-dobbie2021bias" role="doc-biblioref">Dobbie et al. 2021</a>; <a href="#ref-kleinberg2018" role="doc-biblioref">Kleinberg et al. 2018</a>)</span>, and bureau-observed repayment narrows the bounds in <a href="#eq:obs">(2)</a>.</p>
+<h4 data-number="7.0.0.2" id="masking-and-deferral"><span class="header-section-number">7.0.0.2</span> Masking and deferral</h4>
+<p>Deferral programmes that began automatically and later required applications, or that used eligibility thresholds, separate selection into deferral from its effect. That supports both corrected labels and an estimate of whether deferral prevented default or postponed it <span class="citation" data-cites="cherry2021">(<a href="#ref-cherry2021" role="doc-biblioref">Cherry et al. 2021</a>)</span>.</p>
+<h4 data-number="7.0.0.3" id="workout-offers"><span class="header-section-number">7.0.0.3</span> Workout offers</h4>
+<p>If cases are allocated to officers by rotation or workload, officers’ generosity is an instrument for concessions <span class="citation" data-cites="dobbie2015">(<a href="#ref-dobbie2015" role="doc-biblioref">Dobbie and Song 2015</a>)</span>. Debt Clinic eligibility rules, such as cut-off dates for NPL status and limits on debt size, create discontinuities. A small randomised pilot in which every arm is at least as generous as current practice would validate the off-policy estimates, and conservative bandits <span class="citation" data-cites="kazerouni2017">(<a href="#ref-kazerouni2017" role="doc-biblioref">Kazerouni et al. 2017</a>)</span> can then improve offers online.</p>
+<h4 data-number="7.0.0.4" id="return-to-formal-credit"><span class="header-section-number">7.0.0.4</span> Return to formal credit</h4>
+<p>The statutory limit on how long negative information may be disclosed creates a discontinuity in time, comparable to bankruptcy-flag removal in the United States <span class="citation" data-cites="musto2004 dobbie2020bad">(<a href="#ref-musto2004" role="doc-biblioref">Musto 2004</a>; <a href="#ref-dobbie2020bad" role="doc-biblioref">Dobbie et al. 2020</a>)</span>. Any policy that deletes records for small resolved debts would create an experiment similar to Chile’s <span class="citation" data-cites="liberman2018">(<a href="#ref-liberman2018" role="doc-biblioref">Liberman et al. 2018</a>)</span>.</p>
+<h4 data-number="7.0.0.5" id="privacy-preserving-linkage"><span class="header-section-number">7.0.0.5</span> Privacy-preserving linkage</h4>
+<p>Linking the two sources requires neither institution to release identities. National ID numbers, names and birth dates can be encoded with salted Bloom filters held by a trusted third party <span class="citation" data-cites="schnell2009">(<a href="#ref-schnell2009" role="doc-biblioref">Schnell et al. 2009</a>)</span>. Models can be trained across the two institutions with vertical federated learning, with features held at the bureau and outcomes at the AMC <span class="citation" data-cites="cheng2021secureboost">(<a href="#ref-cheng2021secureboost" role="doc-biblioref">Cheng et al. 2021</a>)</span>. Released statistics can carry differential-privacy guarantees <span class="citation" data-cites="dwork2014">(<a href="#ref-dwork2014" role="doc-biblioref">Dwork and Roth 2014</a>)</span>. Each step needs a lawful purpose under the Credit Information Business Act and the Personal Data Protection Act B.E. 2562 (2019), a data-protection impact assessment and ethics review. Pilots that affect borrowers also need pre-registered analysis plans and stopping rules.</p>
+<h1 data-number="8" id="sec:limits"><span class="header-section-number">8</span> Limitations</h1>
+<p>Simulation results show what methods can recover under stated assumptions, not what the Thai credit market looks like. The simulators’ functional forms and parameters were chosen by us. Different choices would change magnitudes and possibly rankings, for example if soft information mattered less or if overhang were rarer. In the bureau simulator, repayment on other accounts is a perfect proxy for repayment on the new loan, so bureau augmentation is evaluated in its best case. The workout simulator satisfies unconfoundedness and overlap by construction; with real data both are assumptions to defend (<a href="#sec:agenda">Section 7</a>). We ignore general-equilibrium responses, such as lenders changing cut-offs after a new score is adopted or borrowers anticipating relief, which performative-prediction and deletion studies show can matter <span class="citation" data-cites="perdomo2020 liberman2018">(<a href="#ref-perdomo2020" role="doc-biblioref">Perdomo et al. 2020</a>; <a href="#ref-liberman2018" role="doc-biblioref">Liberman et al. 2018</a>)</span>. The SSL encoder is a small stand-in for sequence models trained at bureau scale, so E1 tests the evaluation protocol rather than the potential of foundation models.</p>
+<h1 data-number="9" id="sec:conclusion"><span class="header-section-number">9</span> Conclusion</h1>
+<p>The credit system writes its own labels. Approval hides the outcomes of the rejected, deferral hides distress, and workout offers change the outcomes they are meant to predict. Linking a credit bureau with a public AMC exposes all three mechanisms and supplies some of the means to correct them: repayment at other lenders for rejected applicants, post-exit histories for deferred borrowers, and bureau outcomes for workout policies. In our simulators, these corrections remove most of the bias that standard practice leaves in place. The next step is to estimate the same quantities on the linked data under the identification strategies above and the governance they require.</p>
+<h4 data-number="9.0.0.1" id="code-availability"><span class="header-section-number">9.0.0.1</span> Code availability</h4>
+<p>The code that produces every number, table and figure uses only synthetic data and is available at <a href="https://github.com/thanatchon36/bureau-to-workout" class="uri">https://github.com/thanatchon36/bureau-to-workout</a>. It is organised as the Python package <code>bureau_to_workout</code>:</p>
+<ul>
+<li><p><code>bureau</code>: the bureau simulator and experiments E1–E5.</p></li>
+<li><p><code>workout</code>: the workout simulator and the causal-targeting experiments.</p></li>
+<li><p><code>experiments</code>, <code>tables</code>, <code>figures</code>: all seeds, tables and figures (<code>make all</code>).</p></li>
+</ul>
+<h1 class="unnumbered" id="references">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-abe2010" class="csl-entry" role="listitem">
+Abe, Naoki, Prem Melville, Cezar Pendus, et al. 2010. <span>“Optimizing Debt Collections Using Constrained Reinforcement Learning.”</span> <em>Proceedings of the 16th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 75–84.
+</div>
+<div id="ref-adelino2013" class="csl-entry" role="listitem">
+Adelino, Manuel, Kristopher Gerardi, and Paul S. Willen. 2013. <span>“Why Don’t Lenders Renegotiate More Home Mortgages? <span>R</span>edefaults, Self-Cures and Securitization.”</span> <em>Journal of Monetary Economics</em> 60 (7): 835–53.
+</div>
+<div id="ref-agarwal2017" class="csl-entry" role="listitem">
+Agarwal, Sumit, Gene Amromin, Itzhak Ben-David, Souphala Chomsisengphet, Tomasz Piskorski, and Amit Seru. 2017. <span>“Policy Intervention in Debt Renegotiation: Evidence from the <span>H</span>ome <span>A</span>ffordable <span>M</span>odification <span>P</span>rogram.”</span> <em>Journal of Political Economy</em> 125 (3): 654–712.
+</div>
+<div id="ref-agarwal2018" class="csl-entry" role="listitem">
+Agarwal, Sumit, Souphala Chomsisengphet, Neale Mahoney, and Johannes Stroebel. 2018. <span>“Do Banks Pass Through Credit Expansions to Consumers Who Want to Borrow?”</span> <em>Quarterly Journal of Economics</em> 133 (1): 129–90.
+</div>
+<div id="ref-arjovsky2019" class="csl-entry" role="listitem">
+Arjovsky, Martin, Léon Bottou, Ishaan Gulrajani, and David Lopez-Paz. 2019. <span>“Invariant Risk Minimization.”</span> <em>arXiv Preprint arXiv:1907.02893</em>.
+</div>
+<div id="ref-athey2019grf" class="csl-entry" role="listitem">
+Athey, Susan, Julie Tibshirani, and Stefan Wager. 2019. <span>“Generalized Random Forests.”</span> <em>Annals of Statistics</em> 47 (2): 1148–78.
+</div>
+<div id="ref-athey2021" class="csl-entry" role="listitem">
+Athey, Susan, and Stefan Wager. 2021. <span>“Policy Learning with Observational Data.”</span> <em>Econometrica</em> 89 (1): 133–61.
+</div>
+<div id="ref-babaev2022" class="csl-entry" role="listitem">
+Babaev, Dmitrii, Nikita Ovsov, Ivan Kireev, et al. 2022. <span>“<span>CoLES</span>: Contrastive Learning for Event Sequences with Self-Supervision.”</span> <em>Proceedings of the 2022 International Conference on Management of Data (SIGMOD)</em>.
+</div>
+<div id="ref-babaev2019" class="csl-entry" role="listitem">
+Babaev, Dmitrii, Maxim Savchenko, Alexander Tuzhilin, and Dmitrii Umerenkov. 2019. <span>“<span>E.T.-RNN</span>: Applying Deep Learning to Credit Loan Applications.”</span> <em>Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 2183–90.
+</div>
+<div id="ref-banasik2003" class="csl-entry" role="listitem">
+Banasik, John, Jonathan Crook, and Lyn Thomas. 2003. <span>“Sample Selection Bias in Credit Scoring Models.”</span> <em>Journal of the Operational Research Society</em> 54 (8): 822–32.
+</div>
+<div id="ref-blattner2021" class="csl-entry" role="listitem">
+Blattner, Laura, and Scott Nelson. 2021. <em>How Costly Is Noise? <span>D</span>ata and Disparities in Consumer Credit</em>. Working paper. arXiv.
+</div>
+<div id="ref-callaway2021" class="csl-entry" role="listitem">
+Callaway, Brantly, and Pedro H. C. Sant’Anna. 2021. <span>“Difference-in-Differences with Multiple Time Periods.”</span> <em>Journal of Econometrics</em> 225 (2): 200–230.
+</div>
+<div id="ref-chantarat2020" class="csl-entry" role="listitem">
+Chantarat, Sommarat, Atchana Lamsam, Krislert Samphantharak, and Bhumjai Tangsawasdirat. 2020. <span>“Household Debt and Delinquency over the Life Cycle.”</span> <em>Asian Development Review</em> 37 (1).
+</div>
+<div id="ref-chehrazi2019" class="csl-entry" role="listitem">
+Chehrazi, Naveed, Peter W. Glynn, and Thomas A. Weber. 2019. <span>“Dynamic Credit-Collections Optimization.”</span> <em>Management Science</em> 65 (6): 2737–69.
+</div>
+<div id="ref-cheng2021secureboost" class="csl-entry" role="listitem">
+Cheng, Kewei, Tao Fan, Yilun Jin, et al. 2021. <span>“<span>SecureBoost</span>: A Lossless Federated Learning Framework.”</span> <em>IEEE Intelligent Systems</em> 36 (6): 87–98.
+</div>
+<div id="ref-chernozhukov2018" class="csl-entry" role="listitem">
+Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. <span>“Double/Debiased Machine Learning for Treatment and Structural Parameters.”</span> <em>The Econometrics Journal</em> 21 (1): C1–68.
+</div>
+<div id="ref-cherry2021" class="csl-entry" role="listitem">
+Cherry, Susan, Erica Xuewei Jiang, Gregor Matvos, Tomasz Piskorski, and Amit Seru. 2021. <span>“Government and Private Household Debt Relief During <span>COVID-19</span>.”</span> <em>Brookings Papers on Economic Activity</em>.
+</div>
+<div id="ref-chouldechova2017" class="csl-entry" role="listitem">
+Chouldechova, Alexandra. 2017. <span>“Fair Prediction with Disparate Impact: A Study of Bias in Recidivism Prediction Instruments.”</span> <em>Big Data</em> 5 (2): 153–63.
+</div>
+<div id="ref-crook2004" class="csl-entry" role="listitem">
+Crook, Jonathan, and John Banasik. 2004. <span>“Does Reject Inference Really Improve the Performance of Application Scoring Models?”</span> <em>Journal of Banking &amp; Finance</em> 28 (4): 857–74.
+</div>
+<div id="ref-dobbie2020bad" class="csl-entry" role="listitem">
+Dobbie, Will, Paul Goldsmith-Pinkham, Neale Mahoney, and Jae Song. 2020. <span>“Bad Credit, No Problem? <span>C</span>redit and Labor Market Consequences of Bad Credit Reports.”</span> <em>Journal of Finance</em> 75 (5): 2377–419.
+</div>
+<div id="ref-dobbie2021bias" class="csl-entry" role="listitem">
+Dobbie, Will, Andres Liberman, Daniel Paravisini, and Vikram Pathania. 2021. <span>“Measuring Bias in Consumer Lending.”</span> <em>Review of Economic Studies</em> 88 (6): 2799–832.
+</div>
+<div id="ref-dobbie2015" class="csl-entry" role="listitem">
+Dobbie, Will, and Jae Song. 2015. <span>“Debt Relief and Debtor Outcomes: Measuring the Effects of Consumer Bankruptcy Protection.”</span> <em>American Economic Review</em> 105 (3): 1272–311.
+</div>
+<div id="ref-dobbie2020targeted" class="csl-entry" role="listitem">
+Dobbie, Will, and Jae Song. 2020. <span>“Targeted Debt Relief and the Origins of Financial Distress: Experimental Evidence from Distressed Credit Card Borrowers.”</span> <em>American Economic Review</em> 110 (4): 984–1018.
+</div>
+<div id="ref-dudik2011" class="csl-entry" role="listitem">
+Dudík, Miroslav, John Langford, and Lihong Li. 2011. <span>“Doubly Robust Policy Evaluation and Learning.”</span> <em>Proceedings of the 28th International Conference on Machine Learning</em>, 1097–104.
+</div>
+<div id="ref-dwork2014" class="csl-entry" role="listitem">
+Dwork, Cynthia, and Aaron Roth. 2014. <span>“The Algorithmic Foundations of Differential Privacy.”</span> <em>Foundations and Trends in Theoretical Computer Science</em> 9 (3–4): 211–407.
+</div>
+<div id="ref-fuster2022" class="csl-entry" role="listitem">
+Fuster, Andreas, Paul Goldsmith-Pinkham, Tarun Ramadorai, and Ansgar Walther. 2022. <span>“Predictably Unequal? <span>T</span>he Effects of Machine Learning on Credit Markets.”</span> <em>Journal of Finance</em> 77 (1): 5–47.
+</div>
+<div id="ref-ganong2020" class="csl-entry" role="listitem">
+Ganong, Peter, and Pascal Noel. 2020. <span>“Liquidity Versus Wealth in Household Debt Obligations: Evidence from Housing Policy in the <span>G</span>reat <span>R</span>ecession.”</span> <em>American Economic Review</em> 110 (10): 3100–3138.
+</div>
+<div id="ref-gorishniy2021" class="csl-entry" role="listitem">
+Gorishniy, Yury, Ivan Rubachev, Valentin Khrulkov, and Artem Babenko. 2021. <span>“Revisiting Deep Learning Models for Tabular Data.”</span> <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-grinsztajn2022" class="csl-entry" role="listitem">
+Grinsztajn, Léo, Edouard Oyallon, and Gaël Varoquaux. 2022. <span>“Why Do Tree-Based Models Still Outperform Deep Learning on Typical Tabular Data?”</span> <em>Advances in Neural Information Processing Systems, Datasets and Benchmarks Track</em>.
+</div>
+<div id="ref-gunnarsson2021" class="csl-entry" role="listitem">
+Gunnarsson, Björn Rafn, Seppe vanden Broucke, Bart Baesens, María Óskarsdóttir, and Wilfried Lemahieu. 2021. <span>“Deep Learning for Credit Scoring: Do or Don’t?”</span> <em>European Journal of Operational Research</em> 295 (1): 292–305.
+</div>
+<div id="ref-hand1993" class="csl-entry" role="listitem">
+Hand, David J., and William E. Henley. 1993. <span>“Can Reject Inference Ever Work?”</span> <em>IMA Journal of Mathematics Applied in Business and Industry</em> 5 (1): 45–55.
+</div>
+<div id="ref-hand1997" class="csl-entry" role="listitem">
+Hand, David J., and William E. Henley. 1997. <span>“Statistical Classification Methods in Consumer Credit Scoring: A Review.”</span> <em>Journal of the Royal Statistical Society: Series A</em> 160 (3): 523–41.
+</div>
+<div id="ref-herkenhoff2021" class="csl-entry" role="listitem">
+Herkenhoff, Kyle, Gordon M. Phillips, and Ethan Cohen-Cole. 2021. <span>“The Impact of Consumer Credit Access on Self-Employment and Entrepreneurship.”</span> <em>Journal of Financial Economics</em> 141 (1): 345–71.
+</div>
+<div id="ref-hollmann2025" class="csl-entry" role="listitem">
+Hollmann, Noah, Samuel Müller, Lennart Purucker, et al. 2025. <span>“Accurate Predictions on Small Data with a Tabular Foundation Model.”</span> <em>Nature</em> 637: 319–26.
+</div>
+<div id="ref-kazerouni2017" class="csl-entry" role="listitem">
+Kazerouni, Abbas, Mohammad Ghavamzadeh, Yasin Abbasi-Yadkori, and Benjamin Van Roy. 2017. <span>“Conservative Contextual Linear Bandits.”</span> <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-kennedy2023" class="csl-entry" role="listitem">
+Kennedy, Edward H. 2023. <span>“Towards Optimal Doubly Robust Estimation of Heterogeneous Causal Effects.”</span> <em>Electronic Journal of Statistics</em> 17 (2): 3008–49.
+</div>
+<div id="ref-keys2010" class="csl-entry" role="listitem">
+Keys, Benjamin J., Tanmoy Mukherjee, Amit Seru, and Vikrant Vig. 2010. <span>“Did Securitization Lead to Lax Screening? <span>E</span>vidence from Subprime Loans.”</span> <em>Quarterly Journal of Economics</em> 125 (1): 307–62.
+</div>
+<div id="ref-kitagawa2018" class="csl-entry" role="listitem">
+Kitagawa, Toru, and Aleksey Tetenov. 2018. <span>“Who Should Be Treated? <span>E</span>mpirical Welfare Maximization Methods for Treatment Choice.”</span> <em>Econometrica</em> 86 (2): 591–616.
+</div>
+<div id="ref-kleinberg2018" class="csl-entry" role="listitem">
+Kleinberg, Jon, Himabindu Lakkaraju, Jure Leskovec, Jens Ludwig, and Sendhil Mullainathan. 2018. <span>“Human Decisions and Machine Predictions.”</span> <em>Quarterly Journal of Economics</em> 133 (1): 237–93.
+</div>
+<div id="ref-kleinberg2017" class="csl-entry" role="listitem">
+Kleinberg, Jon, Sendhil Mullainathan, and Manish Raghavan. 2017. <span>“Inherent Trade-Offs in the Fair Determination of Risk Scores.”</span> <em>8th Innovations in Theoretical Computer Science Conference (ITCS)</em>.
+</div>
+<div id="ref-kozodoi2022" class="csl-entry" role="listitem">
+Kozodoi, Nikita, Johannes Jacob, and Stefan Lessmann. 2022. <span>“Fairness in Credit Scoring: Assessment, Implementation and Profit Implications.”</span> <em>European Journal of Operational Research</em> 297 (3): 1083–94.
+</div>
+<div id="ref-kunzel2019" class="csl-entry" role="listitem">
+Künzel, Sören R., Jasjeet S. Sekhon, Peter J. Bickel, and Bin Yu. 2019. <span>“Metalearners for Estimating Heterogeneous Treatment Effects Using Machine Learning.”</span> <em>Proceedings of the National Academy of Sciences</em> 116 (10): 4156–65.
+</div>
+<div id="ref-lakkaraju2017" class="csl-entry" role="listitem">
+Lakkaraju, Himabindu, Jon Kleinberg, Jure Leskovec, Jens Ludwig, and Sendhil Mullainathan. 2017. <span>“The Selective Labels Problem: Evaluating Algorithmic Predictions in the Presence of Unobservables.”</span> <em>Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 275–84.
+</div>
+<div id="ref-lessmann2015" class="csl-entry" role="listitem">
+Lessmann, Stefan, Bart Baesens, Hsin-Vonn Seow, and Lyn C. Thomas. 2015. <span>“Benchmarking State-of-the-Art Classification Algorithms for Credit Scoring: An Update of Research.”</span> <em>European Journal of Operational Research</em> 247 (1): 124–36.
+</div>
+<div id="ref-liberman2018" class="csl-entry" role="listitem">
+Liberman, Andres, Christopher Neilson, Luis Opazo, and Seth Zimmerman. 2018. <em>The Equilibrium Effects of Information Deletion: Evidence from Consumer Credit Markets</em>. Working Paper No. 25097. National Bureau of Economic Research.
+</div>
+<div id="ref-manski1990" class="csl-entry" role="listitem">
+Manski, Charles F. 1990. <span>“Nonparametric Bounds on Treatment Effects.”</span> <em>American Economic Review: Papers and Proceedings</em> 80 (2): 319–23.
+</div>
+<div id="ref-musto2004" class="csl-entry" role="listitem">
+Musto, David K. 2004. <span>“What Happens When Information Leaves a Market? <span>E</span>vidence from Postbankruptcy Consumers.”</span> <em>Journal of Business</em> 77 (4): 725–48.
+</div>
+<div id="ref-natarajan2013" class="csl-entry" role="listitem">
+Natarajan, Nagarajan, Inderjit S. Dhillon, Pradeep Ravikumar, and Ambuj Tewari. 2013. <span>“Learning with Noisy Labels.”</span> <em>Advances in Neural Information Processing Systems</em>.
+</div>
+<div id="ref-nie2021" class="csl-entry" role="listitem">
+Nie, Xinkun, and Stefan Wager. 2021. <span>“Quasi-Oracle Estimation of Heterogeneous Treatment Effects.”</span> <em>Biometrika</em> 108 (2): 299–319.
+</div>
+<div id="ref-perdomo2020" class="csl-entry" role="listitem">
+Perdomo, Juan C., Tijana Zrnic, Celestine Mendler-Dünner, and Moritz Hardt. 2020. <span>“Performative Prediction.”</span> <em>Proceedings of the 37th International Conference on Machine Learning</em>.
+</div>
+<div id="ref-piskorski2010" class="csl-entry" role="listitem">
+Piskorski, Tomasz, Amit Seru, and Vikrant Vig. 2010. <span>“Securitization and Distressed Loan Renegotiation: Evidence from the Subprime Mortgage Crisis.”</span> <em>Journal of Financial Economics</em> 97 (3): 369–97.
+</div>
+<div id="ref-rudin2019" class="csl-entry" role="listitem">
+Rudin, Cynthia. 2019. <span>“Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead.”</span> <em>Nature Machine Intelligence</em> 1: 206–15.
+</div>
+<div id="ref-schnell2009" class="csl-entry" role="listitem">
+Schnell, Rainer, Tobias Bachteler, and Jörg Reiher. 2009. <span>“Privacy-Preserving Record Linkage Using <span>B</span>loom Filters.”</span> <em>BMC Medical Informatics and Decision Making</em> 9: 41.
+</div>
+<div id="ref-siddiqi2017" class="csl-entry" role="listitem">
+Siddiqi, Naeem. 2017. <em>Intelligent Credit Scoring: Building and Implementing Better Credit Risk Scorecards</em>. 2nd ed. Wiley.
+</div>
+<div id="ref-thomas2017" class="csl-entry" role="listitem">
+Thomas, Lyn, Jonathan Crook, and David Edelman. 2017. <em>Credit Scoring and Its Applications</em>. 2nd ed. SIAM.
+</div>
+<div id="ref-ustun2019" class="csl-entry" role="listitem">
+Ustun, Berk, Alexander Spangher, and Yang Liu. 2019. <span>“Actionable Recourse in Linear Classification.”</span> <em>Proceedings of the Conference on Fairness, Accountability, and Transparency</em>, 10–19.
+</div>
+<div id="ref-verbraken2014" class="csl-entry" role="listitem">
+Verbraken, Thomas, Cristián Bravo, Richard Weber, and Bart Baesens. 2014. <span>“Development and Application of Consumer Credit Scoring Models Using Profit-Based Classification Measures.”</span> <em>European Journal of Operational Research</em> 238 (2): 505–13.
+</div>
+<div id="ref-wager2018" class="csl-entry" role="listitem">
+Wager, Stefan, and Susan Athey. 2018. <span>“Estimation and Inference of Heterogeneous Treatment Effects Using Random Forests.”</span> <em>Journal of the American Statistical Association</em> 113 (523): 1228–42.
+</div>
+</div>
+
+<h1 data-number="A" id="app:params"><span class="header-section-number">A</span> Simulator parameters</h1>
+<div id="tab:params">
+<div class="tbl"><p class="tcap"><b>Table 8.</b> Main parameters of the two simulators.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">Population</td>
+<td style="text-align: left;">,000 borrowers; 60 recorded months after a 12-month burn-in</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ability</td>
+<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>∼</mo><mi>N</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>μ</mi><mtext mathvariant="normal">occ</mtext></msub><mo>+</mo><mn>0.01</mn><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">age</mtext><mo>−</mo><mn>40</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">a_i \sim N(\mu_{\text{occ}} + 0.01(\text{age}-40), 1)</annotation></semantics></math>, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>0.3</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\mu = 0.3, 0, -0.3</annotation></semantics></math> for salaried, self-employed and informal workers</td>
+</tr>
+<tr>
+<td style="text-align: left;">Shocks</td>
+<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub><mo>=</mo><mn>0.85</mn><msub><mi>z</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mn>0.5</mn><msub><mi>σ</mi><mi>i</mi></msub><msub><mi>ε</mi><mrow><mi>i</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">z_{it} = 0.85 z_{i,t-1} + 0.5\sigma_i\varepsilon_{it}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>i</mi></msub><mo>=</mo><mn>0.6</mn><mo>,</mo><mn>0.9</mn><mo>,</mo><mn>1.1</mn></mrow><annotation encoding="application/x-tex">\sigma_i = 0.6, 0.9, 1.1</annotation></semantics></math>; shock sensitivity <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mn>0.7</mn><mo>,</mo><mn>1.2</mn><mo>,</mo><mn>1.4</mn></mrow><annotation encoding="application/x-tex">v_i = 0.7, 1.2, 1.4</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Macro path</td>
+<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m_t = 1</annotation></semantics></math> in months 24–35, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.3</mn><annotation encoding="application/x-tex">0.3</annotation></semantics></math> in months 36–41, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math> otherwise</td>
+</tr>
+<tr>
+<td style="text-align: left;">New to credit</td>
+<td style="text-align: left;">Probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.10</mn><mo>+</mo><mn>0.25</mn><mspace width="0.167em"></mspace><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mtext mathvariant="normal">age</mtext><mo>&lt;</mo><mn>30</mn><mo stretchy="false" form="postfix">}</mo><mo>+</mo><mn>0.15</mn><mspace width="0.167em"></mspace><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mtext mathvariant="normal">informal</mtext><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">0.10 + 0.25\,\mathbf{1}\{\text{age}&lt;30\} + 0.15\,\mathbf{1}\{\text{informal}\}</annotation></semantics></math> of no account at the start</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lenders</td>
+<td style="text-align: left;">Six; market shares 30%, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>14</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">4\times 14\%</annotation></semantics></math>, 14% (lenient); approval targets 50%, 45–60%, 85%; soft-information weights <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.9</mn><mo>,</mo><mn>0.6</mn><mo>,</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.9, 0.6, 0.1</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Lender risk index</td>
+<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.0</mn><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">worst DPD</mtext><mrow><mn>6</mn><mi>m</mi></mrow></msub><mo>+</mo><mn>1.2</mn><mspace width="0.167em"></mspace><mi>U</mi><mo>+</mo><mn>0.3</mn><mspace width="0.167em"></mspace><msub><mtext mathvariant="normal">inquiries</mtext><mrow><mn>3</mn><mi>m</mi></mrow></msub><mo>−</mo><mn>0.2</mn><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">accounts</mtext><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.4</mn><mspace width="0.167em"></mspace><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mtext mathvariant="normal">no account</mtext><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">1.0\,\text{worst DPD}_{6m} + 1.2\,U + 0.3\,\text{inquiries}_{3m} - 0.2\min(\text{accounts},4) + 0.4\,\mathbf{1}\{\text{no account}\}</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Moratorium</td>
+<td style="text-align: left;">Enrolment at month 24 with probability <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><mo>+</mo><mn>1.6</mn><mover><mi>p</mi><mo accent="true">̃</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\sigma(-1+1.6\tilde p)</annotation></semantics></math>; reported state frozen in months 24–35; logit <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>0.7</mn></mrow><annotation encoding="application/x-tex">+0.7</annotation></semantics></math> for six months after exit</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">Portfolio</td>
+<td style="text-align: left;">,000 NPL cases; 30% secured; balance log-normal with median THB 900,000 (secured) or 120,000 (unsecured)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Capacity</td>
+<td style="text-align: left;">Income log-normal, median THB 15,000 per month; repayment share of income <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false" form="prefix">(</mo><mn>0.10</mn><mo>,</mo><mn>0.35</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">U(0.10, 0.35)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td style="text-align: left;">Offers</td>
+<td style="text-align: left;">Standard: 12% over 36 months (unsecured), 7% over 120 months (secured). Extension: 6% over 96 months, 4% over 240 months. Write-down: 30% of principal</td>
+</tr>
+<tr>
+<td style="text-align: left;">Recovery</td>
+<td style="text-align: left;">Cost of funds 8% a year; legal recovery <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.9</mn><mrow><mi mathvariant="normal">min</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>0.7</mn><mo>×</mo><mtext mathvariant="normal">collateral ratio</mtext><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">0.9\min\{1, 0.7\times\text{collateral ratio}\}</annotation></semantics></math> after 30 months (secured) or 5% after 24 months (unsecured)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Logging policy</td>
+<td style="text-align: left;">officers, generosity <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>0.7</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">N(0, 0.7)</annotation></semantics></math>; multinomial logit on DSR, DTI, prior payments and security; floor of 2% per offer</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<h1 data-number="B" id="app:features"><span class="header-section-number">B</span> Covariates</h1>
+<h4 data-number="11.0.0.1" id="bureau-attributes-16"><span class="header-section-number">11.0.0.1</span> Bureau attributes (16)</h4>
+<p>Active accounts; distinct lenders; months on file; log total limit; utilisation; six-month average and six-month change of utilisation; worst DPD over 3, 6 and 12 months; months with any delinquency in the last 12; months since the last delinquency (capped at 36); inquiries over 3 and 6 months; accounts opened in the last 6 months; any deferral in the last 24 months. The GBM constrains risk to rise with utilisation, its average and change, worst DPD, delinquent months and inquiries, and to fall with months on file and months since the last delinquency. The deferral flag is left unconstrained so that E3 can show which sign a model learns.</p>
+<h4 data-number="11.0.0.2" id="workout-covariates-12"><span class="header-section-number">11.0.0.2</span> Workout covariates (12)</h4>
+<p>Security; log balance; collateral ratio; log income proxy; proxy for the share of income free for repayment; debt-service ratio at standard terms; debt-to-income ratio; share of payments made in the year before default; months in NPL; age; number of other bureau accounts; whether another account is delinquent; inquiries in the last six months.</p>
+<h1 data-number="C" id="app:scorecard"><span class="header-section-number">C</span> Scorecard excerpt and reason codes</h1>
+<p><a href="#tab:scorecard">Table 9</a> shows the three attributes with the widest points range in the seed-7 scorecard, which keeps 10 attributes after removing those with low information value or wrong-signed coefficients. <a href="#tab:reasons">Table 10</a> lists the reason codes for declined applicants at three score levels, at a cut-off of 540 points that approves 70%. Reason codes rank attributes by their shortfall from the maximum points, as adverse-action notices typically do.</p>
+<div id="tab:scorecard">
+<div class="tbl"><p class="tcap"><b>Table 9.</b> Excerpt of the WoE scorecard (seed 7). Points are scaled to 600 at odds of 50:1 with 20 points to double the odds.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Attribute</th>
+<th style="text-align: left;">Bin</th>
+<th style="text-align: right;">Accounts</th>
+<th style="text-align: right;">Default (%)</th>
+<th style="text-align: right;">WoE</th>
+<th style="text-align: right;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>util</code> (IV 0.67)</td>
+<td style="text-align: left;">(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>, 0.307]</td>
+<td style="text-align: right;">24,997</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">+1.71</td>
+<td style="text-align: right;">87</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.307, 0.412]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">+1.09</td>
+<td style="text-align: right;">76</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.412, 0.493]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">+0.70</td>
+<td style="text-align: right;">68</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.493, 0.567]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">+0.42</td>
+<td style="text-align: right;">63</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.567, 0.643]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">+0.14</td>
+<td style="text-align: right;">58</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.643, 0.728]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.16</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.728, 0.846]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">14.5</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.49</td>
+<td style="text-align: right;">46</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.846, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>]</td>
+<td style="text-align: right;">24,996</td>
+<td style="text-align: right;">25.1</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>1.18</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>log_limit</code> (IV 0.12)</td>
+<td style="text-align: left;">(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>, 10.3]</td>
+<td style="text-align: right;">24,999</td>
+<td style="text-align: right;">14.5</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.49</td>
+<td style="text-align: right;">48</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(10.3, 11.1]</td>
+<td style="text-align: right;">49,994</td>
+<td style="text-align: right;">10.7</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.15</td>
+<td style="text-align: right;">53</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(11.1, 11.4]</td>
+<td style="text-align: right;">24,995</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.07</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(11.4, 11.7]</td>
+<td style="text-align: right;">24,995</td>
+<td style="text-align: right;">9.6</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.03</td>
+<td style="text-align: right;">55</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(11.7, 12]</td>
+<td style="text-align: right;">24,994</td>
+<td style="text-align: right;">8.4</td>
+<td style="text-align: right;">+0.13</td>
+<td style="text-align: right;">57</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(12, 12.3]</td>
+<td style="text-align: right;">24,999</td>
+<td style="text-align: right;">6.7</td>
+<td style="text-align: right;">+0.36</td>
+<td style="text-align: right;">61</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(12.3, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>]</td>
+<td style="text-align: right;">24,993</td>
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">+0.81</td>
+<td style="text-align: right;">68</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>worst_dpd_12m</code> (IV 0.49)</td>
+<td style="text-align: left;">(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>, 0.5]</td>
+<td style="text-align: right;">108,210</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">+0.74</td>
+<td style="text-align: right;">62</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(0.5, 1.5]</td>
+<td style="text-align: right;">73,226</td>
+<td style="text-align: right;">11.9</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.27</td>
+<td style="text-align: right;">53</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">(1.5, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>]</td>
+<td style="text-align: right;">18,533</td>
+<td style="text-align: right;">26.7</td>
+<td style="text-align: right;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>1.26</td>
+<td style="text-align: right;">44</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<div id="tab:reasons">
+<div class="tbl"><p class="tcap"><b>Table 10.</b> Reason codes for declined applicants (seed 7).</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Score percentile</th>
+<th style="text-align: center;">Score</th>
+<th style="text-align: left;">Reason codes, largest shortfall first</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">5th</td>
+<td style="text-align: center;">509</td>
+<td style="text-align: left;"><code>util</code>, <code>log_limit</code>, <code>months_since_delinq</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">15th</td>
+<td style="text-align: center;">524</td>
+<td style="text-align: left;"><code>util</code>, <code>log_limit</code>, <code>worst_dpd_12m</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">25th</td>
+<td style="text-align: center;">534</td>
+<td style="text-align: left;"><code>util</code>, <code>log_limit</code>, <code>worst_dpd_12m</code></td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+<h1 data-number="D" id="app:ope"><span class="header-section-number">D</span> Off-policy evaluation errors</h1>
+<div id="tab:r4">
+<div class="tbl"><p class="tcap"><b>Table 11.</b> Errors of off-policy estimates of recovery value over eight policies and five seeds (40 estimates per estimator), in percentage points of balance.</p><div class="tscroll"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Estimator</th>
+<th style="text-align: center;">Mean absolute error (pp)</th>
+<th style="text-align: center;">Mean error (pp)</th>
+<th style="text-align: center;">Largest error (pp)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Direct method</td>
+<td style="text-align: center;">0.41</td>
+<td style="text-align: center;">+0.27</td>
+<td style="text-align: center;">1.71</td>
+</tr>
+<tr>
+<td style="text-align: left;">Inverse propensity (IPS)</td>
+<td style="text-align: center;">1.20</td>
+<td style="text-align: center;">+0.78</td>
+<td style="text-align: center;">4.11</td>
+</tr>
+<tr>
+<td style="text-align: left;">Doubly robust</td>
+<td style="text-align: center;">0.13</td>
+<td style="text-align: center;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>−</mi><annotation encoding="application/x-tex">-</annotation></semantics></math>0.04</td>
+<td style="text-align: center;">0.52</td>
+</tr>
+</tbody>
+</table></div></div>
+</div>
+</article>
+<section class="cite" aria-label="How to cite"><h2>How to cite</h2><pre><code>@misc{chongmankhong2026bureau,
+  author = {Chongmankhong, Thanatchon},
+  title  = {From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels},
+  year   = {2026},
+  note   = {Preprint},
+  url    = {https://thanatchon36.github.io/bureau-to-workout/paper/}
+}</code></pre></section>
+<footer class="colophon">
+<p>Rendered from <code>paper/main.tex</code> by <code>bureau_to_workout.paper_web</code> (<code>make web</code>). Every number comes from <code>paper/results_macros.tex</code>, the macros the PDF uses, which <code>make tables</code> generates from <code>paper_results/</code>. The PDF is authoritative. All data are synthetic.</p>
+</footer>
+</div>
+</body>
+</html>

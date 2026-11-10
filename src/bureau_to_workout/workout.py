@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-sam_resolution_lab.py
-=====================
+bureau_to_workout.workout
+=========================
 Reference research code for Track B of the NCB x SAM research agenda: causal targeting of
 debt-restructuring offers on asset-management (AMC) workout data with credit-bureau covariates.
 
@@ -21,7 +19,7 @@ Experiments
   R4  Off-policy evaluation: direct method, IPS and doubly robust estimates vs true values
 
 Requires numpy, pandas, scikit-learn >= 1.4.
-Run:  python sam_resolution_lab.py --n 50000 --seed 11 --out resolution_outputs
+Run:  make workout   (python -m bureau_to_workout.cli workout --n 50000 --seed 11 --out resolution_outputs)
 """
 from __future__ import annotations
 
@@ -388,12 +386,12 @@ def show(title, df, digits=3):
         print(df.round(digits).to_string())
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--n", type=int, default=50_000)
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--out", default="resolution_outputs")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     t0 = time.time()

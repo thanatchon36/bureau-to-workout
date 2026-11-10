@@ -25,7 +25,7 @@
 \usepackage{float}
 \usepackage[colorlinks=true,linkcolor={blue!45!black},citecolor={blue!45!black},urlcolor={blue!45!black}]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
-\hypersetup{pdftitle={From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels},pdfauthor={Thanantchon Chongmankhong},pdfkeywords={credit scoring, reject inference, selective labels, forbearance, causal machine learning, debt restructuring}}
+\hypersetup{pdftitle={From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels},pdfauthor={Thanatchon Chongmankhong},pdfkeywords={credit scoring, reject inference, selective labels, forbearance, causal machine learning, debt restructuring}}
 
 \input{results_macros.tex}
 
@@ -79,7 +79,7 @@
 \newcommand{\ind}{\mathbf{1}}
 
 \title{From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels}
-\author{Thanantchon Chongmankhong}
+\author{Thanatchon Chongmankhong}
 
 \begin{document}
 \maketitle
@@ -244,7 +244,7 @@ The first term captures liquidity: can the borrower afford the instalment? The s
 
 All results are means over five seeds with standard deviations across seeds. \emph{E1 and E4}: models are developed on observation months $t_0\in\{12,15,18,21,24\}$ (about \EoneNdev{} thousand borrower-months) and tested out of time on $t_0\in\{36,39,42,45\}$ (about \EoneNoot{} thousand), with $h=12$; the development windows span the shock. \emph{E2}: lender~0's applications in months 6--47 (about \EtwoNapps{} thousand per seed), split 50/50 by borrower and scored against every applicant's $Y(1)$. \emph{E3}: development through the moratorium, $t_0\in\{15,18,21,24\}$, and test after it, $t_0\in\{39,42,45\}$. \emph{Workouts}: a 50/50 split, outcome models per offer, a multinomial logistic propensity model and 2-fold cross-fitting.
 
-The models are a gradient-boosted classifier with monotone constraints on 11 of the 16 attributes (scikit-learn \texttt{HistGradientBoosting}); a weight-of-evidence (WoE) scorecard with monotone binning and points scaled to 600 at odds of 50:1 with 20 points to double the odds; and, for E3, logistic regression, so that the coefficient on the deferral flag can be read. The self-supervised (SSL) encoder is a denoising autoencoder (96--16--96) trained on 60,000 unlabelled 24-month sequences of five channels with 25\% of months masked, a CPU-scale stand-in for a bureau foundation model. Metrics are AUC, the KS statistic, the Brier score, the ratio of mean predicted to observed default (PD/observed), and the population stability index (PSI) between development and out-of-time scores.
+The models are a gradient-boosted classifier with monotone constraints on 11 of the 16 attributes (scikit-learn \texttt{Hist\-Gradient\-Boosting}); a weight-of-evidence (WoE) scorecard with monotone binning and points scaled to 600 at odds of 50:1 with 20 points to double the odds; and, for E3, logistic regression, so that the coefficient on the deferral flag can be read. The self-supervised (SSL) encoder is a denoising autoencoder (96--16--96) trained on 60,000 unlabelled 24-month sequences of five channels with 25\% of months masked, a CPU-scale stand-in for a bureau foundation model. Metrics are AUC, the KS statistic, the Brier score, the ratio of mean predicted to observed default (PD/observed), and the population stability index (PSI) between development and out-of-time scores.
 
 % =====================================================================================================
 \section{Results}\label{sec:results}
@@ -402,11 +402,11 @@ Simulation results show what methods can recover under stated assumptions, not w
 
 The credit system writes its own labels. Approval hides the outcomes of the rejected, deferral hides distress, and workout offers change the outcomes they are meant to predict. Linking a credit bureau with a public AMC exposes all three mechanisms and supplies some of the means to correct them: repayment at other lenders for rejected applicants, post-exit histories for deferred borrowers, and bureau outcomes for workout policies. In our simulators, these corrections remove most of the bias that standard practice leaves in place. The next step is to estimate the same quantities on the linked data under the identification strategies above and the governance they require.
 
-\paragraph{Code availability} The code that produces every number, table and figure accompanies this preprint and uses only synthetic data.
+\paragraph{Code availability} The code that produces every number, table and figure uses only synthetic data and is available at \url{https://github.com/thanatchon36/bureau-to-workout}. It is organised as the Python package \texttt{bureau\_to\_workout}:
 \begin{itemize}[leftmargin=1.4em,itemsep=0pt,topsep=2pt]
-  \item \texttt{ncb\_scoring\_lab.py}: the bureau simulator and experiments E1--E5.
-  \item \texttt{sam\_resolution\_lab.py}: the workout simulator and the causal-targeting experiments.
-  \item \texttt{paper\_experiments.py}, \texttt{paper\_tables.py}, \texttt{paper\_figures.py}: all seeds, tables and figures.
+  \item \texttt{bureau}: the bureau simulator and experiments E1--E5.
+  \item \texttt{workout}: the workout simulator and the causal-targeting experiments.
+  \item \texttt{experiments}, \texttt{tables}, \texttt{figures}: all seeds, tables and figures (\texttt{make all}).
 \end{itemize}
 
 \bibliographystyle{plainnat}
