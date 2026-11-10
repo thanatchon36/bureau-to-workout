@@ -28,6 +28,12 @@ configs:
         path: scoring/e1_dev.parquet
       - split: test
         path: scoring/e1_oot.parquet
+  - config_name: scoring_e2_reject_inference
+    data_files:
+      - split: train
+        path: scoring/e2_train.parquet
+      - split: test
+        path: scoring/e2_test.parquet
   - config_name: scoring_e3_moratorium
     data_files:
       - split: train
@@ -83,6 +89,7 @@ seed 7, the bureau with a moratorium with seed 1007, the workouts with seed 107.
 | path | content |
 |---|---|
 | `scoring/e1_dev.parquet`, `scoring/e1_oot.parquet` | the E1 modelling tables from the bureau without a moratorium: one row per scorable borrower (active, not yet 90+ DPD) at observation months 12–24 (train, {{N_E1_DEV}} rows) and 36–45 (test, after the shock; {{N_E1_OOT}} rows). 16 bureau attributes, `y_obs` (reported 90+ DPD within 12 months), `y_true` (the same without deferral), group columns and `thin_file` |
+| `scoring/e2_train.parquet`, `scoring/e2_test.parquet` | the E2 reject-inference tables: every application to lender 0 in months 6–47 ({{N_E2_TRAIN}} train and {{N_E2_TEST}} test rows, split by borrower), with the 15 bureau attributes the lender saw the month before, `approved`, `observable` (the bureau sees repayment on another account within 12 months, so a rejected applicant's outcome is still visible) and `y_true`, the applicant's 90+ DPD outcome had the loan been granted, for **everyone**. A lender sees `y_true` only where `approved`; the bureau also where `observable` |
 | `scoring/e3_dev.parquet`, `scoring/e3_oot.parquet` | the E3 tables from the bureau with a moratorium: training through it (months 15–24, {{N_E3_DEV}} rows) and testing after it (months 39–45, {{N_E3_OOT}} rows). Adds `y_delayed` (windows touching a deferral extended to six months after exit) and `mor_in_window` |
 | `bureau/panel_{clean,moratorium}.parquet` | the account-month panels, long format: 50,000 borrowers × 60 months. `s_obs` reported delinquency state (0 current, 1 30 DPD, 2 60 DPD, 3 90+ DPD, absorbing), `s_true` the state without deferral, `mor` deferred this month, `util`, `n_acc`, `n_lenders`, `limit` (THB), `inq`, `new_acc` |
 | `bureau/borrowers_*.parquet` | static attributes: age at month 0, gender, region, occupation, `new_to_credit_at_start`; `ability` and `soft` are **latent** (lenders' soft information), for evaluation only |
@@ -94,8 +101,9 @@ seed 7, the bureau with a moratorium with seed 1007, the workouts with seed 107.
 
 ## Tasks these data support
 
-- **Reject inference / selective labels.** Train on approved applicants only and score everyone: the panel and
-  applications tables reveal rejected applicants' outcomes at other lenders and, through `s_true`, the truth.
+- **Reject inference / selective labels.** In `scoring_e2_reject_inference`, train on `approved` rows only (what
+  a lender has), on `approved | observable` rows (what the bureau adds), or on everything (the oracle), and score
+  the test split against `y_true`, including rejected applicants.
 - **Label masking.** In `scoring_e3_moratorium`, compare models trained on `y_obs`, `y_delayed` and `y_true`, and
   test after the moratorium.
 - **Heterogeneous treatment effects and policy learning.** In `workout_cases`, estimate offer effects from the

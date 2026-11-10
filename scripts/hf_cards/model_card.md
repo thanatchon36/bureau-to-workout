@@ -40,9 +40,10 @@ the scorecard is plain JSON.
 | path | model | paper |
 |---|---|---|
 | `bureau/woe_scorecard.json`, `bureau/woe_points_table.csv` | weight-of-evidence scorecard: monotone bins, WoE, logistic fit, points (600 at odds 50:1, 20 points to double) | E1, E5 |
-| `bureau/monotone_gbm.skops` | gradient-boosted classifier with monotone constraints on the 16 bureau attributes | E1 |
+| `bureau/monotone_gbm.skops` | gradient-boosted classifier with monotone constraints on the 15 bureau attributes that vary without a moratorium | E1 |
 | `bureau/ssl_encoder.skops` | masked self-supervised encoder of 24-month bureau sequences (scaler + MLP; the embedding is the bottleneck layer) | E1 |
 | `bureau/ssl_linear_probe.skops`, `bureau/gbm_ssl.skops` | logistic probe on the embedding alone; GBM on attributes + embedding | E1 |
+| `bureau/e2_{approved_only,approved_only_ipw,fuzzy,bureau_augmented,bureau_augmented_ipw,oracle}.skops` | monotone GBMs for reject inference at lender 0: approved applicants only, with IPW, classic fuzzy augmentation, bureau-augmented labels (rejects whose outcome the bureau sees), with IPW for unobserved rejects, and the oracle on every applicant's true outcome | E2 |
 | `bureau/e3_{naive,exclude,delayed,oracle}.skops` | logistic models trained through a moratorium on reported labels, without deferred windows, on delayed labels, and on the no-deferral truth | E3 |
 | `bureau/features.json` | feature lists, monotone constraints, embedding columns | |
 | `workout/outcome_models.skops` | expected recovery under each of the four offers (list of 4 regressors; T-learner) | R1 |
@@ -72,6 +73,11 @@ def load(file):
 gbm = load(f"{path}/bureau/monotone_gbm.skops")
 pd_gbm = gbm.predict_proba(oot[feats])[:, 1]
 
+e2 = pd.read_parquet(
+    snapshot_download("thanatchon36/bureau-to-workout", repo_type="dataset") + "/scoring/e2_test.parquet")
+ba = load(f"{path}/bureau/e2_bureau_augmented.skops")
+pd_ba = ba.predict_proba(e2[json.load(open(f"{path}/bureau/features.json"))["e2_features"]])[:, 1]
+
 scorecard = WoEScorecard.from_dict(json.load(open(f"{path}/bureau/woe_scorecard.json")))
 points = scorecard.score(oot[feats])
 reasons = scorecard.reason_codes(oot[feats].head(3))
@@ -87,6 +93,13 @@ uploads were refitted with newer library versions ({{VERSIONS}}), which moves so
 | model | OOT AUC | paper, seed 7 | PSI dev → OOT |
 |---|---|---|---|
 {{E1_ROWS}}
+
+Reject inference (E2), test half of lender 0's applicants. Predicted ÷ observed default among **rejected**
+applicants shows how far each model under-predicts the risk it never saw (ideal 1):
+
+| training labels | AUC, all applicants | predicted ÷ observed, rejected | paper, seed 7 |
+|---|---|---|---|
+{{E2_ROWS}}
 
 After a moratorium (E3), test months 39–45:
 

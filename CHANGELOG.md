@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- The six E2 reject-inference models on Hugging Face (approved-only, with IPW, fuzzy augmentation,
+  bureau-augmented, with IPW, oracle) and the E2 modelling tables in the dataset (`scoring_e2_reject_inference`);
+  `run_e2` also returns its fitted models and table.
+- Zenodo concept DOI [10.5281/zenodo.24102251](https://doi.org/10.5281/zenodo.24102251) in the README, `CITATION.cff`, the web reader and the
+  Hugging Face cards.
+
 ## [0.1.0] - 2026-11-10
 
 ### Added

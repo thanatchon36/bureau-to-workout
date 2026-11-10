@@ -694,7 +694,14 @@ def run_e2(p: BureauPanel, cube, seed):
     info = {"n_applications": int(len(a)), "approval_rate": float(approved.mean()),
             "bad_rate_approved": float(y1[approved].mean()), "bad_rate_rejected": float(y1[~approved].mean()),
             "share_rejects_observable": float(observable[~approved].mean())}
-    art = {"y_te": y_te, "approved_te": app_te, "preds": preds}
+    table = X.copy()
+    table.insert(0, "borrower", b)
+    table.insert(1, "month", m)
+    table["approved"], table["observable"], table["y_true"] = approved, observable, y1.astype(int)
+    split = np.full(len(table), "test", dtype=object)
+    split[tr] = "train"
+    table["split"] = split
+    art = {"y_te": y_te, "approved_te": app_te, "preds": preds, "models": models, "feats": feats, "table": table}
     return pd.DataFrame(rows).set_index("method"), info, art
 
 

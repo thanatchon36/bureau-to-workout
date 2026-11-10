@@ -15,6 +15,7 @@ authors:
     given-names: Thanatchon
 version: 0.1.0
 date-released: 2026-11-10
+doi: 10.5281/zenodo.24102251
 license: MIT
 repository-code: "https://github.com/thanatchon36/bureau-to-workout"
 url: "https://thanatchon36.github.io/bureau-to-workout/paper/"
@@ -26,5 +27,6 @@ preferred-citation:
     - family-names: Chongmankhong
       given-names: Thanatchon
   year: 2026
+  doi: 10.5281/zenodo.24102251
   url: "https://thanatchon36.github.io/bureau-to-workout/paper/"
   notes: "Preprint; all results are from simulators with synthetic data."

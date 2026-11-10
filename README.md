@@ -7,6 +7,7 @@
 <a href="paper/paper.pdf"><img src="https://img.shields.io/badge/paper-PDF-f5a623?style=flat-square&labelColor=0b1020" alt="Paper PDF"></a>
 <a href="#all-data-are-synthetic"><img src="https://img.shields.io/badge/data-synthetic-b0560f?style=flat-square&labelColor=0b1020" alt="Data: synthetic"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-ffe8a3?style=flat-square&labelColor=0b1020" alt="License MIT"></a>
+<a href="https://zenodo.org/badge/latestdoi/1452377934"><img src="https://zenodo.org/badge/1452377934.svg" alt="DOI"></a>
 <a href="https://huggingface.co/datasets/thanatchon36/bureau-to-workout"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20dataset-bureau--to--workout-f5a623?style=flat-square&labelColor=0b1020" alt="Hugging Face dataset"></a>
 <a href="https://huggingface.co/thanatchon36/bureau-to-workout"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20models-bureau--to--workout-f5a623?style=flat-square&labelColor=0b1020" alt="Hugging Face models"></a>
 </p>
@@ -99,10 +100,10 @@ web version at <https://thanatchon36.github.io/bureau-to-workout/paper/>. Every 
 
 - Tables: [`paper/tables/`](paper/tables/) · Figures: [`paper/figures/`](paper/figures/) · Results: [`paper_results/`](paper_results/)
 - Dataset on Hugging Face: [`thanatchon36/bureau-to-workout`](https://huggingface.co/datasets/thanatchon36/bureau-to-workout), with the simulated bureau panels
-  (50,000 borrowers × 60 months, with and without a moratorium), the E1 and E3 modelling tables, the 50,000
+  (50,000 borrowers × 60 months, with and without a moratorium), the E1, E2 and E3 modelling tables, the 50,000
   workout cases with every potential outcome, and every result file
 - Models on Hugging Face: [`thanatchon36/bureau-to-workout`](https://huggingface.co/thanatchon36/bureau-to-workout): the WoE scorecard (JSON), monotone GBM,
-  SSL encoder, the E3 models, the workout outcome and propensity models and the DR-learner (skops, no pickle)
+  SSL encoder, the six E2 reject-inference models, the E3 models, the workout outcome and propensity models and the DR-learner (skops, no pickle)
 - Section 7 sets out identification strategies for the linked NCB × SAM data and a privacy-preserving linkage design.
 
 | ID | Question | Code | Paper |
@@ -154,7 +155,8 @@ third decimal; the Hugging Face models were fitted with current versions and the
 
 ## Citation
 
-See [`CITATION.cff`](CITATION.cff). License: MIT.
+See [`CITATION.cff`](CITATION.cff); each release is archived on Zenodo, concept DOI
+[10.5281/zenodo.24102251](https://doi.org/10.5281/zenodo.24102251) (DOI badge above). License: MIT.
 
 ```bibtex
 @misc{chongmankhong2026bureau,
@@ -162,6 +164,7 @@ See [`CITATION.cff`](CITATION.cff). License: MIT.
   title  = {From Bureau to Workout: Credit Scoring and Causal Debt Resolution under Policy-Shaped Labels},
   year   = {2026},
   note   = {Preprint},
+  doi    = {10.5281/zenodo.24102251},
   url    = {https://thanatchon36.github.io/bureau-to-workout/paper/}
 }
 ```

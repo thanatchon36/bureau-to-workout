@@ -20,6 +20,7 @@ REPO_URL = "https://github.com/thanatchon36/bureau-to-workout"
 PAPER_URL = "https://thanatchon36.github.io/bureau-to-workout/paper/"
 DATA_URL = "https://huggingface.co/datasets/thanatchon36/bureau-to-workout"
 MODEL_URL = "https://huggingface.co/thanatchon36/bureau-to-workout"
+CONCEPT_DOI = "10.5281/zenodo.24102251"
 
 # (label, style, finding, detail); \Macro names are resolved from results_macros.tex.
 # style: "ref" = simulation result, "null" = pending.
@@ -275,6 +276,7 @@ def build_web(paper_dir: Path, out_dir: Path) -> Path:
         f'<li><a href="{REPO_URL}">Code and replication</a></li>'
         f'<li><a href="{DATA_URL}">Data (Hugging Face)</a></li>'
         f'<li><a href="{MODEL_URL}">Models (Hugging Face)</a></li>'
+        f'<li><a href="https://doi.org/{CONCEPT_DOI}">Zenodo archive</a></li>'
     )
     bib = (
         "@misc{chongmankhong2026bureau,\n"
@@ -282,6 +284,7 @@ def build_web(paper_dir: Path, out_dir: Path) -> Path:
         f"  title  = {{{title}}},\n"
         "  year   = {2026},\n"
         "  note   = {Preprint},\n"
+        f"  doi    = {{{CONCEPT_DOI}}},\n"
         f"  url    = {{{PAPER_URL}}}\n"
         "}"
     )
